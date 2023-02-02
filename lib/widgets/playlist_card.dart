@@ -18,52 +18,70 @@ class PlaylistCard extends StatelessWidget {
         Get.toNamed('/playlist', arguments: playlist);
       },
       child: Container(
-        height: 75,
-        margin: const EdgeInsets.only(bottom: 19),
-        padding: const EdgeInsets.symmetric(horizontal: 19),
-        decoration: BoxDecoration(
-          color: Colors.deepOrange.withOpacity(0.7),
-          borderRadius: BorderRadius.circular(13),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        margin: const EdgeInsets.only(right: 10),
+        child: Stack(
+          alignment: Alignment.bottomCenter,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(13),
-              child: Image.asset(
-                playlist.imgUrl,
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
+            Container(
+              width: MediaQuery.of(context).size.width * 0.45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                image: DecorationImage(
+                  image: AssetImage(
+                    playlist.imgUrl,
+                  ),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-            const SizedBox(width: 19),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+            Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width * 0.35,
+              margin: const EdgeInsets.only(bottom: 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.white.withOpacity(0.8),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(
-                    playlist.title,
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        child: Expanded(
+                          child: Text(
+                            playlist.title,
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
+                      ),
+                      Text(
+                        '${playlist.songs.length} songs',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge!
+                            .copyWith(color: Colors.blueGrey),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                  Text(
-                    '${playlist.songs.length} songs',
-                    maxLines: 2,
-                    style: Theme.of(context).textTheme.bodySmall,
+                  const Icon(
+                    Icons.play_circle,
+                    color: Colors.red,
                   )
                 ],
               ),
             ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.play_circle,
-                color: Colors.white,
-              ),
-            )
           ],
         ),
       ),

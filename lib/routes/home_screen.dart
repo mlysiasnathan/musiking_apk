@@ -1,19 +1,40 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 
 import '../models/playlist_model.dart';
+import '../models/playlists_provider.dart';
 import '../models/song_model.dart';
+import '../models/songs_provider.dart';
+import '../widgets/custom_bottom_bar.dart';
 import '../widgets/playlist_card.dart';
 import '../widgets/section_header.dart';
 import '../widgets/song_card.dart';
+import '../widgets/song_card_local.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final OnAudioQuery _audioQuery = OnAudioQuery();
+  @override
+  void initState() {
+    requestStoragePermission();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List<Song> songs = Song.songs;
-    List<Playlist> playlists = Playlist.playlists;
+    final songs = Provider.of<Songs>(context).songs;
+    final playlists = Provider.of<Playlists>(context).playlists;
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -28,53 +49,125 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: const _CustomAppBar(),
-        bottomNavigationBar: const _CustomBottomBar(),
+        bottomNavigationBar: const CustomBottomBar(),
+        floatingActionButton: Container(
+          height: 40,
+          width: MediaQuery.of(context).size.width * 0.96,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10), color: Colors.white),
+          child: Row(
+            children: [
+              Flexible(
+                fit: FlexFit.tight,
+                child: InkWell(
+                  onTap: () {
+                    Get.toNamed('/song', arguments: songs[1]);
+                  },
+                  borderRadius: BorderRadius.circular(5),
+                  splashColor: Colors.deepOrange,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 6),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: Image.asset(
+                          songs[1].coverUrl,
+                          width: 30,
+                          height: 30,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        songs[1].title,
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.deepOrange,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    CupertinoIcons.play_circle,
+                    color: Colors.deepOrange,
+                  ))
+            ],
+          ),
+        ),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterFloat,
         body: SingleChildScrollView(
           child: Column(
             children: [
               const _DiscoverMusic(),
-              _TrendingMusic(songs: songs),
-              _PlaylistMusic(playlists: playlists)
+              _AlbumMusic(playlists: playlists),
+              _PlaylistMusic(songs: songs),
+              FutureBuilder<List<SongModel>>(
+                //default values
+                future: _audioQuery.querySongs(
+                    sortType: null,
+                    ignoreCase: true,
+                    uriType: UriType.EXTERNAL,
+                    orderType: OrderType.ASC_OR_SMALLER),
+                builder: (context, item) {
+                  //loading content indicator
+                  if (item.data == null) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  // no songs found
+                  if (item.data!.isEmpty) {
+                    return const Center(
+                      child: Text('No songs found in this device'),
+                    );
+                  }
+                  //show songs
+                  return Padding(
+                    padding: const EdgeInsets.all(19),
+                    child: Column(
+                      children: [
+                        const SectionHeader(title: 'Local Songs'),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.only(top: 14),
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: item.data!.length,
+                          itemBuilder: ((context, index) {
+                            return SongCardLocal(song: item.data![index]);
+                          }),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ),
       ),
     );
   }
+
+  void requestStoragePermission() async {
+    // only if platform is not web, coz web have no permission
+    if (!kIsWeb) {
+      bool permissionStatus = await _audioQuery.permissionsStatus();
+      if (!permissionStatus) {
+        await _audioQuery.permissionsRequest();
+      }
+      // ensure build method is called
+      setState(() {});
+    }
+  }
 }
 
 class _PlaylistMusic extends StatelessWidget {
   const _PlaylistMusic({
-    Key? key,
-    required this.playlists,
-  }) : super(key: key);
-
-  final List<Playlist> playlists;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(19),
-      child: Column(
-        children: [
-          const SectionHeader(title: 'Playlists'),
-          ListView.builder(
-            shrinkWrap: true,
-            padding: const EdgeInsets.only(top: 19),
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: playlists.length,
-            itemBuilder: ((context, index) {
-              return PlaylistCard(playlist: playlists[index]);
-            }),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _TrendingMusic extends StatelessWidget {
-  const _TrendingMusic({
     Key? key,
     required this.songs,
   }) : super(key: key);
@@ -84,27 +177,57 @@ class _TrendingMusic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
+      padding: const EdgeInsets.all(19),
+      child: Column(
+        children: [
+          const SectionHeader(title: 'All Songs'),
+          ListView.builder(
+            shrinkWrap: true,
+            padding: const EdgeInsets.only(top: 14),
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: songs.length,
+            itemBuilder: ((context, index) {
+              return SongCard(song: songs[index]);
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AlbumMusic extends StatelessWidget {
+  const _AlbumMusic({
+    Key? key,
+    required this.playlists,
+  }) : super(key: key);
+
+  final List<Playlist> playlists;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
       padding: const EdgeInsets.only(
-        left: 19,
-        top: 19,
-        bottom: 19,
+        left: 14,
+        top: 14,
+        bottom: 14,
       ),
       child: Column(
         children: [
           const Padding(
-            padding: EdgeInsets.only(right: 19),
+            padding: EdgeInsets.only(right: 14),
             child: SectionHeader(
-              title: "Trending Music",
+              title: "Albums",
             ),
           ),
-          const SizedBox(height: 19),
+          const SizedBox(height: 15),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.27,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: songs.length,
+              itemCount: playlists.length,
               itemBuilder: (context, index) {
-                return SongCard(song: songs[index]);
+                return PlaylistCard(playlist: playlists[index]);
               },
             ),
           )
@@ -122,7 +245,7 @@ class _DiscoverMusic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(19.0),
+      padding: const EdgeInsets.all(14.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -130,7 +253,7 @@ class _DiscoverMusic extends StatelessWidget {
             'Musiking',
             style: Theme.of(context).textTheme.bodyLarge,
           ),
-          const SizedBox(height: 5),
+          const SizedBox(height: 4),
           Text(
             'Enjoy your favorites Musics',
             style: Theme.of(context)
@@ -138,7 +261,7 @@ class _DiscoverMusic extends StatelessWidget {
                 .headline6!
                 .copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 19),
+          const SizedBox(height: 14),
           TextFormField(
             style: const TextStyle(
                 color: Colors.deepOrange, fontWeight: FontWeight.bold),
@@ -148,7 +271,7 @@ class _DiscoverMusic extends StatelessWidget {
               isDense: true,
               prefixIcon: const Icon(Icons.search, color: Colors.grey),
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(13),
                   borderSide: BorderSide.none),
               hintStyle: Theme.of(context)
                   .textTheme
@@ -159,39 +282,6 @@ class _DiscoverMusic extends StatelessWidget {
           )
         ],
       ),
-    );
-  }
-}
-
-class _CustomBottomBar extends StatelessWidget {
-  const _CustomBottomBar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomNavigationBar(
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      unselectedItemColor: Colors.white,
-      selectedItemColor: Colors.white,
-      type: BottomNavigationBarType.fixed,
-      showUnselectedLabels: false,
-      showSelectedLabels: true,
-      items: const [
-        BottomNavigationBarItem(
-            icon: Icon(
-              CupertinoIcons.music_house_fill,
-            ),
-            label: 'Home'),
-        BottomNavigationBarItem(
-            icon: Icon(
-              CupertinoIcons.heart_fill,
-            ),
-            label: 'Favories'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.play_circle), label: 'Playing'),
-      ],
     );
   }
 }
@@ -212,11 +302,13 @@ class _CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       actions: [
         Container(
           margin: const EdgeInsets.only(right: 19),
-          child: CircleAvatar(
-              backgroundColor: Colors.orange.withOpacity(0.6),
-              child: const Icon(
-                CupertinoIcons.person_alt_circle,
-              )),
+          child: IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              CupertinoIcons.gear_alt,
+              color: Colors.white,
+            ),
+          ),
         )
       ],
     );
@@ -224,5 +316,5 @@ class _CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => const Size.fromHeight(56.0);
+  Size get preferredSize => const Size.fromHeight(50);
 }

@@ -2,24 +2,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:palette_generator/palette_generator.dart';
+
 import 'package:rxdart/rxdart.dart' as rxdart;
 
-import '../models/song_model.dart';
+// import '../models/song_model.dart';
 import '../models/songs_provider.dart';
 import '../widgets/seekbar.dart';
 import '../widgets/player_controllers.dart';
 
-class SongScreen extends StatefulWidget {
-  const SongScreen({super.key});
+class SongScreenLocal extends StatefulWidget {
+  const SongScreenLocal({super.key});
 
   @override
-  State<SongScreen> createState() => _SongScreenState();
+  State<SongScreenLocal> createState() => _SongScreenLocalState();
 }
 
-class _SongScreenState extends State<SongScreen> {
+class _SongScreenLocalState extends State<SongScreenLocal> {
   AudioPlayer audioPlayer = AudioPlayer();
-  Song song = Get.arguments ?? Songs().songs[0];
+  SongModel song = Get.arguments ?? Songs().songs[0];
   @override
   void initState() {
     super.initState();
@@ -28,10 +30,10 @@ class _SongScreenState extends State<SongScreen> {
       ConcatenatingAudioSource(
         children: [
           AudioSource.uri(
-            Uri.parse('asset:///${song.musicUrl}'),
+            Uri.parse('${song.uri}'),
           ),
           AudioSource.uri(
-            Uri.parse('asset:///${Songs().songs[5].musicUrl}'),
+            Uri.parse('asset:///${Songs().songs[4].musicUrl}'),
           ),
         ],
       ),
@@ -65,12 +67,19 @@ class _SongScreenState extends State<SongScreen> {
         elevation: 0,
       ),
       body: Stack(fit: StackFit.expand, children: [
-        Image.asset(
-          song.coverUrl,
-          fit: BoxFit.cover,
+        QueryArtworkWidget(
+          id: song.id,
+          type: ArtworkType.AUDIO,
         ),
+        // Image.asset(
+        //   song.coverUrl,
+        //   fit: BoxFit.cover,
+        // ),
         _BackgroundFilter(
-          image: song.coverUrl,
+          image: QueryArtworkWidget(
+            id: song.id,
+            type: ArtworkType.AUDIO,
+          ),
         ),
         _MusicTimer(
             song: song,
@@ -89,7 +98,7 @@ class _MusicTimer extends StatelessWidget {
     required this.audioPlayer,
   })  : _seekBarDataStream = seekBarDataStream,
         super(key: key);
-  final Song song;
+  final SongModel song;
   final Stream<SeekBarData> _seekBarDataStream;
   final AudioPlayer audioPlayer;
 
@@ -101,16 +110,6 @@ class _MusicTimer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ClipRRect(
-          //   borderRadius: BorderRadius.circular(15),
-          //   child: Image.asset(
-          //     song.coverUrl,
-          //     height: MediaQuery.of(context).size.height * 0.3,
-          //     width: MediaQuery.of(context).size.height * 0.3,
-          //     fit: BoxFit.cover,
-          //   ),
-          // ),
-          const SizedBox(height: 50),
           Text(
             song.title,
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
@@ -120,7 +119,7 @@ class _MusicTimer extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            song.descriptions,
+            '${song.artist}',
             style: Theme.of(context)
                 .textTheme
                 .bodySmall!
@@ -139,7 +138,6 @@ class _MusicTimer extends StatelessWidget {
             },
           ),
           PlayerControllers(audioPlayer: audioPlayer),
-          const SizedBox(height: 19),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -178,7 +176,7 @@ class _BackgroundFilter extends StatefulWidget {
     Key? key,
     required this.image,
   }) : super(key: key);
-  final String image;
+  final QueryArtworkWidget image;
 
   @override
   State<_BackgroundFilter> createState() => _BackgroundFilterState();
@@ -186,11 +184,14 @@ class _BackgroundFilter extends StatefulWidget {
 
 class _BackgroundFilterState extends State<_BackgroundFilter> {
   PaletteGenerator? paletteGenerator;
-  Color defaultLightColor = Colors.orange;
-  Color defaultDarkColor = Colors.red;
   Future<PaletteGenerator?> generateColors() async {
     paletteGenerator = await PaletteGenerator.fromImageProvider(
-      Image.asset(widget.image).image,
+      Image.asset(
+        QueryArtworkWidget(
+          id: widget.image.id,
+          type: ArtworkType.AUDIO,
+        ).toString(),
+      ).image,
       size: const Size.square(1000),
       region: const Rect.fromLTRB(0, 0, 1000, 1000),
     );
@@ -212,9 +213,9 @@ class _BackgroundFilterState extends State<_BackgroundFilter> {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.black,
-            Colors.black.withOpacity(0.5),
-            Colors.black.withOpacity(0.0),
+            Colors.white,
+            Colors.white.withOpacity(0.5),
+            Colors.white.withOpacity(0.0),
           ],
           stops: const [
             0.0,
@@ -233,13 +234,15 @@ class _BackgroundFilterState extends State<_BackgroundFilter> {
               paletteGenerator != null
                   ? paletteGenerator!.vibrantColor != null
                       ? paletteGenerator!.vibrantColor!.color
-                      : defaultLightColor
-                  : defaultLightColor,
+                      : Colors.orange
+                  : Colors.orange,
               paletteGenerator != null
                   ? paletteGenerator!.darkVibrantColor != null
                       ? paletteGenerator!.darkVibrantColor!.color
-                      : defaultDarkColor
-                  : defaultDarkColor,
+                      : Colors.red
+                  : Colors.red,
+              // Colors.orange,
+              // Colors.red,
             ],
           ),
         ),

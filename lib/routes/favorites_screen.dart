@@ -5,9 +5,10 @@ import 'package:get/get.dart';
 
 import '../models/playlist_model.dart';
 import '../models/playlists_provider.dart';
+import '../widgets/custom_bottom_bar.dart';
 
-class PlaylistScreen extends StatelessWidget {
-  const PlaylistScreen({Key? key}) : super(key: key);
+class Favorites extends StatelessWidget {
+  const Favorites({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +29,20 @@ class PlaylistScreen extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
+        bottomNavigationBar: const CustomBottomBar(),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          title: const Text('Playlist'),
+          title: const Text('Favorites Songs'),
           centerTitle: true,
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(19.9),
             child: Column(
               children: [
-                _PlaylistInfo(playlists: playlist),
-                const SizedBox(height: 20),
+                // _PlaylistInfo(playlists: playlist),
+                const SizedBox(height: 30),
                 const _PlayOrShuffleSwitch(),
                 ListView.builder(
                   shrinkWrap: true,
@@ -49,37 +51,28 @@ class PlaylistScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
-                        InkWell(
-                          onTap: () {
-                            Get.toNamed('/song',
-                                arguments: playlist.songs[index]);
-                          },
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Text(
-                                '${index + 1}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            title: Text(
-                              playlist.songs[index].title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Text(
-                                '${playlist.songs[index].descriptions} - 3:00'),
-                            trailing: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.more_vert,
-                                color: Colors.white,
-                              ),
+                        ListTile(
+                          leading: Text(
+                            '${index + 1}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          title: Text(
+                            playlist.songs[index].title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text(
+                              '${playlist.songs[index].descriptions} - 3:00'),
+                          trailing: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.more_vert,
+                              color: Colors.white,
                             ),
                           ),
                         ),

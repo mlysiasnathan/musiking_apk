@@ -37,61 +37,62 @@ class PlayerControllers extends StatelessWidget {
                   audioPlayer.hasPrevious ? audioPlayer.seekToPrevious : null,
               icon: const Icon(CupertinoIcons.backward_end_fill,
                   color: Colors.white),
-              iconSize: 45,
+              iconSize: 30,
             );
           },
         ),
         StreamBuilder<PlayerState>(
-            stream: audioPlayer.playerStateStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                final playerState = snapshot.data;
-                final processingState = playerState!.processingState;
-                if (processingState == ProcessingState.loading ||
-                    processingState == ProcessingState.buffering) {
-                  return Container(
-                    height: 64,
-                    width: 64,
-                    margin: const EdgeInsets.all(8),
-                    child: const CircularProgressIndicator(),
-                  );
-                } else if (!audioPlayer.playing) {
-                  return IconButton(
-                    color: Colors.white,
-                    iconSize: 75,
-                    onPressed: audioPlayer.play,
-                    icon: const Icon(
-                      CupertinoIcons.play_circle_fill,
-                    ),
-                  );
-                } else if (processingState != ProcessingState.completed) {
-                  return IconButton(
-                    color: Colors.white,
-                    iconSize: 75,
-                    onPressed: audioPlayer.pause,
-                    icon: const Icon(
-                      CupertinoIcons.pause_circle_fill,
-                    ),
-                  );
-                } else {
-                  return IconButton(
-                    color: Colors.white,
-                    iconSize: 75,
-                    onPressed: () => audioPlayer.seek(
-                      Duration.zero,
-                      index: audioPlayer.effectiveIndices!.first,
-                    ),
-                    icon: const Icon(
-                      CupertinoIcons.memories,
-                    ),
-                  );
-                }
+          stream: audioPlayer.playerStateStream,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final playerState = snapshot.data;
+              final processingState = playerState!.processingState;
+              if (processingState == ProcessingState.loading ||
+                  processingState == ProcessingState.buffering) {
+                return Container(
+                  height: 64,
+                  width: 64,
+                  margin: const EdgeInsets.all(8),
+                  child: const CircularProgressIndicator(),
+                );
+              } else if (!audioPlayer.playing) {
+                return IconButton(
+                  color: Colors.white,
+                  iconSize: 75,
+                  onPressed: audioPlayer.play,
+                  icon: const Icon(
+                    CupertinoIcons.play_circle_fill,
+                  ),
+                );
+              } else if (processingState != ProcessingState.completed) {
+                return IconButton(
+                  color: Colors.white,
+                  iconSize: 75,
+                  onPressed: audioPlayer.pause,
+                  icon: const Icon(
+                    CupertinoIcons.pause_circle_fill,
+                  ),
+                );
               } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return IconButton(
+                  color: Colors.white,
+                  iconSize: 75,
+                  onPressed: () => audioPlayer.seek(
+                    Duration.zero,
+                    index: audioPlayer.effectiveIndices!.first,
+                  ),
+                  icon: const Icon(
+                    CupertinoIcons.memories,
+                  ),
                 );
               }
-            }),
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
         StreamBuilder<SequenceState?>(
           stream: audioPlayer.sequenceStateStream,
           builder: (context, index) {
@@ -99,7 +100,7 @@ class PlayerControllers extends StatelessWidget {
               onPressed: audioPlayer.hasNext ? audioPlayer.seekToNext : null,
               icon: const Icon(CupertinoIcons.forward_end_fill,
                   color: Colors.white),
-              iconSize: 45,
+              iconSize: 30,
             );
           },
         ),

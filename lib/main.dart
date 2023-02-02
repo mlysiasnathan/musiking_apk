@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:musiking/routes/equalizer_screen.dart';
+import 'package:musiking/routes/favorites_screen.dart';
+import 'package:musiking/routes/song_screen_local.dart';
+import 'package:provider/provider.dart';
+
 import './routes/playlist_screen.dart';
 import './routes/song_screen.dart';
 import './routes/home_screen.dart';
+import './models/playlists_provider.dart';
+import './models/songs_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,30 +21,52 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'MusiKing',
-      theme: ThemeData(
-        primaryColor: Colors.deepOrange,
-        textTheme: Theme.of(context).textTheme.apply(
-              bodyColor: Colors.white,
-              displayColor: Colors.white,
-            ),
-      ),
-      home: const HomeScreen(),
-      getPages: [
-        GetPage(
-          name: '/',
-          page: () => const HomeScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (ctx) => Songs(),
         ),
-        GetPage(
-          name: '/song',
-          page: () => const SongScreen(),
+        ChangeNotifierProvider(
+          create: (ctx) => Playlists(),
         ),
-        GetPage(
-          name: '/playlist',
-          page: () => const PlaylistScreen(),
-        )
       ],
+      child: GetMaterialApp(
+        title: 'MusiKing',
+        theme: ThemeData(
+          primaryColor: Colors.deepOrange,
+          textTheme: Theme.of(context).textTheme.apply(
+                bodyColor: Colors.white,
+                displayColor: Colors.white,
+              ),
+        ),
+        home: const HomeScreen(),
+        getPages: [
+          GetPage(
+            name: '/',
+            page: () => const HomeScreen(),
+          ),
+          GetPage(
+            name: '/song',
+            page: () => const SongScreen(),
+          ),
+          GetPage(
+            name: '/songLocal',
+            page: () => const SongScreenLocal(),
+          ),
+          GetPage(
+            name: '/playlist',
+            page: () => const PlaylistScreen(),
+          ),
+          GetPage(
+            name: '/favorites',
+            page: () => const Favorites(),
+          ),
+          GetPage(
+            name: '/equalizer',
+            page: () => const Equalizer(),
+          )
+        ],
+      ),
     );
   }
 }
