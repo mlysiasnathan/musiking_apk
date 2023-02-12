@@ -29,7 +29,7 @@ class Favorites extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        bottomNavigationBar: const CustomBottomBar(),
+        bottomNavigationBar: const CustomBottomBar(indexPage: 1),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,

@@ -54,6 +54,7 @@ class PlaylistScreen extends StatelessWidget {
                             Get.toNamed('/song',
                                 arguments: playlist.songs[index]);
                           },
+                          borderRadius: BorderRadius.circular(13),
                           child: ListTile(
                             leading: CircleAvatar(
                               backgroundColor: Colors.transparent,
@@ -83,7 +84,7 @@ class PlaylistScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const Divider(),
+                        const Divider(color: Colors.white),
                       ],
                     );
                   },

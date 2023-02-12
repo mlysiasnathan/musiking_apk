@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -101,16 +103,21 @@ class _MusicTimer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ClipRRect(
-          //   borderRadius: BorderRadius.circular(15),
-          //   child: Image.asset(
-          //     song.coverUrl,
-          //     height: MediaQuery.of(context).size.height * 0.3,
-          //     width: MediaQuery.of(context).size.height * 0.3,
-          //     fit: BoxFit.cover,
-          //   ),
-          // ),
-          const SizedBox(height: 50),
+          Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Hero(
+                tag: song.title,
+                child: Image.asset(
+                  song.coverUrl,
+                  height: MediaQuery.of(context).size.height * 0.45,
+                  width: MediaQuery.of(context).size.height * 0.45,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
           Text(
             song.title,
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
@@ -126,7 +133,7 @@ class _MusicTimer extends StatelessWidget {
                 .bodySmall!
                 .copyWith(color: Colors.white),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 10),
           StreamBuilder<SeekBarData>(
             stream: _seekBarDataStream,
             builder: (context, snapshot) {
@@ -139,7 +146,7 @@ class _MusicTimer extends StatelessWidget {
             },
           ),
           PlayerControllers(audioPlayer: audioPlayer),
-          const SizedBox(height: 19),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -206,44 +213,72 @@ class _BackgroundFilterState extends State<_BackgroundFilter> {
 
   @override
   Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (item) {
-        return LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.black,
-            Colors.black.withOpacity(0.5),
-            Colors.black.withOpacity(0.0),
-          ],
-          stops: const [
-            0.0,
-            0.3,
-            0.9,
-          ],
-        ).createShader(item);
-      },
-      blendMode: BlendMode.dstOut,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              paletteGenerator != null
-                  ? paletteGenerator!.vibrantColor != null
-                      ? paletteGenerator!.vibrantColor!.color
-                      : defaultLightColor
-                  : defaultLightColor,
-              paletteGenerator != null
-                  ? paletteGenerator!.darkVibrantColor != null
-                      ? paletteGenerator!.darkVibrantColor!.color
-                      : defaultDarkColor
-                  : defaultDarkColor,
-            ],
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(
+            widget.image,
+          ),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: BackdropFilter(
+        filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        child: Container(
+          decoration: BoxDecoration(
+            color:
+                // Colors.grey.shade200.withOpacity(0.5),
+                paletteGenerator != null
+                    ? paletteGenerator!.vibrantColor != null
+                        ? paletteGenerator!.vibrantColor!.color.withOpacity(0.7)
+                        : defaultDarkColor
+                    : defaultDarkColor,
+            // color: Colors.transparent,
           ),
         ),
       ),
     );
+
+    // android UI========================
+
+    // return ShaderMask(
+    //   shaderCallback: (item) {
+    //     return LinearGradient(
+    //       begin: Alignment.topCenter,
+    //       end: Alignment.bottomCenter,
+    //       colors: [
+    //         Colors.black,
+    //         Colors.black.withOpacity(0.5),
+    //         Colors.black.withOpacity(0.0),
+    //       ],
+    //       stops: const [
+    //         0.0,
+    //         0.3,
+    //         0.9,
+    //       ],
+    //     ).createShader(item);
+    //   },
+    //   blendMode: BlendMode.dstOut,
+    //   child: Container(
+    //     decoration: BoxDecoration(
+    //       gradient: LinearGradient(
+    //         begin: Alignment.topCenter,
+    //         end: Alignment.bottomCenter,
+    //         colors: [
+    //           paletteGenerator != null
+    //               ? paletteGenerator!.vibrantColor != null
+    //                   ? paletteGenerator!.vibrantColor!.color
+    //                   : defaultLightColor
+    //               : defaultLightColor,
+    //           paletteGenerator != null
+    //               ? paletteGenerator!.darkVibrantColor != null
+    //                   ? paletteGenerator!.darkVibrantColor!.color
+    //                   : defaultDarkColor
+    //               : defaultDarkColor,
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }

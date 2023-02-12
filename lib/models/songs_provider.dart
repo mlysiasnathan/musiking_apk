@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
 
 import 'package:musiking/models/song_model.dart';
 
@@ -52,7 +51,7 @@ class Songs with ChangeNotifier {
     return _songs.where((songItem) => songItem.isFavorite).toList();
   }
 
-  Song findById(String title) {
+  Song findByTitle(String title) {
     return _songs.firstWhere((song) => song.title == title);
   }
 
@@ -62,5 +61,9 @@ class Songs with ChangeNotifier {
     notifyListeners();
   }
 
-  var playState = false;
+  late Song currentSong = songs[0];
+  void currentPlayingSong(Song song) {
+    currentSong = song;
+    notifyListeners();
+  }
 }

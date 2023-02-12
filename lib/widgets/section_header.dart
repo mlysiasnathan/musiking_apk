@@ -25,8 +25,8 @@ class SectionHeader extends StatelessWidget {
           action,
           style: Theme.of(context)
               .textTheme
-              .bodyLarge!
-              .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+              .bodySmall!
+              .copyWith(color: Colors.white, fontWeight: FontWeight.w400),
         ),
       ],
     );

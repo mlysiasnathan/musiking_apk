@@ -29,7 +29,7 @@ class Equalizer extends StatelessWidget {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        bottomNavigationBar: const CustomBottomBar(),
+        bottomNavigationBar: const CustomBottomBar(indexPage: 2),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -40,47 +40,9 @@ class Equalizer extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(19.9),
             child: Column(
-              children: [
-                _PlaylistInfo(playlists: playlist),
-                const SizedBox(height: 30),
-                const _PlayOrShuffleSwitch(),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: playlist.songs.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        ListTile(
-                          leading: Text(
-                            '${index + 1}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          title: Text(
-                            playlist.songs[index].title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(
-                              '${playlist.songs[index].descriptions} - 3:00'),
-                          trailing: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.more_vert,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const Divider(),
-                      ],
-                    );
-                  },
-                ),
+              children: const [
+                SizedBox(height: 30),
+                _PlayOrShuffleSwitch(),
               ],
             ),
           ),
@@ -182,40 +144,6 @@ class _PlayOrShuffleSwitchState extends State<_PlayOrShuffleSwitch> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _PlaylistInfo extends StatelessWidget {
-  const _PlaylistInfo({
-    Key? key,
-    required this.playlists,
-  }) : super(key: key);
-
-  final Playlist playlists;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Image.asset(
-            playlists.imgUrl,
-            height: MediaQuery.of(context).size.height * 0.3,
-            width: MediaQuery.of(context).size.height * 0.3,
-            fit: BoxFit.cover,
-          ),
-        ),
-        const SizedBox(height: 30),
-        Text(
-          playlists.title,
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall!
-              .copyWith(fontWeight: FontWeight.bold),
-        )
-      ],
     );
   }
 }

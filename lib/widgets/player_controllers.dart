@@ -24,7 +24,7 @@ class PlayerControllers extends StatelessWidget {
               icon: Icon(CupertinoIcons.shuffle,
                   color: audioPlayer.shuffleModeEnabled
                       ? Colors.white
-                      : Colors.grey),
+                      : Colors.white),
               iconSize: 20,
             );
           },
@@ -47,18 +47,19 @@ class PlayerControllers extends StatelessWidget {
             if (snapshot.hasData) {
               final playerState = snapshot.data;
               final processingState = playerState!.processingState;
-              if (processingState == ProcessingState.loading ||
-                  processingState == ProcessingState.buffering) {
-                return Container(
-                  height: 64,
-                  width: 64,
-                  margin: const EdgeInsets.all(8),
-                  child: const CircularProgressIndicator(),
-                );
-              } else if (!audioPlayer.playing) {
+              // if (processingState == ProcessingState.loading ||
+              //     processingState == ProcessingState.buffering) {
+              //   return Container(
+              //     height: 64,
+              //     width: 64,
+              //     margin: const EdgeInsets.all(8),
+              //     child: const CircularProgressIndicator(),
+              //   );
+              // } else
+              if (!audioPlayer.playing) {
                 return IconButton(
                   color: Colors.white,
-                  iconSize: 75,
+                  iconSize: 70,
                   onPressed: audioPlayer.play,
                   icon: const Icon(
                     CupertinoIcons.play_circle_fill,
@@ -67,7 +68,7 @@ class PlayerControllers extends StatelessWidget {
               } else if (processingState != ProcessingState.completed) {
                 return IconButton(
                   color: Colors.white,
-                  iconSize: 75,
+                  iconSize: 70,
                   onPressed: audioPlayer.pause,
                   icon: const Icon(
                     CupertinoIcons.pause_circle_fill,

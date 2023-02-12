@@ -17,6 +17,7 @@ class PlaylistCard extends StatelessWidget {
       onTap: () {
         Get.toNamed('/playlist', arguments: playlist);
       },
+      borderRadius: BorderRadius.circular(15),
       child: Container(
         margin: const EdgeInsets.only(right: 10),
         child: Stack(
@@ -45,6 +46,7 @@ class PlaylistCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  const SizedBox(width: 5),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -78,7 +80,8 @@ class PlaylistCard extends StatelessWidget {
                   const Icon(
                     Icons.play_circle,
                     color: Colors.red,
-                  )
+                  ),
+                  const SizedBox(width: 4),
                 ],
               ),
             ),

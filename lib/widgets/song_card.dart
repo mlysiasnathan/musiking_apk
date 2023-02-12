@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 import '../models/song_model.dart';
+import '../models/songs_provider.dart';
 
 class SongCard extends StatelessWidget {
   const SongCard({
-    Key? key,
     required this.song,
+    Key? key,
   }) : super(key: key);
 
   final Song song;
@@ -15,29 +16,30 @@ class SongCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.toNamed('/song', arguments: song);
+        Provider.of<Songs>(context, listen: false).currentPlayingSong(song);
       },
+      borderRadius: BorderRadius.circular(10),
       child: Container(
-        height: 70,
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        height: 50,
+        margin: const EdgeInsets.all(3),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         decoration: BoxDecoration(
           color: Colors.deepOrange.withOpacity(0.7),
-          borderRadius: BorderRadius.circular(13),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(13),
+              borderRadius: BorderRadius.circular(7),
               child: Image.asset(
                 song.coverUrl,
-                width: 50,
-                height: 50,
+                width: 40,
+                height: 40,
                 fit: BoxFit.cover,
               ),
             ),
-            const SizedBox(width: 19),
+            const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,13 +59,20 @@ class SongCard extends StatelessWidget {
                 ],
               ),
             ),
+            Icon(
+                song == Provider.of<Songs>(context).currentSong
+                    ? Icons.play_arrow
+                    : null,
+                color: Colors.white,
+                size: 16),
             IconButton(
+              splashRadius: 23,
               onPressed: () {},
               icon: const Icon(
-                Icons.play_circle,
+                Icons.more_horiz_outlined,
                 color: Colors.white,
               ),
-            )
+            ),
           ],
         ),
       ),

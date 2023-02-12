@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,8 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final songs = Provider.of<Songs>(context).songs;
-    final playlists = Provider.of<Playlists>(context).playlists;
+    final songsData = Provider.of<Songs>(context, listen: false);
+    final songs = songsData.songs;
+    final playlists = Provider.of<Playlists>(context, listen: false).playlists;
 
     return Container(
       decoration: BoxDecoration(
@@ -49,55 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: const _CustomAppBar(),
-        bottomNavigationBar: const CustomBottomBar(),
-        floatingActionButton: Container(
-          height: 40,
-          width: MediaQuery.of(context).size.width * 0.96,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10), color: Colors.white),
-          child: Row(
-            children: [
-              Flexible(
-                fit: FlexFit.tight,
-                child: InkWell(
-                  onTap: () {
-                    Get.toNamed('/song', arguments: songs[1]);
-                  },
-                  borderRadius: BorderRadius.circular(5),
-                  splashColor: Colors.deepOrange,
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 6),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
-                        child: Image.asset(
-                          songs[1].coverUrl,
-                          width: 30,
-                          height: 30,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        songs[1].title,
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.deepOrange,
-                            ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    CupertinoIcons.play_circle,
-                    color: Colors.deepOrange,
-                  ))
-            ],
-          ),
-        ),
+        bottomNavigationBar: const CustomBottomBar(indexPage: 0),
+        floatingActionButton: const _PrePlayingSong(),
         floatingActionButtonLocation:
             FloatingActionButtonLocation.miniCenterFloat,
         body: SingleChildScrollView(
@@ -106,46 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const _DiscoverMusic(),
               _AlbumMusic(playlists: playlists),
               _PlaylistMusic(songs: songs),
-              FutureBuilder<List<SongModel>>(
-                //default values
-                future: _audioQuery.querySongs(
-                    sortType: null,
-                    ignoreCase: true,
-                    uriType: UriType.EXTERNAL,
-                    orderType: OrderType.ASC_OR_SMALLER),
-                builder: (context, item) {
-                  //loading content indicator
-                  if (item.data == null) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  // no songs found
-                  if (item.data!.isEmpty) {
-                    return const Center(
-                      child: Text('No songs found in this device'),
-                    );
-                  }
-                  //show songs
-                  return Padding(
-                    padding: const EdgeInsets.all(19),
-                    child: Column(
-                      children: [
-                        const SectionHeader(title: 'Local Songs'),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.only(top: 14),
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: item.data!.length,
-                          itemBuilder: ((context, index) {
-                            return SongCardLocal(song: item.data![index]);
-                          }),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
+              _LocalPlaylistMusic(audioQuery: _audioQuery),
             ],
           ),
         ),
@@ -163,6 +80,111 @@ class _HomeScreenState extends State<HomeScreen> {
       // ensure build method is called
       setState(() {});
     }
+  }
+}
+
+class _CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+  const _CustomAppBar({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      leading: const Icon(
+        CupertinoIcons.square_grid_2x2,
+      ),
+      actions: [
+        Container(
+          margin: const EdgeInsets.only(right: 19),
+          child: IconButton(
+            splashRadius: 25,
+            onPressed: () {},
+            icon: const Icon(
+              CupertinoIcons.gear_alt,
+              color: Colors.white,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => const Size.fromHeight(50);
+}
+
+class _PrePlayingSong extends StatelessWidget {
+  const _PrePlayingSong({
+    Key? key,
+    // required this.song,
+  }) : super(key: key);
+
+  // final Song song;
+
+  @override
+  Widget build(BuildContext context) {
+    final songData = Provider.of<Songs>(context).currentSong;
+    return ChangeNotifierProvider(
+      create: (c) => songData,
+      child: Container(
+        height: 40,
+        width: MediaQuery.of(context).size.width * 0.96,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+        ),
+        child: Row(
+          children: [
+            Flexible(
+              fit: FlexFit.tight,
+              child: InkWell(
+                onTap: () {
+                  Get.toNamed('/song', arguments: songData);
+                },
+                borderRadius: BorderRadius.circular(5),
+                child: Row(
+                  children: [
+                    const SizedBox(width: 6),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Hero(
+                        tag: songData.title,
+                        child: Image.asset(
+                          songData.coverUrl,
+                          width: 30,
+                          height: 30,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 18),
+                    Text(
+                      songData.title,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.deepOrange,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            IconButton(
+                splashRadius: 40,
+                splashColor: Colors.deepOrange,
+                onPressed: () {},
+                icon: const Icon(
+                  CupertinoIcons.play_circle,
+                  color: Colors.deepOrange,
+                ))
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -220,7 +242,7 @@ class _AlbumMusic extends StatelessWidget {
               title: "Albums",
             ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 10),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.27,
             child: ListView.builder(
@@ -286,35 +308,56 @@ class _DiscoverMusic extends StatelessWidget {
   }
 }
 
-class _CustomAppBar extends StatelessWidget with PreferredSizeWidget {
-  const _CustomAppBar({
+class _LocalPlaylistMusic extends StatelessWidget {
+  const _LocalPlaylistMusic({
     Key? key,
-  }) : super(key: key);
+    required OnAudioQuery audioQuery,
+  })  : _audioQuery = audioQuery,
+        super(key: key);
+
+  final OnAudioQuery _audioQuery;
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      leading: const Icon(
-        CupertinoIcons.square_grid_2x2,
-      ),
-      actions: [
-        Container(
-          margin: const EdgeInsets.only(right: 19),
-          child: IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              CupertinoIcons.gear_alt,
-              color: Colors.white,
-            ),
+    return FutureBuilder<List<SongModel>>(
+      //default values
+      future: _audioQuery.querySongs(
+          sortType: null,
+          ignoreCase: true,
+          uriType: UriType.EXTERNAL,
+          orderType: OrderType.ASC_OR_SMALLER),
+      builder: (context, item) {
+        //loading content indicator
+        if (item.data == null) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        // no songs found
+        if (item.data!.isEmpty) {
+          return const Center(
+            child: Text('No songs found in this device'),
+          );
+        }
+        //show songs
+        return Padding(
+          padding: const EdgeInsets.all(19),
+          child: Column(
+            children: [
+              const SectionHeader(title: 'Local Songs'),
+              ListView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.only(top: 14),
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: item.data!.length,
+                itemBuilder: ((context, index) {
+                  return SongCardLocal(song: item.data![index]);
+                }),
+              ),
+            ],
           ),
-        )
-      ],
+        );
+      },
     );
   }
-
-  @override
-  // TODO: implement preferredSize
-  Size get preferredSize => const Size.fromHeight(50);
 }

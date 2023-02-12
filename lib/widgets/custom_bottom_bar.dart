@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CustomBottomBar extends StatefulWidget {
   final int indexPage;
   const CustomBottomBar({
-    this.indexPage = 0,
+    required this.indexPage,
     Key? key,
   }) : super(key: key);
 
@@ -15,24 +14,22 @@ class CustomBottomBar extends StatefulWidget {
 
 class _CustomBottomBarState extends State<CustomBottomBar> {
   late int currentIndex = widget.indexPage;
-  // final tabPages = [
-  //   Get.toNamed('/'),
-  //   Get.toNamed('/favorites'),
-  //   Get.toNamed('/equalizer'),
-  // ];
+  final tabPages = [
+    '/',
+    '/favorites',
+    '/equalizer',
+  ];
 
   @override
   Widget build(BuildContext context) {
-    // assert(tabPages.length == navItems.length);
-
     return BottomNavigationBar(
       onTap: (index) {
         setState(() {
           currentIndex = index;
-          // tabPages[currentIndex];
-          print(currentIndex);
+          Navigator.pushReplacementNamed(context, tabPages[index]);
         });
       },
+      selectedFontSize: 10,
       elevation: 0,
       backgroundColor: Colors.transparent,
       currentIndex: currentIndex,
@@ -60,10 +57,10 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
             label: 'Favorites'),
         BottomNavigationBarItem(
             icon: Icon(
-              Icons.equalizer_outlined,
+              CupertinoIcons.slider_horizontal_3,
             ),
             activeIcon: Icon(
-              Icons.equalizer,
+              CupertinoIcons.slider_horizontal_below_rectangle,
             ),
             label: 'Equalizer'),
       ],
