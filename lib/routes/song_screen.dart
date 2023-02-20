@@ -5,61 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:palette_generator/palette_generator.dart';
-import 'package:rxdart/rxdart.dart' as rxdart;
+import 'package:provider/provider.dart';
 
 import '../models/song_model.dart';
 import '../models/songs_provider.dart';
 import '../widgets/seekbar.dart';
 import '../widgets/player_controllers.dart';
 
-class SongScreen extends StatefulWidget {
+class SongScreen extends StatelessWidget {
   const SongScreen({super.key});
 
   @override
-  State<SongScreen> createState() => _SongScreenState();
-}
-
-class _SongScreenState extends State<SongScreen> {
-  AudioPlayer audioPlayer = AudioPlayer();
-  Song song = Get.arguments ?? Songs().songs[0];
-  @override
-  void initState() {
-    super.initState();
-
-    audioPlayer.setAudioSource(
-      ConcatenatingAudioSource(
-        children: [
-          AudioSource.uri(
-            Uri.parse('asset:///${song.musicUrl}'),
-          ),
-          AudioSource.uri(
-            Uri.parse('asset:///${Songs().songs[5].musicUrl}'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    audioPlayer.dispose();
-    super.dispose();
-  }
-
-  Stream<SeekBarData> get _seekBarDataStream =>
-      rxdart.Rx.combineLatest2<Duration, Duration?, SeekBarData>(
-          audioPlayer.positionStream, audioPlayer.durationStream, (
-        Duration position,
-        Duration? duration,
-      ) {
-        return SeekBarData(
-          position,
-          duration ?? Duration.zero,
-        );
-      });
-
-  @override
   Widget build(BuildContext context) {
+    final songData = Provider.of<Songs>(context);
+    final audioPlayer = songData.audioPlayer;
+    Song song = Get.arguments ?? songData.currentSong;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -76,7 +36,7 @@ class _SongScreenState extends State<SongScreen> {
         ),
         _MusicTimer(
             song: song,
-            seekBarDataStream: _seekBarDataStream,
+            seekBarDataStream: songData.seekBarDataStream,
             audioPlayer: audioPlayer),
       ]),
     );
@@ -145,7 +105,7 @@ class _MusicTimer extends StatelessWidget {
               );
             },
           ),
-          PlayerControllers(audioPlayer: audioPlayer),
+          const PlayerControllers(),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

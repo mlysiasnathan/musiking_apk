@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -127,9 +125,10 @@ class _PrePlayingSong extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final songData = Provider.of<Songs>(context).currentSong;
+    final songData = Provider.of<Songs>(context);
+
     return ChangeNotifierProvider(
-      create: (c) => songData,
+      create: (c) => songData.currentSong,
       child: Container(
         height: 40,
         width: MediaQuery.of(context).size.width * 0.96,
@@ -143,7 +142,8 @@ class _PrePlayingSong extends StatelessWidget {
               fit: FlexFit.tight,
               child: InkWell(
                 onTap: () {
-                  Get.toNamed('/song', arguments: songData);
+                  // songData.setPosition();
+                  Get.toNamed('/song', arguments: songData.currentSong);
                 },
                 borderRadius: BorderRadius.circular(5),
                 child: Row(
@@ -152,9 +152,9 @@ class _PrePlayingSong extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(5),
                       child: Hero(
-                        tag: songData.title,
+                        tag: songData.currentSong.title,
                         child: Image.asset(
-                          songData.coverUrl,
+                          songData.currentSong.coverUrl,
                           width: 30,
                           height: 30,
                           fit: BoxFit.cover,
@@ -163,7 +163,7 @@ class _PrePlayingSong extends StatelessWidget {
                     ),
                     const SizedBox(width: 18),
                     Text(
-                      songData.title,
+                      songData.currentSong.title,
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.deepOrange,
@@ -174,13 +174,18 @@ class _PrePlayingSong extends StatelessWidget {
               ),
             ),
             IconButton(
-                splashRadius: 40,
-                splashColor: Colors.deepOrange,
-                onPressed: () {},
-                icon: const Icon(
-                  CupertinoIcons.play_circle,
-                  color: Colors.deepOrange,
-                ))
+              splashRadius: 40,
+              splashColor: Colors.deepOrange,
+              onPressed: () {
+                songData.playPause(songData.currentSong);
+              },
+              icon: Icon(
+                songData.isPlaying
+                    ? CupertinoIcons.pause_circle
+                    : CupertinoIcons.play_circle,
+                color: Colors.deepOrange,
+              ),
+            ),
           ],
         ),
       ),

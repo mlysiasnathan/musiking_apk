@@ -1,17 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:provider/provider.dart';
+
+import '../models/songs_provider.dart';
 
 class PlayerControllers extends StatelessWidget {
   const PlayerControllers({
     Key? key,
-    required this.audioPlayer,
   }) : super(key: key);
-
-  final AudioPlayer audioPlayer;
 
   @override
   Widget build(BuildContext context) {
+    final songData = Provider.of<Songs>(context);
+    final audioPlayer = songData.audioPlayer;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -47,20 +49,22 @@ class PlayerControllers extends StatelessWidget {
             if (snapshot.hasData) {
               final playerState = snapshot.data;
               final processingState = playerState!.processingState;
-              // if (processingState == ProcessingState.loading ||
-              //     processingState == ProcessingState.buffering) {
-              //   return Container(
-              //     height: 64,
-              //     width: 64,
-              //     margin: const EdgeInsets.all(8),
-              //     child: const CircularProgressIndicator(),
-              //   );
-              // } else
-              if (!audioPlayer.playing) {
+              if (processingState == ProcessingState.loading ||
+                  processingState == ProcessingState.buffering) {
+                return Container(
+                  height: 64,
+                  width: 64,
+                  margin: const EdgeInsets.all(8),
+                  child: const CircularProgressIndicator(),
+                );
+              } else if (!audioPlayer.playing) {
                 return IconButton(
                   color: Colors.white,
                   iconSize: 70,
-                  onPressed: audioPlayer.play,
+                  onPressed: () {
+                    audioPlayer.play();
+                    songData.isPlaying = true;
+                  },
                   icon: const Icon(
                     CupertinoIcons.play_circle_fill,
                   ),
@@ -69,7 +73,10 @@ class PlayerControllers extends StatelessWidget {
                 return IconButton(
                   color: Colors.white,
                   iconSize: 70,
-                  onPressed: audioPlayer.pause,
+                  onPressed: () {
+                    audioPlayer.pause();
+                    songData.isPlaying = false;
+                  },
                   icon: const Icon(
                     CupertinoIcons.pause_circle_fill,
                   ),
@@ -78,10 +85,13 @@ class PlayerControllers extends StatelessWidget {
                 return IconButton(
                   color: Colors.white,
                   iconSize: 75,
-                  onPressed: () => audioPlayer.seek(
-                    Duration.zero,
-                    index: audioPlayer.effectiveIndices!.first,
-                  ),
+                  onPressed: () {
+                    audioPlayer.seek(
+                      Duration.zero,
+                      index: audioPlayer.effectiveIndices!.first,
+                    );
+                    songData.isPlaying = false;
+                  },
                   icon: const Icon(
                     CupertinoIcons.memories,
                   ),

@@ -35,6 +35,7 @@ class PlaylistCard extends StatelessWidget {
                 ),
               ),
             ),
+            //error============================================================
             Container(
               height: 50,
               width: MediaQuery.of(context).size.width * 0.35,
@@ -51,19 +52,17 @@ class PlaylistCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
+                      SizedBox(
                         width: MediaQuery.of(context).size.width * 0.25,
-                        child: Expanded(
-                          child: Text(
-                            playlist.title,
-                            style:
-                                Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        child: Text(
+                          playlist.title,
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       Text(

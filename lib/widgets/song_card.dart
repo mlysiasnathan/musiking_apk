@@ -16,7 +16,7 @@ class SongCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Provider.of<Songs>(context, listen: false).currentPlayingSong(song);
+        Provider.of<Songs>(context, listen: false).clickToPlay(song);
       },
       borderRadius: BorderRadius.circular(10),
       child: Container(

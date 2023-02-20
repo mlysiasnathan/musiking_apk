@@ -10,7 +10,7 @@ import 'package:rxdart/rxdart.dart' as rxdart;
 // import '../models/song_model.dart';
 import '../models/songs_provider.dart';
 import '../widgets/seekbar.dart';
-import '../widgets/player_controllers.dart';
+// import '../widgets/player_controllers.dart';
 
 class SongScreenLocal extends StatefulWidget {
   const SongScreenLocal({super.key});
@@ -137,7 +137,7 @@ class _MusicTimer extends StatelessWidget {
               );
             },
           ),
-          PlayerControllers(audioPlayer: audioPlayer),
+          // PlayerControllers(audioPlayer: audioPlayer),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
