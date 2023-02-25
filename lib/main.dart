@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:musiking/routes/equalizer_screen.dart';
 import 'package:musiking/routes/favorites_screen.dart';
@@ -12,6 +13,9 @@ import './models/playlists_provider.dart';
 import './models/songs_provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(const MyApp());
 }
 
@@ -31,6 +35,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: GetMaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'MusiKing',
         theme: ThemeData(
           primaryColor: Colors.deepOrange,

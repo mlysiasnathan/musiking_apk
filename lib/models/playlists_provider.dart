@@ -6,24 +6,24 @@ import '../models/songs_provider.dart';
 class Playlists with ChangeNotifier {
   List<Playlist> playlists = [
     Playlist(
-      title: 'Hip-Hop R&B',
+      title: 'NRJ 2018',
       songs: Songs().songs,
-      imgUrl: 'assets/musiccovers/lonely.JPG',
+      imgUrl: 'assets/musiccovers/nrj18.jpg',
     ),
     Playlist(
-      title: 'Rock & Roll',
+      title: 'So Far So Good 2023',
       songs: Songs().songs,
-      imgUrl: 'assets/musiccovers/love.jpg',
+      imgUrl: 'assets/musiccovers/smoker.jpg',
     ),
     Playlist(
-      title: 'Techno',
+      title: 'Planet Her',
       songs: Songs().songs,
-      imgUrl: 'assets/musiccovers/Longtemps.jpg',
+      imgUrl: 'assets/musiccovers/doja.jpg',
     ),
     Playlist(
-      title: 'Slow',
+      title: 'Other Songs',
       songs: Songs().songs,
-      imgUrl: 'assets/musiccovers/love.jpg',
+      imgUrl: 'assets/musiccovers/nrj18.jpg',
     ),
   ];
 }

@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,7 +12,7 @@ import 'package:rxdart/rxdart.dart' as rxdart;
 // import '../models/song_model.dart';
 import '../models/songs_provider.dart';
 import '../widgets/seekbar.dart';
-// import '../widgets/player_controllers.dart';
+import '../widgets/player_controllers.dart';
 
 class SongScreenLocal extends StatefulWidget {
   const SongScreenLocal({super.key});
@@ -66,26 +68,27 @@ class _SongScreenLocalState extends State<SongScreenLocal> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: Stack(fit: StackFit.expand, children: [
-        QueryArtworkWidget(
-          id: song.id,
-          type: ArtworkType.AUDIO,
-        ),
-        // Image.asset(
-        //   song.coverUrl,
-        //   fit: BoxFit.cover,
-        // ),
-        _BackgroundFilter(
-          image: QueryArtworkWidget(
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          QueryArtworkWidget(
             id: song.id,
             type: ArtworkType.AUDIO,
+            artworkBorder: BorderRadius.zero,
           ),
-        ),
-        _MusicTimer(
+          _BackgroundFilter(
+            image: QueryArtworkWidget(
+              id: song.id,
+              type: ArtworkType.AUDIO,
+            ),
+          ),
+          _MusicTimer(
             song: song,
             seekBarDataStream: _seekBarDataStream,
-            audioPlayer: audioPlayer),
-      ]),
+            audioPlayer: audioPlayer,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -110,6 +113,23 @@ class _MusicTimer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Center(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Hero(
+                transitionOnUserGestures: true,
+                tag: song.title,
+                child: QueryArtworkWidget(
+                  id: song.id,
+                  type: ArtworkType.AUDIO,
+                  artworkHeight: MediaQuery.of(context).size.height * 0.45,
+                  artworkWidth: MediaQuery.of(context).size.height * 0.45,
+                  artworkBorder: BorderRadius.zero,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
           Text(
             song.title,
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
@@ -137,7 +157,8 @@ class _MusicTimer extends StatelessWidget {
               );
             },
           ),
-          // PlayerControllers(audioPlayer: audioPlayer),
+          const PlayerControllers(),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -184,6 +205,8 @@ class _BackgroundFilter extends StatefulWidget {
 
 class _BackgroundFilterState extends State<_BackgroundFilter> {
   PaletteGenerator? paletteGenerator;
+  Color defaultLightColor = Colors.orange;
+  Color defaultDarkColor = Colors.deepOrange;
   Future<PaletteGenerator?> generateColors() async {
     paletteGenerator = await PaletteGenerator.fromImageProvider(
       Image.asset(
@@ -192,7 +215,7 @@ class _BackgroundFilterState extends State<_BackgroundFilter> {
           type: ArtworkType.AUDIO,
         ).toString(),
       ).image,
-      size: const Size.square(1000),
+      // size: const Size.square(1000),
       region: const Rect.fromLTRB(0, 0, 1000, 1000),
     );
     setState(() {});
@@ -207,46 +230,76 @@ class _BackgroundFilterState extends State<_BackgroundFilter> {
 
   @override
   Widget build(BuildContext context) {
-    return ShaderMask(
-      shaderCallback: (item) {
-        return LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.white,
-            Colors.white.withOpacity(0.5),
-            Colors.white.withOpacity(0.0),
-          ],
-          stops: const [
-            0.0,
-            0.3,
-            0.9,
-          ],
-        ).createShader(item);
-      },
-      blendMode: BlendMode.dstOut,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              paletteGenerator != null
-                  ? paletteGenerator!.vibrantColor != null
-                      ? paletteGenerator!.vibrantColor!.color
-                      : Colors.orange
-                  : Colors.orange,
-              paletteGenerator != null
-                  ? paletteGenerator!.darkVibrantColor != null
-                      ? paletteGenerator!.darkVibrantColor!.color
-                      : Colors.red
-                  : Colors.red,
-              // Colors.orange,
-              // Colors.red,
-            ],
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: Image.asset(
+            QueryArtworkWidget(
+              id: widget.image.id,
+              type: ArtworkType.AUDIO,
+            ).toString(),
+          ).image,
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: BackdropFilter(
+        filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        child: Container(
+          decoration: BoxDecoration(
+            color:
+                // Colors.grey.shade200.withOpacity(0.5),
+                paletteGenerator != null
+                    ? paletteGenerator!.dominantColor != null
+                        ? paletteGenerator!.dominantColor!.color
+                            .withOpacity(0.7)
+                        : defaultDarkColor
+                    : defaultDarkColor,
+            // color: Colors.transparent,
           ),
         ),
       ),
     );
+
+    // android UI========================
+
+    // return ShaderMask(
+    //   shaderCallback: (item) {
+    //     return LinearGradient(
+    //       begin: Alignment.topCenter,
+    //       end: Alignment.bottomCenter,
+    //       colors: [
+    //         Colors.black,
+    //         Colors.black.withOpacity(0.6),
+    //         Colors.black.withOpacity(0.0),
+    //       ],
+    //       stops: const [
+    //         0.0,
+    //         0.6,
+    //         0.9,
+    //       ],
+    //     ).createShader(item);
+    //   },
+    //   blendMode: BlendMode.dstOut,
+    //   child: Container(
+    //     decoration: BoxDecoration(
+    //       gradient: LinearGradient(
+    //         begin: Alignment.topCenter,
+    //         end: Alignment.bottomCenter,
+    //         colors: [
+    //           paletteGenerator != null
+    //               ? paletteGenerator!.vibrantColor != null
+    //                   ? paletteGenerator!.vibrantColor!.color
+    //                   : defaultLightColor
+    //               : defaultLightColor,
+    //           paletteGenerator != null
+    //               ? paletteGenerator!.dominantColor != null
+    //                   ? paletteGenerator!.dominantColor!.color
+    //                   : defaultDarkColor
+    //               : defaultDarkColor,
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }

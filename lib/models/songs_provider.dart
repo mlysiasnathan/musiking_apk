@@ -8,43 +8,42 @@ import 'package:musiking/models/song_model.dart';
 import '../widgets/seekbar.dart';
 
 class Songs with ChangeNotifier {
-  List<Song> _songs = [
+  List<Song> _songs = <Song>[
     Song(
-      title: 'Holyday - Lil Nas X',
-      descriptions: 'old song',
-      musicUrl: 'assets/musics/Lil Nas X - HOLIDAY.mp3',
-      coverUrl: 'assets/musiccovers/Longtemps.jpg',
+      title: 'High',
+      descriptions: 'TheChainsmokers - So Far So Good 2023',
+      musicUrl: 'assets/musics/High.mp3',
+      coverUrl: 'assets/musiccovers/smoker.jpg',
     ),
     Song(
-      title: 'Love Again',
-      descriptions: 'Hits song',
-      musicUrl: 'assets/musics/Love Again (Extended Version).mp3',
-      coverUrl: 'assets/musiccovers/love.jpg',
+      title: 'Need To Know',
+      descriptions: 'Doja Cat - Planet Her',
+      musicUrl: 'assets/musics/Need To Know.mp3',
+      coverUrl: 'assets/musiccovers/doja.jpg',
     ),
     Song(
-      title: 'Lonely - Akon',
-      descriptions: 'old song',
-      musicUrl: 'assets/musics/Lonely - Akon.mp3',
-      coverUrl: 'assets/musiccovers/lonely.JPG',
+      title: 'Dam Dam',
+      descriptions: 'The Parakit 2018',
+      musicUrl: 'assets/musics/Dam Dam.mp3',
+      coverUrl: 'assets/musiccovers/nrj18.jpg',
     ),
     Song(
-      title: 'Love Again',
-      descriptions: 'Hits song',
-      musicUrl: 'assets/musics/Love Again (Extended Version).mp3',
-      coverUrl: 'assets/musiccovers/love.jpg',
+      title: 'Need To Know Duplicate',
+      descriptions: 'Doja Cat - Planet Her',
+      musicUrl: 'assets/musics/Need To Know.mp3',
+      coverUrl: 'assets/musiccovers/doja.jpg',
     ),
     Song(
-      title: 'Lonely - Akon',
-      descriptions: 'old song',
-      musicUrl: 'assets/musics/Lonely - Akon.mp3',
-      coverUrl: 'assets/musiccovers/lonely.JPG',
+      title: 'Dam Dam Duplicate',
+      descriptions: 'The Parakit 2018',
+      musicUrl: 'assets/musics/Dam Dam.mp3',
+      coverUrl: 'assets/musiccovers/nrj18.jpg',
     ),
     Song(
-      title: 'Holyday - Lil Nas X',
-      descriptions: 'old song',
-      musicUrl: 'assets/musics/Lil Nas X - HOLIDAY.mp3',
-      coverUrl: 'assets/musiccovers/Longtemps.jpg',
-      // coverProv: 'assets/musiccovers/Longtemps.jpg',
+      title: 'High Duplicate',
+      descriptions: 'TheChainsmokers - So Far So Good 2023',
+      musicUrl: 'assets/musics/High.mp3',
+      coverUrl: 'assets/musiccovers/smoker.jpg',
     ),
   ];
   List<Song> get songs {
@@ -73,13 +72,22 @@ class Songs with ChangeNotifier {
   bool isLoading = false;
   Duration songPosition = Duration.zero;
 
-  void _initializePlayer(Song song) {
+  void initializePlayer(Song song) {
     audioPlayer.setAudioSource(
       ConcatenatingAudioSource(
         children: [
-          AudioSource.uri(
-            Uri.parse('asset:///${song.musicUrl}'),
-          ),
+          // songs
+          //     .map(
+          //       (son) =>
+
+          AudioSource.uri(Uri.parse('asset:///${song.musicUrl}')),
+          AudioSource.uri(Uri.parse('asset:///${songs[1].musicUrl}')),
+          AudioSource.uri(Uri.parse('asset:///${songs[2].musicUrl}')),
+          AudioSource.uri(Uri.parse('asset:///${songs[3].musicUrl}')),
+          AudioSource.uri(Uri.parse('asset:///${songs[4].musicUrl}')),
+          AudioSource.uri(Uri.parse('asset:///${songs[5].musicUrl}')),
+          // )
+          // .toList(),
         ],
       ),
     );
@@ -101,7 +109,7 @@ class Songs with ChangeNotifier {
       );
 
   void playPause(Song song) {
-    audioPlayer.position == Duration.zero ? _initializePlayer(song) : null;
+    audioPlayer.position == Duration.zero ? initializePlayer(song) : null;
 
     if (audioPlayer.playerState.processingState == ProcessingState.loading ||
         audioPlayer.playerState.processingState == ProcessingState.buffering) {
@@ -111,6 +119,9 @@ class Songs with ChangeNotifier {
     } else if (audioPlayer.playerState.processingState !=
         ProcessingState.completed) {
       audioPlayer.pause();
+    } else if (audioPlayer.playerState.processingState ==
+        ProcessingState.completed) {
+      currentSong = songs[audioPlayer.currentIndex! + 1];
     } else {
       audioPlayer.seek(
         Duration.zero,
@@ -121,9 +132,49 @@ class Songs with ChangeNotifier {
     notifyListeners();
   }
 
+  void next() {
+    if (audioPlayer.hasNext) {
+      audioPlayer.seekToNext();
+      currentSong = songs[audioPlayer.currentIndex! + 1];
+      print(songs.indexOf(currentSong));
+      print(audioPlayer.currentIndex);
+    } else {
+      final index = songs.indexOf(currentSong);
+      if (index >= songs.length - 1) {
+        return;
+      } else {
+        currentSong = songs[index + 1];
+        initializePlayer(currentSong);
+        audioPlayer.play();
+      }
+    }
+    isPlaying = true;
+    notifyListeners();
+  }
+
+  void prev() {
+    if (audioPlayer.hasPrevious) {
+      audioPlayer.seekToPrevious();
+      currentSong = songs[audioPlayer.currentIndex! - 1];
+      print(songs.indexOf(currentSong));
+      print(audioPlayer.currentIndex);
+    } else {
+      final index = songs.indexOf(currentSong);
+      if (index <= 0) {
+        return;
+      } else {
+        currentSong = songs[index - 1];
+        initializePlayer(currentSong);
+        audioPlayer.play();
+      }
+    }
+    isPlaying = true;
+    notifyListeners();
+  }
+
   void clickToPlay(Song song) {
     currentSong = song;
-    _initializePlayer(currentSong);
+    initializePlayer(currentSong);
     audioPlayer.play();
     isPlaying = true;
     notifyListeners();

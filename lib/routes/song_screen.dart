@@ -2,7 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +19,10 @@ class SongScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final songData = Provider.of<Songs>(context);
     final audioPlayer = songData.audioPlayer;
-    Song song = Get.arguments ?? songData.currentSong;
+    // Song song = Get.arguments ?? songData.currentSong;
+
+    Song song = songData.currentSong;
+    // print(audioPlayer.currentIndex);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -35,9 +38,10 @@ class SongScreen extends StatelessWidget {
           image: song.coverUrl,
         ),
         _MusicTimer(
-            song: song,
-            seekBarDataStream: songData.seekBarDataStream,
-            audioPlayer: audioPlayer),
+          song: song,
+          seekBarDataStream: songData.seekBarDataStream,
+          audioPlayer: audioPlayer,
+        ),
       ]),
     );
   }
@@ -67,6 +71,7 @@ class _MusicTimer extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: Hero(
+                transitionOnUserGestures: true,
                 tag: song.title,
                 child: Image.asset(
                   song.coverUrl,
@@ -154,7 +159,7 @@ class _BackgroundFilter extends StatefulWidget {
 class _BackgroundFilterState extends State<_BackgroundFilter> {
   PaletteGenerator? paletteGenerator;
   Color defaultLightColor = Colors.orange;
-  Color defaultDarkColor = Colors.red;
+  Color defaultDarkColor = Colors.deepOrange;
   Future<PaletteGenerator?> generateColors() async {
     paletteGenerator = await PaletteGenerator.fromImageProvider(
       Image.asset(widget.image).image,
@@ -189,8 +194,9 @@ class _BackgroundFilterState extends State<_BackgroundFilter> {
             color:
                 // Colors.grey.shade200.withOpacity(0.5),
                 paletteGenerator != null
-                    ? paletteGenerator!.vibrantColor != null
-                        ? paletteGenerator!.vibrantColor!.color.withOpacity(0.7)
+                    ? paletteGenerator!.dominantColor != null
+                        ? paletteGenerator!.dominantColor!.color
+                            .withOpacity(0.7)
                         : defaultDarkColor
                     : defaultDarkColor,
             // color: Colors.transparent,
@@ -208,12 +214,12 @@ class _BackgroundFilterState extends State<_BackgroundFilter> {
     //       end: Alignment.bottomCenter,
     //       colors: [
     //         Colors.black,
-    //         Colors.black.withOpacity(0.5),
+    //         Colors.black.withOpacity(0.4),
     //         Colors.black.withOpacity(0.0),
     //       ],
     //       stops: const [
     //         0.0,
-    //         0.3,
+    //         0.2,
     //         0.9,
     //       ],
     //     ).createShader(item);
@@ -231,8 +237,8 @@ class _BackgroundFilterState extends State<_BackgroundFilter> {
     //                   : defaultLightColor
     //               : defaultLightColor,
     //           paletteGenerator != null
-    //               ? paletteGenerator!.darkVibrantColor != null
-    //                   ? paletteGenerator!.darkVibrantColor!.color
+    //               ? paletteGenerator!.dominantColor != null
+    //                   ? paletteGenerator!.dominantColor!.color
     //                   : defaultDarkColor
     //               : defaultDarkColor,
     //         ],

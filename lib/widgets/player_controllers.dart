@@ -21,8 +21,9 @@ class PlayerControllers extends StatelessWidget {
           stream: audioPlayer.sequenceStateStream,
           builder: (context, index) {
             return IconButton(
-              onPressed:
-                  audioPlayer.shuffleModeEnabled ? audioPlayer.shuffle : null,
+              onPressed: () {
+                audioPlayer.setShuffleModeEnabled(true);
+              },
               icon: Icon(CupertinoIcons.shuffle,
                   color: audioPlayer.shuffleModeEnabled
                       ? Colors.white
@@ -35,8 +36,9 @@ class PlayerControllers extends StatelessWidget {
           stream: audioPlayer.sequenceStateStream,
           builder: (context, index) {
             return IconButton(
-              onPressed:
-                  audioPlayer.hasPrevious ? audioPlayer.seekToPrevious : null,
+              onPressed: () {
+                songData.prev();
+              },
               icon: const Icon(CupertinoIcons.backward_end_fill,
                   color: Colors.white),
               iconSize: 30,
@@ -62,8 +64,14 @@ class PlayerControllers extends StatelessWidget {
                   color: Colors.white,
                   iconSize: 70,
                   onPressed: () {
+                    audioPlayer.position == Duration.zero
+                        ? songData.initializePlayer(songData.currentSong)
+                        : null;
                     audioPlayer.play();
                     songData.isPlaying = true;
+                    print(
+                        'current song : ${songData.songs.indexOf(songData.currentSong)}');
+                    print(songData.audioPlayer.currentIndex);
                   },
                   icon: const Icon(
                     CupertinoIcons.play_circle_fill,
@@ -76,6 +84,26 @@ class PlayerControllers extends StatelessWidget {
                   onPressed: () {
                     audioPlayer.pause();
                     songData.isPlaying = false;
+                    print(
+                        'current song : ${songData.songs.indexOf(songData.currentSong)}');
+                    print(songData.audioPlayer.currentIndex);
+                  },
+                  icon: const Icon(
+                    CupertinoIcons.pause_circle_fill,
+                  ),
+                );
+              } else if (processingState == ProcessingState.idle) {
+                songData.currentSong =
+                    songData.songs[audioPlayer.currentIndex! + 1];
+                return IconButton(
+                  color: Colors.white,
+                  iconSize: 70,
+                  onPressed: () {
+                    audioPlayer.pause();
+                    songData.isPlaying = false;
+                    print(
+                        'current song : ${songData.songs.indexOf(songData.currentSong)}');
+                    print(songData.audioPlayer.currentIndex);
                   },
                   icon: const Icon(
                     CupertinoIcons.pause_circle_fill,
@@ -108,7 +136,9 @@ class PlayerControllers extends StatelessWidget {
           stream: audioPlayer.sequenceStateStream,
           builder: (context, index) {
             return IconButton(
-              onPressed: audioPlayer.hasNext ? audioPlayer.seekToNext : null,
+              onPressed: () {
+                songData.next();
+              },
               icon: const Icon(CupertinoIcons.forward_end_fill,
                   color: Colors.white),
               iconSize: 30,
@@ -122,7 +152,7 @@ class PlayerControllers extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               child: IconButton(
                 onPressed: () {
-                  return;
+                  audioPlayer.setLoopMode(LoopMode.one);
                 },
                 icon: const Icon(
                   Icons.loop_outlined,

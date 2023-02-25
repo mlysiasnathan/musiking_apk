@@ -31,30 +31,28 @@ class SongCardLocal extends StatelessWidget {
         Get.toNamed('/songLocal', arguments: song);
       },
       child: Container(
-        height: 70,
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        height: 50,
+        margin: const EdgeInsets.all(3),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         decoration: BoxDecoration(
           color: Colors.deepOrange.withOpacity(0.7),
-          borderRadius: BorderRadius.circular(13),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(13),
+              borderRadius: BorderRadius.circular(7),
               child: QueryArtworkWidget(
                 id: song.id,
                 type: ArtworkType.AUDIO,
+                artworkHeight: 40,
+                artworkWidth: 40,
+                artworkBorder: BorderRadius.zero,
+                nullArtworkWidget: const Icon(Icons.music_note_outlined),
               ),
-              // Image.asset(
-              //   song.coverUrl,
-              //   width: 50,
-              //   height: 50,
-              //   fit: BoxFit.cover,
-              // ),
             ),
-            const SizedBox(width: 19),
+            const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,12 +73,13 @@ class SongCardLocal extends StatelessWidget {
               ),
             ),
             IconButton(
+              splashRadius: 23,
               onPressed: () {},
               icon: const Icon(
-                Icons.more_vert,
+                Icons.more_horiz_outlined,
                 color: Colors.white,
               ),
-            )
+            ),
           ],
         ),
       ),
