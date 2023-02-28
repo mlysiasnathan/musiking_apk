@@ -1,32 +1,53 @@
 import 'package:flutter/material.dart';
 
-class SectionHeader extends StatelessWidget {
+class SectionHeader extends StatefulWidget {
   final String title;
-  final String action;
+  final String actionText;
+  final Function action;
   const SectionHeader({
     Key? key,
-    this.action = 'View more',
+    this.actionText = 'View more',
     required this.title,
+    required this.action,
   }) : super(key: key);
 
+  @override
+  State<SectionHeader> createState() => _SectionHeaderState();
+}
+
+class _SectionHeaderState extends State<SectionHeader> {
+  bool _isClicked = false;
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          title,
+          widget.title,
           style: Theme.of(context)
               .textTheme
               .headline6!
               .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        Text(
-          action,
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall!
-              .copyWith(color: Colors.white, fontWeight: FontWeight.w400),
+        TextButton.icon(
+          onPressed: () {
+            widget.action();
+            setState(() {
+              _isClicked = !_isClicked;
+            });
+          },
+          label: Text(
+            _isClicked == true ? 'View less' : widget.actionText,
+            style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                ),
+          ),
+          icon: _isClicked == true
+              ? const Icon(Icons.keyboard_arrow_down_outlined,
+                  color: Colors.white)
+              : const Icon(Icons.keyboard_arrow_right_outlined,
+                  color: Colors.white),
         ),
       ],
     );

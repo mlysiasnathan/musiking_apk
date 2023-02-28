@@ -20,10 +20,40 @@ class Playlists with ChangeNotifier {
       songs: Songs().songs,
       imgUrl: 'assets/musiccovers/doja.jpg',
     ),
+    // Playlist(
+    //   title: 'Other Songs',
+    //   songs: Songs().songs,
+    //   imgUrl: 'assets/musiccovers/nrj18.jpg',
+    // ),
+    // Playlist(
+    //   title: 'Planet Her',
+    //   songs: Songs().songs,
+    //   imgUrl: 'assets/musiccovers/doja.jpg',
+    // ),
+    Playlist(
+      title: 'NRJ 2018',
+      songs: Songs().songs,
+      imgUrl: 'assets/musiccovers/nrj18.jpg',
+    ),
+    Playlist(
+      title: 'So Far So Good 2023',
+      songs: Songs().songs,
+      imgUrl: 'assets/musiccovers/smoker.jpg',
+    ),
+    Playlist(
+      title: 'Planet Her',
+      songs: Songs().songs,
+      imgUrl: 'assets/musiccovers/doja.jpg',
+    ),
     Playlist(
       title: 'Other Songs',
       songs: Songs().songs,
       imgUrl: 'assets/musiccovers/nrj18.jpg',
+    ),
+    Playlist(
+      title: 'Planet Her',
+      songs: Songs().songs,
+      imgUrl: 'assets/musiccovers/doja.jpg',
     ),
   ];
 }

@@ -1,17 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../models/songs_provider.dart';
+import '../routes/song_screen.dart';
 
 class PrePlayingSong extends StatelessWidget {
   const PrePlayingSong({
     Key? key,
-    // required this.song,
   }) : super(key: key);
-
-  // final Song song;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +29,8 @@ class PrePlayingSong extends StatelessWidget {
               fit: FlexFit.tight,
               child: InkWell(
                 onTap: () {
-                  // songData.setPosition();
-                  Get.toNamed('/song', arguments: songData.currentSong);
+                  Navigator.of(context).pushNamed(SongScreen.routeName,
+                      arguments: songData.currentSong);
                 },
                 borderRadius: BorderRadius.circular(5),
                 child: Row(

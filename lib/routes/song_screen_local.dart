@@ -2,20 +2,17 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 import 'package:rxdart/rxdart.dart' as rxdart;
-
-// import '../models/song_model.dart';
-import '../models/songs_provider.dart';
 import '../widgets/seekbar.dart';
-import '../widgets/player_controllers.dart';
+import '../widgets/music_controllers.dart';
 
 class SongScreenLocal extends StatefulWidget {
   const SongScreenLocal({super.key});
+  static const routeName = '/song-local';
 
   @override
   State<SongScreenLocal> createState() => _SongScreenLocalState();
@@ -23,24 +20,25 @@ class SongScreenLocal extends StatefulWidget {
 
 class _SongScreenLocalState extends State<SongScreenLocal> {
   AudioPlayer audioPlayer = AudioPlayer();
-  SongModel song = Get.arguments ?? Songs().songs[0];
-  @override
-  void initState() {
-    super.initState();
-
-    audioPlayer.setAudioSource(
-      ConcatenatingAudioSource(
-        children: [
-          AudioSource.uri(
-            Uri.parse('${song.uri}'),
-          ),
-          AudioSource.uri(
-            Uri.parse('asset:///${Songs().songs[4].musicUrl}'),
-          ),
-        ],
-      ),
-    );
-  }
+  // SongModel song = Get.arguments ?? Songs().songs[0];
+  // final playlist = ModalRoute.of(context)?.settings.arguments as Playlist;
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  //   audioPlayer.setAudioSource(
+  //     ConcatenatingAudioSource(
+  //       children: [
+  //         AudioSource.uri(
+  //           Uri.parse('${song.uri}'),
+  //         ),
+  //         AudioSource.uri(
+  //           Uri.parse('asset:///${Songs().songs[4].musicUrl}'),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   @override
   void dispose() {
@@ -62,6 +60,7 @@ class _SongScreenLocalState extends State<SongScreenLocal> {
 
   @override
   Widget build(BuildContext context) {
+    final song = ModalRoute.of(context)?.settings.arguments as SongModel;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -157,7 +156,7 @@ class _MusicTimer extends StatelessWidget {
               );
             },
           ),
-          const PlayerControllers(),
+          const MusicControllers(),
           const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

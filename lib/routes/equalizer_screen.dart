@@ -1,21 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:get/get.dart';
 
-import '../models/playlist_model.dart';
-import '../models/playlists_provider.dart';
 import '../widgets/custom_bottom_bar.dart';
 
 class Equalizer extends StatelessWidget {
   const Equalizer({Key? key}) : super(key: key);
+  static const routeName = '/equalizer';
 
   @override
   Widget build(BuildContext context) {
-    // Playlist playlist = Playlist.playlists[0];
-    final playlist =
-        Get.arguments ?? Provider.of<Playlists>(context).playlists[0];
-
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(

@@ -1,19 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 
 import '../models/playlist_model.dart';
-import '../models/playlists_provider.dart';
 
 class PlaylistScreen extends StatelessWidget {
   const PlaylistScreen({Key? key}) : super(key: key);
+  static const routeName = '/playlist';
 
   @override
   Widget build(BuildContext context) {
-    // Playlist playlist = Playlist.playlists[0];
-    final playlist =
-        Get.arguments ?? Provider.of<Playlists>(context).playlists[0];
+    final playlist = ModalRoute.of(context)?.settings.arguments as Playlist;
 
     return Container(
       decoration: BoxDecoration(

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
+import '../routes/song_screen_local.dart';
+
 // import '../models/song_model.dart';
 
 class SongCardLocal extends StatelessWidget {
@@ -28,7 +30,8 @@ class SongCardLocal extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.toNamed('/songLocal', arguments: song);
+        Navigator.of(context)
+            .pushNamed(SongScreenLocal.routeName, arguments: song);
       },
       child: Container(
         height: 50,
@@ -60,14 +63,17 @@ class SongCardLocal extends StatelessWidget {
                 children: [
                   Text(
                     song.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                   ),
                   Text(
                     '${song.artist} - ${_formatDuration(song.duration as int)}',
-                    maxLines: 2,
+                    maxLines: 1,
                     style: Theme.of(context).textTheme.bodySmall,
+                    overflow: TextOverflow.ellipsis,
                   )
                 ],
               ),

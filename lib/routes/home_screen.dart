@@ -15,7 +15,7 @@ import '../widgets/pre_playing_floating_action_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
+  static const routeName = '/';
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }

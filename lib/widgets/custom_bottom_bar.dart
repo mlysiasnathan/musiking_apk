@@ -16,7 +16,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
   late int currentIndex = widget.indexPage;
   final tabPages = [
     '/',
-    '/favorites',
+    '/favorites-songs',
     '/equalizer',
   ];
 

@@ -14,9 +14,11 @@ class SongCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final songData = Provider.of<Songs>(context);
     return InkWell(
       onTap: () {
-        Provider.of<Songs>(context, listen: false).clickToPlay(song);
+        songData.clickToPlay(song);
+        songData.generateColors();
       },
       borderRadius: BorderRadius.circular(10),
       child: Container(
@@ -62,12 +64,8 @@ class SongCard extends StatelessWidget {
                 ],
               ),
             ),
-            Icon(
-                song == Provider.of<Songs>(context).currentSong
-                    ? Icons.play_arrow
-                    : null,
-                color: Colors.white,
-                size: 16),
+            Icon(song == songData.currentSong ? Icons.play_arrow : null,
+                color: Colors.white, size: 16),
             IconButton(
               splashRadius: 23,
               onPressed: () {},

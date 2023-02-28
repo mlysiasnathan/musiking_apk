@@ -1,20 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:get/get.dart';
 
-import '../models/playlist_model.dart';
 import '../models/playlists_provider.dart';
 import '../widgets/custom_bottom_bar.dart';
 
 class Favorites extends StatelessWidget {
   const Favorites({Key? key}) : super(key: key);
+  static const routeName = '/favorites-songs';
 
   @override
   Widget build(BuildContext context) {
-    // Playlist playlist = Playlist.playlists[0];
     final playlist =
-        Get.arguments ?? Provider.of<Playlists>(context).playlists[0];
+        // ModalRoute.of(context)?.settings.arguments as Playlist ??
+        Provider.of<Playlists>(context).playlists[0];
 
     return Container(
       decoration: BoxDecoration(
@@ -182,40 +181,6 @@ class _PlayOrShuffleSwitchState extends State<_PlayOrShuffleSwitch> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _PlaylistInfo extends StatelessWidget {
-  const _PlaylistInfo({
-    Key? key,
-    required this.playlists,
-  }) : super(key: key);
-
-  final Playlist playlists;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Image.asset(
-            playlists.imgUrl,
-            height: MediaQuery.of(context).size.height * 0.3,
-            width: MediaQuery.of(context).size.height * 0.3,
-            fit: BoxFit.cover,
-          ),
-        ),
-        const SizedBox(height: 30),
-        Text(
-          playlists.title,
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall!
-              .copyWith(fontWeight: FontWeight.bold),
-        )
-      ],
     );
   }
 }

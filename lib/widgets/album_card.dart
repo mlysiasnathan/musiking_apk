@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 import '../models/playlist_model.dart';
+import '../models/songs_provider.dart';
+import '../routes/playlist_screen.dart';
 
 class AlbumCard extends StatelessWidget {
   const AlbumCard({
@@ -13,9 +16,11 @@ class AlbumCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final songData = Provider.of<Songs>(context);
     return InkWell(
       onTap: () {
-        Get.toNamed('/playlist', arguments: playlist);
+        Navigator.of(context)
+            .pushNamed(PlaylistScreen.routeName, arguments: playlist);
       },
       borderRadius: BorderRadius.circular(15),
       child: Container(
@@ -36,14 +41,16 @@ class AlbumCard extends StatelessWidget {
               ),
             ),
             Container(
-              // height: 40,
-              height: 50,
-              // width: MediaQuery.of(context).size.width * 0.27,
-              width: MediaQuery.of(context).size.width * 0.35,
-              margin: const EdgeInsets.only(bottom: 10),
+              height: songData.isViewMoreAlbum ? 40 : 50,
+              width: songData.isViewMoreAlbum
+                  ? MediaQuery.of(context).size.width * 0.27
+                  : MediaQuery.of(context).size.width * 0.35,
+              margin:
+                  EdgeInsets.only(bottom: songData.isViewMoreAlbum ? 4 : 10),
               decoration: BoxDecoration(
-                // borderRadius: BorderRadius.circular(10),
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: songData.isViewMoreAlbum
+                    ? BorderRadius.circular(10)
+                    : BorderRadius.circular(15),
                 color: Colors.white.withOpacity(0.6),
               ),
               child: Row(
@@ -78,11 +85,12 @@ class AlbumCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const Icon(
-                    Icons.play_circle,
-                    color: Colors.red,
-                  ),
-                  const SizedBox(width: 4),
+                  if (!songData.isViewMoreAlbum)
+                    const Icon(
+                      Icons.play_circle,
+                      color: Colors.red,
+                    ),
+                  if (!songData.isViewMoreAlbum) const SizedBox(width: 4),
                 ],
               ),
             ),

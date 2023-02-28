@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 import '../models/songs_provider.dart';
 
-class PlayerControllers extends StatelessWidget {
-  const PlayerControllers({
+class MusicControllers extends StatelessWidget {
+  const MusicControllers({
     Key? key,
   }) : super(key: key);
 
@@ -38,6 +38,7 @@ class PlayerControllers extends StatelessWidget {
             return IconButton(
               onPressed: () {
                 songData.prev();
+                songData.generateColors();
               },
               icon: const Icon(CupertinoIcons.backward_end_fill,
                   color: Colors.white),
@@ -92,7 +93,7 @@ class PlayerControllers extends StatelessWidget {
                     CupertinoIcons.pause_circle_fill,
                   ),
                 );
-              } else if (processingState == ProcessingState.idle) {
+              } else if (processingState == ProcessingState.completed) {
                 songData.currentSong =
                     songData.songs[audioPlayer.currentIndex! + 1];
                 return IconButton(
@@ -110,6 +111,8 @@ class PlayerControllers extends StatelessWidget {
                   ),
                 );
               } else {
+                songData.currentSong =
+                    songData.songs[audioPlayer.currentIndex! + 1];
                 return IconButton(
                   color: Colors.white,
                   iconSize: 75,
@@ -138,6 +141,7 @@ class PlayerControllers extends StatelessWidget {
             return IconButton(
               onPressed: () {
                 songData.next();
+                songData.generateColors();
               },
               icon: const Icon(CupertinoIcons.forward_end_fill,
                   color: Colors.white),

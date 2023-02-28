@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:rxdart/rxdart.dart' as rxdart;
 
 import 'package:musiking/models/song_model.dart';
@@ -66,11 +66,15 @@ class Songs with ChangeNotifier {
 
 //============================================SONG HANDLING===============================================
   AudioPlayer audioPlayer = AudioPlayer();
+  PaletteGenerator? paletteGenerator;
 
   late Song currentSong = songs[0];
   bool isPlaying = false;
   bool isLoading = false;
+  bool isViewMoreAlbum = false;
   Duration songPosition = Duration.zero;
+  Color defaultLightColor = Colors.orange;
+  Color defaultDarkColor = Colors.deepOrange;
 
   void initializePlayer(Song song) {
     audioPlayer.setAudioSource(
@@ -136,8 +140,6 @@ class Songs with ChangeNotifier {
     if (audioPlayer.hasNext) {
       audioPlayer.seekToNext();
       currentSong = songs[audioPlayer.currentIndex! + 1];
-      print(songs.indexOf(currentSong));
-      print(audioPlayer.currentIndex);
     } else {
       final index = songs.indexOf(currentSong);
       if (index >= songs.length - 1) {
@@ -156,8 +158,6 @@ class Songs with ChangeNotifier {
     if (audioPlayer.hasPrevious) {
       audioPlayer.seekToPrevious();
       currentSong = songs[audioPlayer.currentIndex! - 1];
-      print(songs.indexOf(currentSong));
-      print(audioPlayer.currentIndex);
     } else {
       final index = songs.indexOf(currentSong);
       if (index <= 0) {
@@ -172,11 +172,27 @@ class Songs with ChangeNotifier {
     notifyListeners();
   }
 
+  void viewMoreAlbum() {
+    isViewMoreAlbum = !isViewMoreAlbum;
+    notifyListeners();
+  }
+
   void clickToPlay(Song song) {
     currentSong = song;
     initializePlayer(currentSong);
     audioPlayer.play();
     isPlaying = true;
+    // generateColors();
     notifyListeners();
+  }
+
+  Future<PaletteGenerator?> generateColors() async {
+    paletteGenerator = await PaletteGenerator.fromImageProvider(
+      Image.asset(currentSong.coverUrl).image,
+      size: const Size.square(1000),
+      region: const Rect.fromLTRB(0, 0, 1000, 1000),
+    );
+    notifyListeners();
+    return paletteGenerator;
   }
 }
