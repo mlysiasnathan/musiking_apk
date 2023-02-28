@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/songs_provider.dart';
-import '../routes/song_screen.dart';
+import '../routes/song_bottom_sheet.dart';
 
 class PrePlayingSong extends StatelessWidget {
   const PrePlayingSong({
@@ -13,6 +13,17 @@ class PrePlayingSong extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final songData = Provider.of<Songs>(context);
+    void songBottomSheet(BuildContext contex) {
+      showModalBottomSheet(
+          isScrollControlled: true,
+          context: contex,
+          builder: (_) {
+            return const FractionallySizedBox(
+              heightFactor: 1.0,
+              child: SongBottomSheet(),
+            );
+          });
+    }
 
     return ChangeNotifierProvider(
       create: (c) => songData.currentSong,
@@ -29,8 +40,10 @@ class PrePlayingSong extends StatelessWidget {
               fit: FlexFit.tight,
               child: InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(SongScreen.routeName,
-                      arguments: songData.currentSong);
+                  songData.paletteGenerator == null
+                      ? songData.generateColors()
+                      : null;
+                  songBottomSheet(context);
                 },
                 borderRadius: BorderRadius.circular(5),
                 child: Row(
@@ -38,14 +51,11 @@ class PrePlayingSong extends StatelessWidget {
                     const SizedBox(width: 6),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                      child: Hero(
-                        tag: songData.currentSong.title,
-                        child: Image.asset(
-                          songData.currentSong.coverUrl,
-                          width: 30,
-                          height: 30,
-                          fit: BoxFit.cover,
-                        ),
+                      child: Image.asset(
+                        songData.currentSong.coverUrl,
+                        width: 30,
+                        height: 30,
+                        fit: BoxFit.cover,
                       ),
                     ),
                     const SizedBox(width: 18),

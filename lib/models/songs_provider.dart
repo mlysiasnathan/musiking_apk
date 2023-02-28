@@ -192,6 +192,7 @@ class Songs with ChangeNotifier {
       size: const Size.square(1000),
       region: const Rect.fromLTRB(0, 0, 1000, 1000),
     );
+    print('color generated');
     notifyListeners();
     return paletteGenerator;
   }
