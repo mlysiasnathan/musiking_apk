@@ -24,22 +24,22 @@ class MusicTimer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton.icon(
-                onPressed: () => Navigator.pop(context),
-                label: const Text(
-                  'Close',
-                  style: TextStyle(color: Colors.white),
-                ),
-                icon: const Icon(
-                  Icons.keyboard_arrow_down_outlined,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     TextButton.icon(
+          //       onPressed: () => Navigator.pop(context),
+          //       label: const Text(
+          //         'Close',
+          //         style: TextStyle(color: Colors.white),
+          //       ),
+          //       icon: const Icon(
+          //         Icons.keyboard_arrow_down_outlined,
+          //         color: Colors.white,
+          //       ),
+          //     ),
+          //   ],
+          // ),
           Center(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),

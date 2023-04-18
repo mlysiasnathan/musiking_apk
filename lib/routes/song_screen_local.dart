@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/cupertino.dart';
@@ -61,6 +62,7 @@ class _SongScreenLocalState extends State<SongScreenLocal> {
   @override
   Widget build(BuildContext context) {
     final song = ModalRoute.of(context)?.settings.arguments as SongModel;
+    final audioQuery = OnAudioQuery();
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -203,11 +205,21 @@ class _BackgroundFilter extends StatefulWidget {
 }
 
 class _BackgroundFilterState extends State<_BackgroundFilter> {
+  final audioQuery = OnAudioQuery();
+  someName() async {
+    // DEFAULT: ArtworkFormat.JPEG, 200 and false
+    return await audioQuery.queryArtwork(
+      1,
+      ArtworkType.AUDIO,
+    );
+  }
+
   PaletteGenerator? paletteGenerator;
   Color defaultLightColor = Colors.orange;
   Color defaultDarkColor = Colors.deepOrange;
   Future<PaletteGenerator?> generateColors() async {
     paletteGenerator = await PaletteGenerator.fromImageProvider(
+      // someName(),
       Image.asset(
         QueryArtworkWidget(
           id: widget.image.id,
@@ -229,6 +241,12 @@ class _BackgroundFilterState extends State<_BackgroundFilter> {
 
   @override
   Widget build(BuildContext context) {
+    print(Image.asset(
+      QueryArtworkWidget(
+        id: widget.image.id,
+        type: ArtworkType.AUDIO,
+      ).toString(),
+    ).image);
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -245,15 +263,13 @@ class _BackgroundFilterState extends State<_BackgroundFilter> {
         filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
         child: Container(
           decoration: BoxDecoration(
-            color:
-                // Colors.grey.shade200.withOpacity(0.5),
-                paletteGenerator != null
-                    ? paletteGenerator!.dominantColor != null
-                        ? paletteGenerator!.dominantColor!.color
-                            .withOpacity(0.7)
-                        : defaultDarkColor
-                    : defaultDarkColor,
-            // color: Colors.transparent,
+            color: Colors.black.withOpacity(0.7),
+            // paletteGenerator != null
+            //     ? paletteGenerator!.dominantColor != null
+            //         ? paletteGenerator!.dominantColor!.color
+            //             .withOpacity(0.7)
+            //         : Colors.black.withOpacity(0.7)
+            //     : Colors.black.withOpacity(0.7),
           ),
         ),
       ),
