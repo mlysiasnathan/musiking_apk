@@ -205,48 +205,42 @@ class _BackgroundFilter extends StatefulWidget {
 }
 
 class _BackgroundFilterState extends State<_BackgroundFilter> {
-  final audioQuery = OnAudioQuery();
-  someName() async {
-    // DEFAULT: ArtworkFormat.JPEG, 200 and false
-    return await audioQuery.queryArtwork(
-      1,
-      ArtworkType.AUDIO,
-    );
-  }
+  // final audioQuery = OnAudioQuery();
+  // someName() async {
+  //   // DEFAULT: ArtworkFormat.JPEG, 200 and false
+  //   return await audioQuery.queryArtwork(
+  //     1,
+  //     ArtworkType.AUDIO,
+  //   );
+  // }
 
-  PaletteGenerator? paletteGenerator;
-  Color defaultLightColor = Colors.orange;
-  Color defaultDarkColor = Colors.deepOrange;
-  Future<PaletteGenerator?> generateColors() async {
-    paletteGenerator = await PaletteGenerator.fromImageProvider(
-      // someName(),
-      Image.asset(
-        QueryArtworkWidget(
-          id: widget.image.id,
-          type: ArtworkType.AUDIO,
-        ).toString(),
-      ).image,
-      // size: const Size.square(1000),
-      region: const Rect.fromLTRB(0, 0, 1000, 1000),
-    );
-    setState(() {});
-    return paletteGenerator;
-  }
-
-  @override
-  void initState() {
-    generateColors();
-    super.initState();
-  }
+  // PaletteGenerator? paletteGenerator;
+  // Color defaultLightColor = Colors.orange;
+  // Color defaultDarkColor = Colors.deepOrange;
+  // Future<PaletteGenerator?> generateColors() async {
+  //   paletteGenerator = await PaletteGenerator.fromImageProvider(
+  //     // someName(),
+  //     Image.asset(
+  //       QueryArtworkWidget(
+  //         id: widget.image.id,
+  //         type: ArtworkType.AUDIO,
+  //       ).toString(),
+  //     ).image,
+  //     // size: const Size.square(1000),
+  //     region: const Rect.fromLTRB(0, 0, 1000, 1000),
+  //   );
+  //   setState(() {});
+  //   return paletteGenerator;
+  // }
+  //
+  // @override
+  // void initState() {
+  //   generateColors();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    print(Image.asset(
-      QueryArtworkWidget(
-        id: widget.image.id,
-        type: ArtworkType.AUDIO,
-      ).toString(),
-    ).image);
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
