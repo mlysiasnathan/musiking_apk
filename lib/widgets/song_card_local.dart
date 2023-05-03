@@ -1,8 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 
-import '../routes/song_screen_local.dart';
+import '../models/songs_provider_local.dart';
 
 // import '../models/song_model.dart';
 
@@ -10,9 +11,11 @@ class SongCardLocal extends StatelessWidget {
   const SongCardLocal({
     Key? key,
     required this.song,
+    required this.index,
   }) : super(key: key);
 
   final SongModel song;
+  final int index;
   String _formatDuration(int duration) {
     int h, m, s;
     h = duration ~/ 3600;
@@ -28,11 +31,18 @@ class SongCardLocal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final songData = Provider.of<SongsLocal>(context, listen: false);
     return InkWell(
-      onTap: () {
-        Navigator.of(context)
-            .pushNamed(SongScreenLocal.routeName, arguments: song);
+      onTap: () async {
+        await songData.audioPlayer.setAudioSource(
+          songData.initializePlaylist(songData.songs),
+          initialIndex: index,
+        );
+        await songData.audioPlayer.play();
+        songData.setCurrentSong(index);
+        songData.generateColors();
       },
+      borderRadius: BorderRadius.circular(10),
       child: Container(
         height: 50,
         margin: const EdgeInsets.all(3),
@@ -52,7 +62,7 @@ class SongCardLocal extends StatelessWidget {
                 artworkHeight: 40,
                 artworkWidth: 40,
                 artworkBorder: BorderRadius.zero,
-                nullArtworkWidget: const Icon(Icons.music_note_outlined),
+                nullArtworkWidget: const Icon(CupertinoIcons.music_note_2),
               ),
             ),
             const SizedBox(width: 14),
@@ -77,6 +87,12 @@ class SongCardLocal extends StatelessWidget {
                   )
                 ],
               ),
+            ),
+            Consumer<SongsLocal>(
+              builder: (ctx, songData, _) => Icon(
+                  song.title == songData.currentSong ? Icons.play_arrow : null,
+                  color: Colors.white,
+                  size: 16),
             ),
             IconButton(
               splashRadius: 23,

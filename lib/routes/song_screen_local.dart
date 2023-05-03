@@ -76,6 +76,7 @@ class _SongScreenLocalState extends State<SongScreenLocal> {
             id: song.id,
             type: ArtworkType.AUDIO,
             artworkBorder: BorderRadius.zero,
+            nullArtworkWidget: const Icon(CupertinoIcons.music_note_2),
           ),
           _BackgroundFilter(
             image: QueryArtworkWidget(

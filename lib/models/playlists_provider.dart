@@ -8,7 +8,7 @@ class Playlists with ChangeNotifier {
     Playlist(
       title: 'NRJ 2018',
       songs: Songs().songs,
-      imgUrl: 'assets/musiccovers/nrj18.jpg',
+      imgUrl: 'assets/musiccovers/smoker.jpg',
     ),
     Playlist(
       title: 'So Far So Good 2023',
@@ -18,7 +18,7 @@ class Playlists with ChangeNotifier {
     Playlist(
       title: 'Planet Her',
       songs: Songs().songs,
-      imgUrl: 'assets/musiccovers/doja.jpg',
+      imgUrl: 'assets/musiccovers/smoker.jpg',
     ),
     // Playlist(
     //   title: 'Other Songs',
@@ -33,7 +33,7 @@ class Playlists with ChangeNotifier {
     Playlist(
       title: 'NRJ 2018',
       songs: Songs().songs,
-      imgUrl: 'assets/musiccovers/nrj18.jpg',
+      imgUrl: 'assets/musiccovers/smoker.jpg',
     ),
     Playlist(
       title: 'So Far So Good 2023',
@@ -43,17 +43,17 @@ class Playlists with ChangeNotifier {
     Playlist(
       title: 'Planet Her',
       songs: Songs().songs,
-      imgUrl: 'assets/musiccovers/doja.jpg',
+      imgUrl: 'assets/musiccovers/smoker.jpg',
     ),
     Playlist(
       title: 'Other Songs',
       songs: Songs().songs,
-      imgUrl: 'assets/musiccovers/nrj18.jpg',
+      imgUrl: 'assets/musiccovers/smoker.jpg',
     ),
     Playlist(
       title: 'Planet Her',
       songs: Songs().songs,
-      imgUrl: 'assets/musiccovers/doja.jpg',
+      imgUrl: 'assets/musiccovers/smoker.jpg',
     ),
   ];
 }

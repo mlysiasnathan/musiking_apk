@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../models/song_model.dart';
 import '../models/songs_provider.dart';
+import '../routes/song_bottom_sheet.dart';
 
 class SongCard extends StatelessWidget {
   const SongCard({
@@ -15,10 +16,23 @@ class SongCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final songData = Provider.of<Songs>(context);
+    void songBottomSheet(BuildContext contex) {
+      showModalBottomSheet(
+          isScrollControlled: true,
+          context: contex,
+          builder: (_) {
+            return const FractionallySizedBox(
+              heightFactor: 1.0,
+              child: SongBottomSheet(),
+            );
+          });
+    }
+
     return InkWell(
       onTap: () {
         songData.clickToPlay(song);
         songData.generateColors();
+        songBottomSheet(context);
       },
       borderRadius: BorderRadius.circular(10),
       child: Container(

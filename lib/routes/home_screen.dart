@@ -11,25 +11,14 @@ import '../widgets/custom_bottom_bar.dart';
 import '../widgets/discover_music.dart';
 import '../widgets/playlist_local_music.dart';
 import '../widgets/playlist_music.dart';
-import '../widgets/pre_playing_floating_action_bar.dart';
+import '../widgets/pre_playing_floating_action_bar_local.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
-  static const routeName = '/';
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final OnAudioQuery _audioQuery = OnAudioQuery();
-  @override
-  void initState() {
-    requestStoragePermission();
-    super.initState();
-  }
-
+  static const routeName = '/home';
   @override
   Widget build(BuildContext context) {
+    final OnAudioQuery _audioQuery = OnAudioQuery();
     final songsData = Provider.of<Songs>(context, listen: false);
     final songs = songsData.songs;
     final playlists = Provider.of<Playlists>(context, listen: false).playlists;
@@ -49,33 +38,21 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.transparent,
         appBar: const CustomAppBar(),
         bottomNavigationBar: const CustomBottomBar(indexPage: 0),
-        floatingActionButton: const PrePlayingSong(),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.miniCenterFloat,
         body: SingleChildScrollView(
           child: Column(
             children: [
               const DiscoverMusic(),
               AlbumMusic(playlists: playlists),
-              PlaylistMusic(songs: songs),
               LocalPlaylistMusic(audioQuery: _audioQuery),
+              PlaylistMusic(songs: songs),
               const SizedBox(height: 32),
             ],
           ),
         ),
+        floatingActionButton: const PrePlayingSong(),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterFloat,
       ),
     );
-  }
-
-  void requestStoragePermission() async {
-    // only if platform is not web, coz web have no permission
-    if (!kIsWeb) {
-      bool permissionStatus = await _audioQuery.permissionsStatus();
-      if (!permissionStatus) {
-        await _audioQuery.permissionsRequest();
-      }
-      // ensure build method is called
-      setState(() {});
-    }
   }
 }

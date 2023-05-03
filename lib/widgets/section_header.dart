@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class SectionHeader extends StatefulWidget {
   final String title;
   final String actionText;
+  final String afterActionText;
   final Function action;
   const SectionHeader({
     Key? key,
     this.actionText = 'View more',
+    this.afterActionText = 'View less',
     required this.title,
     required this.action,
   }) : super(key: key);
@@ -37,7 +39,7 @@ class _SectionHeaderState extends State<SectionHeader> {
             });
           },
           label: Text(
-            _isClicked == true ? 'View less' : widget.actionText,
+            _isClicked == true ? widget.afterActionText : widget.actionText,
             style: Theme.of(context).textTheme.bodySmall!.copyWith(
                   color: Colors.white,
                   fontWeight: FontWeight.w400,

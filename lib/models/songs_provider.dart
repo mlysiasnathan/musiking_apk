@@ -15,36 +15,6 @@ class Songs with ChangeNotifier {
       musicUrl: 'assets/musics/High.mp3',
       coverUrl: 'assets/musiccovers/smoker.jpg',
     ),
-    Song(
-      title: 'Need To Know',
-      descriptions: 'Doja Cat - Planet Her',
-      musicUrl: 'assets/musics/Need To Know.mp3',
-      coverUrl: 'assets/musiccovers/doja.jpg',
-    ),
-    Song(
-      title: 'Dam Dam',
-      descriptions: 'The Parakit 2018',
-      musicUrl: 'assets/musics/Dam Dam.mp3',
-      coverUrl: 'assets/musiccovers/nrj18.jpg',
-    ),
-    Song(
-      title: 'Need To Know Duplicate',
-      descriptions: 'Doja Cat - Planet Her',
-      musicUrl: 'assets/musics/Need To Know.mp3',
-      coverUrl: 'assets/musiccovers/doja.jpg',
-    ),
-    Song(
-      title: 'Dam Dam Duplicate',
-      descriptions: 'The Parakit 2018',
-      musicUrl: 'assets/musics/Dam Dam.mp3',
-      coverUrl: 'assets/musiccovers/nrj18.jpg',
-    ),
-    Song(
-      title: 'High Duplicate',
-      descriptions: 'TheChainsmokers - So Far So Good 2023',
-      musicUrl: 'assets/musics/High.mp3',
-      coverUrl: 'assets/musiccovers/smoker.jpg',
-    ),
   ];
   List<Song> get songs {
     return [..._songs];
@@ -85,11 +55,11 @@ class Songs with ChangeNotifier {
           //       (son) =>
 
           AudioSource.uri(Uri.parse('asset:///${song.musicUrl}')),
-          AudioSource.uri(Uri.parse('asset:///${songs[1].musicUrl}')),
-          AudioSource.uri(Uri.parse('asset:///${songs[2].musicUrl}')),
-          AudioSource.uri(Uri.parse('asset:///${songs[3].musicUrl}')),
-          AudioSource.uri(Uri.parse('asset:///${songs[4].musicUrl}')),
-          AudioSource.uri(Uri.parse('asset:///${songs[5].musicUrl}')),
+          // AudioSource.uri(Uri.parse('asset:///${songs[1].musicUrl}')),
+          // AudioSource.uri(Uri.parse('asset:///${songs[2].musicUrl}')),
+          // AudioSource.uri(Uri.parse('asset:///${songs[3].musicUrl}')),
+          // AudioSource.uri(Uri.parse('asset:///${songs[4].musicUrl}')),
+          // AudioSource.uri(Uri.parse('asset:///${songs[5].musicUrl}')),
           // )
           // .toList(),
         ],
