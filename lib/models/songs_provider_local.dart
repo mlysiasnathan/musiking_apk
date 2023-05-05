@@ -16,7 +16,7 @@ class SongsLocal with ChangeNotifier {
   bool isPlaying = false;
   bool isLoading = false;
   bool pageLoaded = false;
-  bool isViewMoreAlbum = false;
+
   List<AudioSource> sources = [];
   Duration songPosition = Duration.zero;
   Color defaultLightColor = Colors.orange;
@@ -84,11 +84,6 @@ class SongsLocal with ChangeNotifier {
       audioPlayer.seekToPrevious();
     }
     isPlaying = true;
-    notifyListeners();
-  }
-
-  void viewMoreAlbum() {
-    isViewMoreAlbum = !isViewMoreAlbum;
     notifyListeners();
   }
 

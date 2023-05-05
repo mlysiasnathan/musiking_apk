@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
+import '../models/playlists_provider_local.dart';
 import '../models/songs_provider_local.dart';
 import './custom_tab_screen_bottom_bar.dart';
 
@@ -39,6 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     final songData = Provider.of<SongsLocal>(context, listen: false);
+    final playlistData = Provider.of<Playlists>(context, listen: false);
     // void _loadingMusics() async {
     //   if (songData.songs.isEmpty) {
     //     await Navigator.pushReplacementNamed(context, '/home');
@@ -81,6 +83,27 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
             const Center(
               child: CircularProgressIndicator(color: Colors.white),
+            ),
+            FutureBuilder<List<AlbumModel>>(
+              //default values
+              future: _audioQuery.queryAlbums(
+                  sortType: null,
+                  ignoreCase: true,
+                  uriType: UriType.EXTERNAL,
+                  orderType: OrderType.ASC_OR_SMALLER),
+              builder: (context, item) {
+                //loading content indicator
+                if (item.data == null) {
+                  return const SizedBox();
+                }
+                // no album found
+                if (item.data!.isEmpty) {
+                  return const SizedBox();
+                }
+                playlistData.playlists.clear();
+                playlistData.playlists = item.data!;
+                return const SizedBox();
+              },
             ),
             FutureBuilder<List<SongModel>>(
               //default values

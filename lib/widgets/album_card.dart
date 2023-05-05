@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
-import '../models/playlist_model.dart';
-import '../models/songs_provider.dart';
+import '../models/playlists_provider_local.dart';
 import '../routes/playlist_screen.dart';
 
 class AlbumCard extends StatelessWidget {
@@ -12,11 +11,12 @@ class AlbumCard extends StatelessWidget {
     required this.playlist,
   }) : super(key: key);
 
-  final Playlist playlist;
+  final AlbumModel playlist;
 
   @override
   Widget build(BuildContext context) {
-    final songData = Provider.of<Songs>(context);
+    final playlistData = Provider.of<Playlists>(context);
+    final mediaQuery = MediaQuery.of(context).size;
     return InkWell(
       onTap: () {
         Navigator.of(context)
@@ -28,27 +28,50 @@ class AlbumCard extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.43,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                image: DecorationImage(
-                  image: AssetImage(
-                    playlist.imgUrl,
+            SizedBox(
+              width: mediaQuery.width * 0.43,
+              height: mediaQuery.height * 0.43,
+              // decoration: BoxDecoration(
+              // borderRadius: BorderRadius.circular(15),
+              //   image: DecorationImage(
+              //     image: Image.asset(
+              //       QueryArtworkWidget(
+              //         id: playlist.id,
+              //         type: ArtworkType.ALBUM,
+              //       ).toString(),
+              //     ).image,
+              //     fit: BoxFit.cover,
+              //   ),
+              //   // AssetImage(
+              //   //     playlist.album,
+              //   //   ),
+              //   //   fit: BoxFit.cover,
+              //   //   ),
+              // ),
+              child: QueryArtworkWidget(
+                id: playlist.id,
+                artworkBorder: BorderRadius.circular(15),
+                type: ArtworkType.ALBUM,
+                nullArtworkWidget: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Container(
+                    color: Colors.white.withOpacity(0.7),
+                    child: const FlutterLogo(
+                      size: 40,
+                    ),
                   ),
-                  fit: BoxFit.cover,
                 ),
               ),
             ),
             Container(
-              height: songData.isViewMoreAlbum ? 40 : 50,
-              width: songData.isViewMoreAlbum
-                  ? MediaQuery.of(context).size.width * 0.27
-                  : MediaQuery.of(context).size.width * 0.35,
-              margin:
-                  EdgeInsets.only(bottom: songData.isViewMoreAlbum ? 4 : 10),
+              height: playlistData.isViewMoreAlbum ? 40 : 50,
+              width: playlistData.isViewMoreAlbum
+                  ? mediaQuery.width * 0.27
+                  : mediaQuery.width * 0.35,
+              margin: EdgeInsets.only(
+                  bottom: playlistData.isViewMoreAlbum ? 4 : 10),
               decoration: BoxDecoration(
-                borderRadius: songData.isViewMoreAlbum
+                borderRadius: playlistData.isViewMoreAlbum
                     ? BorderRadius.circular(10)
                     : BorderRadius.circular(15),
                 color: Colors.white.withOpacity(0.6),
@@ -62,9 +85,9 @@ class AlbumCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.25,
+                        width: mediaQuery.width * 0.25,
                         child: Text(
-                          playlist.title,
+                          playlist.album,
                           style:
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
                                     color: Colors.red,
@@ -75,7 +98,7 @@ class AlbumCard extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${playlist.songs.length} songs',
+                        '${playlist.numOfSongs} songs',
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall!
@@ -85,12 +108,12 @@ class AlbumCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  if (!songData.isViewMoreAlbum)
+                  if (!playlistData.isViewMoreAlbum)
                     const Icon(
                       Icons.play_circle,
                       color: Colors.red,
                     ),
-                  if (!songData.isViewMoreAlbum) const SizedBox(width: 4),
+                  if (!playlistData.isViewMoreAlbum) const SizedBox(width: 4),
                 ],
               ),
             ),

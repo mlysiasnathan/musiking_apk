@@ -10,7 +10,7 @@ import './routes/splash_screen.dart';
 import './routes/playlist_screen.dart';
 import './routes/song_screen.dart';
 import './routes/home_screen.dart';
-import './models/playlists_provider.dart';
+import './models/playlists_provider_local.dart';
 import './models/songs_provider.dart';
 import './models/songs_provider_local.dart';
 
