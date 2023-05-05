@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:musiking/models/songs_provider_local.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
+import '../models/songs_provider_local.dart';
 import '../routes/song_local_bottom_sheet.dart';
 
 class PrePlayingSong extends StatelessWidget {
@@ -14,16 +14,17 @@ class PrePlayingSong extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final songData = Provider.of<SongsLocal>(context, listen: false);
-    void songBottomSheet(BuildContext contex) {
+    void songBottomSheet(BuildContext _) {
       showModalBottomSheet(
-          isScrollControlled: true,
-          context: contex,
-          builder: (_) {
-            return const FractionallySizedBox(
-              heightFactor: 1.0,
-              child: SongBottomSheet(),
-            );
-          });
+        isScrollControlled: true,
+        context: _,
+        builder: (_) {
+          return const FractionallySizedBox(
+            heightFactor: 1.0,
+            child: SongBottomSheet(),
+          );
+        },
+      );
     }
 
     songData.audioPlayer.currentIndexStream.listen((index) {
@@ -63,8 +64,14 @@ class PrePlayingSong extends StatelessWidget {
                         artworkBorder: BorderRadius.zero,
                         artworkHeight: 38,
                         artworkWidth: 38,
-                        nullArtworkWidget:
-                            const Icon(CupertinoIcons.music_note_2),
+                        nullArtworkWidget: ClipRRect(
+                          child: Container(
+                            color: Colors.white.withOpacity(0.7),
+                            child: const FlutterLogo(
+                              size: 38,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),

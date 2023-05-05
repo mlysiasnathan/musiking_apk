@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:musiking/models/songs_provider_local.dart';
 import 'package:provider/provider.dart';
+
+import '../models/songs_provider_local.dart';
 
 class MusicControllers extends StatelessWidget {
   const MusicControllers({

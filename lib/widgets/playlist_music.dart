@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../models/songs_provider.dart';
 import './section_header.dart';
 import './song_card.dart';
 import '../models/song_model.dart';
@@ -7,18 +9,16 @@ import '../models/song_model.dart';
 class PlaylistMusic extends StatelessWidget {
   const PlaylistMusic({
     Key? key,
-    required this.songs,
   }) : super(key: key);
-
-  final List<Song> songs;
 
   @override
   Widget build(BuildContext context) {
+    final List<Song> songs = Provider.of<Songs>(context).songs;
     return Padding(
       padding: const EdgeInsets.all(19),
       child: Column(
         children: [
-          SectionHeader(title: 'All Songs', action: () => null),
+          SectionHeader(title: 'Assets Songs', action: () => null),
           ListView.builder(
             shrinkWrap: true,
             padding: const EdgeInsets.only(top: 14),

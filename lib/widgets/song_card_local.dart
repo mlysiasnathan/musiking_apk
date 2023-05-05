@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
@@ -62,7 +61,14 @@ class SongCardLocal extends StatelessWidget {
                 artworkHeight: 40,
                 artworkWidth: 40,
                 artworkBorder: BorderRadius.zero,
-                nullArtworkWidget: const Icon(CupertinoIcons.music_note_2),
+                nullArtworkWidget: ClipRRect(
+                  child: Container(
+                    color: Colors.white.withOpacity(0.7),
+                    child: const FlutterLogo(
+                      size: 40,
+                    ),
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: 14),

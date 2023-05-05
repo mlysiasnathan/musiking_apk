@@ -1,13 +1,12 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:musiking/routes/home_screen.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 import '../models/songs_provider_local.dart';
+import './custom_tab_screen_bottom_bar.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -40,11 +39,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     final songData = Provider.of<SongsLocal>(context, listen: false);
-    void _loadingMusics() async {
-      if (songData.songs.isEmpty) {
-        await Navigator.pushReplacementNamed(context, '/home');
-      }
-    }
+    // void _loadingMusics() async {
+    //   if (songData.songs.isEmpty) {
+    //     await Navigator.pushReplacementNamed(context, '/home');
+    //   }
+    // }
 
     return Scaffold(
       body: Container(
@@ -121,7 +120,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 // _loadingMusics();
                 return TextButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/home');
+                    Navigator.pushReplacementNamed(
+                        context, CustomTabScreenBottomBar.routeName);
                   },
                   child: const Text('Skip'),
                 );

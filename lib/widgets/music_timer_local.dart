@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:musiking/models/songs_provider_local.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/seekbar.dart';
 import '../widgets/music_controllers_local.dart';
+import '../models/songs_provider_local.dart';
 
 class MusicTimer extends StatelessWidget {
   const MusicTimer({
@@ -46,17 +46,28 @@ class MusicTimer extends StatelessWidget {
               borderRadius: BorderRadius.circular(15),
               child: Consumer<SongsLocal>(
                 builder: (ctx, songData, _) => QueryArtworkWidget(
-                  id: songData.songs[songData.currentIndex].id,
-                  type: ArtworkType.AUDIO,
-                  artworkBorder: BorderRadius.zero,
-                  artworkHeight: mediaQuery.size.height * 0.45,
-                  artworkWidth: mediaQuery.size.height * 0.45,
-                  artworkFit: BoxFit.cover,
-                  nullArtworkWidget: const Icon(
-                    CupertinoIcons.music_note_2,
-                    size: 55,
-                  ),
-                ),
+                    id: songData.songs[songData.currentIndex].id,
+                    type: ArtworkType.AUDIO,
+                    artworkBorder: BorderRadius.zero,
+                    artworkHeight: mediaQuery.size.height * 0.45,
+                    artworkWidth: mediaQuery.size.height * 0.45,
+                    artworkFit: BoxFit.cover,
+                    nullArtworkWidget: ClipRRect(
+                      child: Container(
+                        color: Colors.white.withOpacity(0.7),
+                        child: FlutterLogo(
+                          size: mediaQuery.size.height * 0.45,
+                        ),
+                      ),
+                    )
+                    // Image.asset(
+                    //   'assets/musiccovers/smoker.jpg',
+                    //   width: mediaQuery.size.height * 0.45,
+                    //   height: mediaQuery.size.height * 0.45,
+                    //   fit: BoxFit.cover,
+                    // )),
+
+                    ),
               ),
             ),
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/playlist_model.dart';
+import '../models/playlists_provider.dart';
 import '../models/songs_provider.dart';
 import './album_card.dart';
 import './section_header.dart';
@@ -9,15 +9,13 @@ import './section_header.dart';
 class AlbumMusic extends StatelessWidget {
   const AlbumMusic({
     Key? key,
-    required this.playlists,
   }) : super(key: key);
-
-  final List<Playlist> playlists;
 
   @override
   Widget build(BuildContext context) {
     final songData = Provider.of<Songs>(context);
     final mediaQuery = MediaQuery.of(context);
+    final playlists = Provider.of<Playlists>(context, listen: false).playlists;
     return Padding(
       padding: const EdgeInsets.only(
         left: 14,
