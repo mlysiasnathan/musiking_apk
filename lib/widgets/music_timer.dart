@@ -58,6 +58,8 @@ class MusicTimer extends StatelessWidget {
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 10),
           Text(
@@ -66,6 +68,8 @@ class MusicTimer extends StatelessWidget {
                 .textTheme
                 .bodySmall!
                 .copyWith(color: Colors.white),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 10),
           StreamBuilder<SeekBarData>(

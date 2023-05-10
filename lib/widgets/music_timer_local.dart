@@ -15,7 +15,7 @@ class MusicTimer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final songData = Provider.of<SongsLocal>(context, listen: false);
-    final mediaQuery = MediaQuery.of(context);
+    final mediaQuery = MediaQuery.of(context).size;
     final seekBarDataStream = songData.seekBarDataStream;
     final audioPlayer = songData.audioPlayer;
     return Padding(
@@ -25,45 +25,45 @@ class MusicTimer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton.icon(
-                onPressed: () => Navigator.pop(context),
-                label: const Text(
-                  'Close',
-                  style: TextStyle(color: Colors.white),
-                ),
-                icon: const Icon(
-                  Icons.keyboard_arrow_down_outlined,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     TextButton.icon(
+          //       onPressed: () => Navigator.pop(context),
+          //       label: const Text(
+          //         'Close',
+          //         style: TextStyle(color: Colors.white),
+          //       ),
+          //       icon: const Icon(
+          //         Icons.keyboard_arrow_down_outlined,
+          //         color: Colors.white,
+          //       ),
+          //     ),
+          //   ],
+          // ),
           Center(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
               child: Consumer<SongsLocal>(
                 builder: (ctx, songData, _) => QueryArtworkWidget(
-                    id: songData.songs[songData.currentIndex].id,
+                    id: songData.currentPlaylist[songData.currentIndex].id,
                     type: ArtworkType.AUDIO,
                     artworkBorder: BorderRadius.zero,
-                    artworkHeight: mediaQuery.size.height * 0.45,
-                    artworkWidth: mediaQuery.size.height * 0.45,
+                    artworkHeight: mediaQuery.height * 0.45,
+                    artworkWidth: mediaQuery.height * 0.45,
                     artworkFit: BoxFit.cover,
                     nullArtworkWidget: ClipRRect(
                       child: Container(
                         color: Colors.white.withOpacity(0.7),
                         child: FlutterLogo(
-                          size: mediaQuery.size.height * 0.45,
+                          size: mediaQuery.height * 0.45,
                         ),
                       ),
                     )
                     // Image.asset(
                     //   'assets/musiccovers/smoker.jpg',
-                    //   width: mediaQuery.size.height * 0.45,
-                    //   height: mediaQuery.size.height * 0.45,
+                    //   width: mediaQuery.height * 0.45,
+                    //   height: mediaQuery.height * 0.45,
                     //   fit: BoxFit.cover,
                     // )),
 
@@ -74,21 +74,25 @@ class MusicTimer extends StatelessWidget {
           const SizedBox(height: 10),
           Consumer<SongsLocal>(
             builder: (ctx, songData, _) => Text(
-              songData.songs[songData.currentIndex].title,
+              songData.currentPlaylist[songData.currentIndex].title,
               style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           const SizedBox(height: 10),
           Consumer<SongsLocal>(
             builder: (ctx, songData, _) => Text(
-              songData.songs[songData.currentIndex].artist.toString(),
+              songData.currentPlaylist[songData.currentIndex].artist.toString(),
               style: Theme.of(context)
                   .textTheme
                   .bodySmall!
                   .copyWith(color: Colors.white),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           const SizedBox(height: 10),
@@ -192,10 +196,10 @@ class MusicTimer extends StatelessWidget {
                         ),
                       ),
                       content: SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.40,
-                        width: MediaQuery.of(context).size.width,
+                        height: mediaQuery.height * 0.40,
+                        width: mediaQuery.width,
                         child: ListView.builder(
-                          itemCount: songData.songs.length,
+                          itemCount: songData.currentPlaylist.length,
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
@@ -218,7 +222,7 @@ class MusicTimer extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(8),
                                         child: QueryArtworkWidget(
                                           id: songData
-                                              .songs[songData.currentIndex].id,
+                                              .currentPlaylist[index].id,
                                           type: ArtworkType.AUDIO,
                                           artworkBorder: BorderRadius.zero,
                                           artworkWidth: 40,
@@ -236,7 +240,8 @@ class MusicTimer extends StatelessWidget {
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              songData.songs[index].title,
+                                              songData
+                                                  .currentPlaylist[index].title,
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodyLarge!
@@ -247,7 +252,7 @@ class MusicTimer extends StatelessWidget {
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                             Text(
-                                              '${songData.songs.indexOf(songData.songs[index]) + 1}',
+                                              '${songData.currentPlaylist.indexOf(songData.songs[index]) + 1}',
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: Theme.of(context)

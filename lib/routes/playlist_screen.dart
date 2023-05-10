@@ -1,8 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 
-import '../models/playlist_model.dart';
+import '../models/songs_provider_local.dart';
+import '../widgets/play_or_shuffle.dart';
+import '../widgets/pre_playing_floating_action_bar_local.dart';
+import '../widgets/song_card_for_playlist.dart';
 
 class PlaylistScreen extends StatelessWidget {
   const PlaylistScreen({Key? key}) : super(key: key);
@@ -10,7 +13,12 @@ class PlaylistScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final playlist = ModalRoute.of(context)?.settings.arguments as Playlist;
+    final playlist = ModalRoute.of(context)?.settings.arguments as AlbumModel;
+    final List<SongModel> songs =
+        Provider.of<SongsLocal>(context, listen: false)
+            .songs
+            .where((song) => song.albumId == playlist.id)
+            .toList();
 
     return Container(
       decoration: BoxDecoration(
@@ -24,6 +32,9 @@ class PlaylistScreen extends StatelessWidget {
         ),
       ),
       child: Scaffold(
+        floatingActionButton: const PrePlayingSong(),
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterFloat,
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -36,51 +47,19 @@ class PlaylistScreen extends StatelessWidget {
             padding: const EdgeInsets.all(15),
             child: Column(
               children: [
-                _PlaylistInfo(playlists: playlist),
+                _PlaylistInfo(playlist: playlist),
                 const SizedBox(height: 20),
-                const _PlayOrShuffleSwitch(),
+                const PlayOrShuffleSwitch(),
+                const SizedBox(height: 10),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: playlist.songs.length,
+                  itemCount: playlist.numOfSongs,
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
-                        InkWell(
-                          onTap: () {
-                            Get.toNamed('/song',
-                                arguments: playlist.songs[index]);
-                          },
-                          borderRadius: BorderRadius.circular(13),
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child: Text(
-                                '${index + 1}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            title: Text(
-                              playlist.songs[index].title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Text(
-                                '${playlist.songs[index].descriptions} - 3:00'),
-                            trailing: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.more_vert,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
+                        SongCardForPlaylist(
+                            song: songs[index], index: index, songs: songs),
                         const Divider(color: Colors.white),
                       ],
                     );
@@ -95,126 +74,42 @@ class PlaylistScreen extends StatelessWidget {
   }
 }
 
-class _PlayOrShuffleSwitch extends StatefulWidget {
-  const _PlayOrShuffleSwitch({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<_PlayOrShuffleSwitch> createState() => _PlayOrShuffleSwitchState();
-}
-
-class _PlayOrShuffleSwitchState extends State<_PlayOrShuffleSwitch> {
-  bool isPlay = true;
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width * 0.7;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          isPlay = !isPlay;
-        });
-      },
-      child: Container(
-        height: 40,
-        width: width,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Stack(
-          children: [
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 100),
-              left: isPlay ? 0 : width * 0.48,
-              right: isPlay ? width * 0.48 : 0,
-              child: Container(
-                padding: const EdgeInsets.all(3),
-                height: 40,
-                width: width * 0.40,
-                decoration: BoxDecoration(
-                  color: Colors.deepOrange,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Text(
-                          'Play',
-                          style: TextStyle(
-                            color: isPlay ? Colors.white : Colors.orange,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Icon(
-                        Icons.play_circle_outline,
-                        color: isPlay ? Colors.white : Colors.orange,
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Text(
-                          'Shuffle',
-                          style: TextStyle(
-                            color: isPlay ? Colors.orange : Colors.white,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Icon(
-                        CupertinoIcons.shuffle,
-                        color: isPlay ? Colors.orange : Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _PlaylistInfo extends StatelessWidget {
   const _PlaylistInfo({
     Key? key,
-    required this.playlists,
+    required this.playlist,
   }) : super(key: key);
 
-  final Playlist playlists;
+  final AlbumModel playlist;
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context).size;
     return Column(
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(15),
-          child: Image.asset(
-            playlists.imgUrl,
-            height: MediaQuery.of(context).size.height * 0.3,
-            width: MediaQuery.of(context).size.height * 0.3,
-            fit: BoxFit.cover,
+          child: QueryArtworkWidget(
+            id: playlist.id,
+            artworkBorder: BorderRadius.circular(15),
+            type: ArtworkType.ALBUM,
+            artworkFit: BoxFit.cover,
+            artworkWidth: mediaQuery.height * 0.3,
+            artworkHeight: mediaQuery.height * 0.3,
+            nullArtworkWidget: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Container(
+                color: Colors.white.withOpacity(0.7),
+                child: FlutterLogo(
+                  size: mediaQuery.height * 0.3,
+                ),
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 30),
         Text(
-          playlists.title,
+          playlist.album,
           style: Theme.of(context)
               .textTheme
               .headlineSmall!

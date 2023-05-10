@@ -8,6 +8,7 @@ import '../widgets/seekbar.dart';
 
 class SongsLocal with ChangeNotifier {
   List<SongModel> songs = <SongModel>[];
+  List<SongModel> currentPlaylist = <SongModel>[];
   AudioPlayer audioPlayer = AudioPlayer();
   PaletteGenerator? paletteGenerator;
 
@@ -27,12 +28,16 @@ class SongsLocal with ChangeNotifier {
   }
 
   ConcatenatingAudioSource initializePlaylist(List<SongModel> songsToPlay) {
-    if (sources.isEmpty) {
+    print('songs before :${songsToPlay.length}=============================');
+    if (sources.isEmpty || sources.length != songsToPlay.length) {
       for (var song in songsToPlay) {
         sources.add(AudioSource.uri(Uri.parse(song.uri!)));
       }
+      print(
+          'songs initialized :${songsToPlay.length}=============================');
       return ConcatenatingAudioSource(children: sources);
     }
+    print('songs after :${songsToPlay.length}=============================');
     return ConcatenatingAudioSource(children: sources);
   }
 
@@ -88,8 +93,8 @@ class SongsLocal with ChangeNotifier {
   }
 
   void setCurrentSong(int index) async {
-    if (songs.isNotEmpty) {
-      currentSong = songs[index].title;
+    if (currentPlaylist.isNotEmpty && songs.isNotEmpty) {
+      currentSong = songs[index].title ?? currentPlaylist[index].title;
       currentIndex = index;
       isPlaying = true;
     }

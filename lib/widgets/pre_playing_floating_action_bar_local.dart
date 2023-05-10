@@ -57,9 +57,10 @@ class PrePlayingSong extends StatelessWidget {
                     borderRadius: BorderRadius.circular(7),
                     child: Consumer<SongsLocal>(
                       builder: (ctx, songData, _) => QueryArtworkWidget(
-                        id: songData.songs.isEmpty
+                        id: songData.currentPlaylist.isEmpty
                             ? 0
-                            : songData.songs[songData.currentIndex].id,
+                            : songData
+                                .currentPlaylist[songData.currentIndex].id,
                         type: ArtworkType.AUDIO,
                         artworkBorder: BorderRadius.zero,
                         artworkHeight: 38,

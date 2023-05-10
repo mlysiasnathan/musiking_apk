@@ -140,6 +140,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 }
                 songData.songs.clear();
                 songData.songs = item.data!;
+                songData.currentPlaylist = songData.songs;
                 // _loadingMusics();
                 return TextButton(
                   onPressed: () {
