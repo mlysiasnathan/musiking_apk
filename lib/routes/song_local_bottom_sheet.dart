@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:musiking/models/songs_provider_local.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/background_filter_local.dart';
 import '../widgets/music_timer_local.dart';
+import '../models/songs_provider_local.dart';
 
 class SongBottomSheet extends StatelessWidget {
   const SongBottomSheet({super.key});
@@ -20,6 +19,9 @@ class SongBottomSheet extends StatelessWidget {
       //   builder: (ctx, songData, child) => QueryArtworkWidget(
       //     id: songData.songs[songData.currentIndex].id,
       //     type: ArtworkType.AUDIO,
+      //     artworkFit: BoxFit.cover,
+      //     artworkHeight: double.infinity,
+      //     artworkWidth: double.infinity,
       //     artworkBorder: BorderRadius.zero,
       //     nullArtworkWidget:
       //         const Icon(CupertinoIcons.music_note_2, color: Colors.white),

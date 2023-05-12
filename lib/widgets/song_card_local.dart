@@ -33,6 +33,7 @@ class SongCardLocal extends StatelessWidget {
     final songData = Provider.of<SongsLocal>(context, listen: false);
     return InkWell(
       onTap: () async {
+        songData.currentPlaylist = songData.songs;
         await songData.audioPlayer.setAudioSource(
           songData.initializePlaylist(songData.songs),
           initialIndex: index,

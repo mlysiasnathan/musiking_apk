@@ -117,10 +117,11 @@ class MusicTimer extends StatelessWidget {
             children: [
               PopupMenuButton(
                 elevation: 5,
+                tooltip: 'Get more Info about this song',
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                color: Colors.black.withOpacity(0.8),
+                color: Colors.white.withOpacity(0.8),
                 icon: const Icon(
                   CupertinoIcons.info_circle,
                   color: Colors.white,
@@ -129,11 +130,31 @@ class MusicTimer extends StatelessWidget {
                   return [
                     PopupMenuItem(
                       child: ListTile(
-                        leading:
-                            const Icon(Icons.music_note, color: Colors.white),
+                        leading: const Icon(Icons.music_note),
+                        // trailing: Consumer<SongsLocal>(
+                        //   builder: (ctx, songData, _) => Text(
+                        //       songData.songs[songData.currentIndex].size
+                        //           .toString(),
+                        //       style: Theme.of(context)
+                        //           .textTheme
+                        //           .bodyLarge!
+                        //           .copyWith(
+                        //             color: Colors.deepOrange,
+                        //             fontWeight: FontWeight.bold,
+                        //           ),
+                        //       maxLines: 2,
+                        //       overflow: TextOverflow.ellipsis),
+                        // ),
                         title: Consumer<SongsLocal>(
                           builder: (ctx, songData, _) => Text(
-                              songData.songs[songData.currentIndex].title,
+                              songData.songs[songData.currentIndex].displayName,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                    color: Colors.deepOrange,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis),
                         ),
@@ -141,11 +162,12 @@ class MusicTimer extends StatelessWidget {
                     ),
                     PopupMenuItem(
                       child: ListTile(
-                        leading: const Icon(Icons.album, color: Colors.white),
+                        leading: const Icon(Icons.album),
                         title: Consumer<SongsLocal>(
                           builder: (ctx, songData, _) => Text(
                               songData.songs[songData.currentIndex].album
                                   .toString(),
+                              style: const TextStyle(color: Colors.deepOrange),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis),
                         ),
@@ -153,12 +175,38 @@ class MusicTimer extends StatelessWidget {
                     ),
                     PopupMenuItem(
                       child: ListTile(
-                        leading:
-                            const Icon(Icons.folder_open, color: Colors.white),
+                        leading: const Icon(Icons.person_2),
+                        title: Consumer<SongsLocal>(
+                          builder: (ctx, songData, _) => Text(
+                              songData.songs[songData.currentIndex].artist
+                                  .toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    color: Colors.deepOrange,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true),
+                        ),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      child: ListTile(
+                        leading: const Icon(Icons.folder_open),
                         title: Consumer<SongsLocal>(
                           builder: (ctx, songData, _) => Text(
                               songData.songs[songData.currentIndex].uri
                                   .toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium!
+                                  .copyWith(
+                                    color: Colors.deepOrange,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               softWrap: true),
@@ -169,6 +217,7 @@ class MusicTimer extends StatelessWidget {
                 },
               ),
               IconButton(
+                tooltip: 'Add This song to favorite Playlist',
                 onPressed: () {},
                 icon: const Icon(
                   CupertinoIcons.heart,
@@ -176,48 +225,58 @@ class MusicTimer extends StatelessWidget {
                 ),
               ),
               IconButton(
+                tooltip: 'Show the current Playlist',
                 onPressed: () {
                   showDialog<void>(
                     context: context,
                     builder: (ctx) => AlertDialog(
                       actionsAlignment: MainAxisAlignment.center,
-                      backgroundColor: Colors.black.withOpacity(0.8),
-                      elevation: 0,
+                      elevation: 10,
                       contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
+                        vertical: 10,
+                        horizontal: 10,
+                      ),
+                      backgroundColor: Colors.white.withOpacity(0.8),
                       alignment: Alignment.center,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
                       title: const Text(
                         'Playlist and Queue',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
+                        style: TextStyle(color: Colors.deepOrange),
                       ),
                       content: SizedBox(
-                        height: mediaQuery.height * 0.40,
+                        height: mediaQuery.height * 0.50,
                         width: mediaQuery.width,
                         child: ListView.builder(
                           itemCount: songData.currentPlaylist.length,
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
+                                songData.audioPlayer.setAudioSource(
+                                  songData.initializePlaylist(
+                                      songData.currentPlaylist),
+                                  initialIndex: index,
+                                );
+                                songData.audioPlayer.play();
                                 songData.setCurrentSong(index);
                                 songData.generateColors();
-                                Navigator.pop(context);
                               },
                               borderRadius: BorderRadius.circular(10),
                               child: Consumer<SongsLocal>(
                                 builder: (ctx, songData, _) => Container(
-                                  color: index == songData.currentIndex
-                                      ? Colors.deepOrange
-                                      : null,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: index == songData.currentIndex
+                                        ? Colors.deepOrange
+                                        : null,
+                                  ),
                                   height: 50,
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
+                                      const SizedBox(width: 7),
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
                                         child: QueryArtworkWidget(
@@ -227,43 +286,33 @@ class MusicTimer extends StatelessWidget {
                                           artworkBorder: BorderRadius.zero,
                                           artworkWidth: 40,
                                           artworkHeight: 40,
-                                          nullArtworkWidget: const Icon(
-                                              CupertinoIcons.music_note_2),
+                                          nullArtworkWidget: ClipRRect(
+                                            child: Container(
+                                              color:
+                                                  Colors.white.withOpacity(0.7),
+                                              child: const FlutterLogo(
+                                                size: 40,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                       const SizedBox(width: 14),
                                       Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              songData
-                                                  .currentPlaylist[index].title,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge!
-                                                  .copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            Text(
-                                              '${songData.currentPlaylist.indexOf(songData.songs[index]) + 1}',
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                            const Divider(
-                                              color: Colors.white,
-                                              height: 1,
-                                            )
-                                          ],
+                                        child: Text(
+                                          '${songData.currentPlaylist.indexOf(songData.songs[index]) + 1} - \t${songData.currentPlaylist[index].title}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(
+                                                color: index ==
+                                                        songData.currentIndex
+                                                    ? null
+                                                    : Colors.deepOrange,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                       IconButton(
@@ -271,7 +320,6 @@ class MusicTimer extends StatelessWidget {
                                         onPressed: () {},
                                         icon: const Icon(
                                           Icons.more_horiz_outlined,
-                                          color: Colors.white,
                                         ),
                                       ),
                                     ],
@@ -289,7 +337,7 @@ class MusicTimer extends StatelessWidget {
                           },
                           child: const Text(
                             'Close',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Colors.deepOrange),
                           ),
                         ),
                       ],

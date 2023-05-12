@@ -14,6 +14,18 @@ class PlayOrShuffleSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width * 0.7;
     final songData = Provider.of<SongsLocal>(context);
+    void showToast(BuildContext ctx, String message) {
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        SnackBar(
+          dismissDirection: DismissDirection.startToEnd,
+          content: Text(message),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+      );
+    }
 
     return StreamBuilder<SequenceState?>(
       stream: songData.audioPlayer.sequenceStateStream,
@@ -31,6 +43,11 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                 ? songData.audioPlayer.setShuffleModeEnabled(false)
                 : songData.audioPlayer.setShuffleModeEnabled(true);
             songData.generateColors();
+            showToast(
+                context,
+                songData.audioPlayer.shuffleModeEnabled
+                    ? 'Shuffle mode Enabled'
+                    : 'Shuffle mode Disabled');
           },
           child: Container(
             height: 40,

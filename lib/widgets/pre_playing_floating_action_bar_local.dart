@@ -14,14 +14,17 @@ class PrePlayingSong extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final songData = Provider.of<SongsLocal>(context, listen: false);
-    void songBottomSheet(BuildContext _) {
+    void songBottomSheet(BuildContext ctx) {
       showModalBottomSheet(
+        isDismissible: true,
         isScrollControlled: true,
-        context: _,
+        context: ctx,
         builder: (_) {
-          return const FractionallySizedBox(
-            heightFactor: 1.0,
-            child: SongBottomSheet(),
+          return const Scaffold(
+            body: FractionallySizedBox(
+              heightFactor: 1.0,
+              child: SongBottomSheet(),
+            ),
           );
         },
       );
@@ -96,14 +99,15 @@ class PrePlayingSong extends StatelessWidget {
             onPressed: () async {
               if (songData.currentSong == 'Click to play') {
                 await songData.audioPlayer.setAudioSource(
-                  songData.initializePlaylist(songData.songs),
+                  songData.initializePlaylist(songData.currentPlaylist),
                   initialIndex: songData.currentIndex,
                 );
                 await songData.audioPlayer.play();
                 songData.setCurrentSong(songData.currentIndex);
                 songData.generateColors();
               } else {
-                songData.playPause(songData.songs[songData.currentIndex]);
+                songData
+                    .playPause(songData.currentPlaylist[songData.currentIndex]);
               }
             },
             icon: Consumer<SongsLocal>(

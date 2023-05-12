@@ -14,6 +14,19 @@ class MusicControllers extends StatelessWidget {
   Widget build(BuildContext context) {
     final songData = Provider.of<SongsLocal>(context);
     final audioPlayer = songData.audioPlayer;
+    void showToast(BuildContext ctx, String message) {
+      ScaffoldMessenger.of(ctx).showSnackBar(
+        SnackBar(
+          dismissDirection: DismissDirection.startToEnd,
+          content: Text(message),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+      );
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -21,7 +34,13 @@ class MusicControllers extends StatelessWidget {
           stream: audioPlayer.sequenceStateStream,
           builder: (context, index) {
             return IconButton(
+              tooltip: 'Shuffle Mode',
               onPressed: () {
+                showToast(
+                    context,
+                    songData.audioPlayer.shuffleModeEnabled
+                        ? 'Shuffle mode Disabled'
+                        : 'Shuffle mode Enabled');
                 audioPlayer.shuffleModeEnabled
                     ? audioPlayer.setShuffleModeEnabled(false)
                     : audioPlayer.setShuffleModeEnabled(true);
@@ -38,6 +57,9 @@ class MusicControllers extends StatelessWidget {
           stream: audioPlayer.sequenceStateStream,
           builder: (context, index) {
             return IconButton(
+              tooltip: songData.audioPlayer.currentIndex! > 0
+                  ? songData.currentPlaylist[songData.currentIndex - 1].title
+                  : 'This is the first song of the playlist',
               onPressed: () {
                 songData.prev();
                 // songData.generateColors();
@@ -133,6 +155,10 @@ class MusicControllers extends StatelessWidget {
           stream: audioPlayer.sequenceStateStream,
           builder: (context, index) {
             return IconButton(
+              tooltip: songData.audioPlayer.currentIndex! <
+                      songData.currentPlaylist.length - 1
+                  ? songData.currentPlaylist[songData.currentIndex + 1].title
+                  : 'End of the playlist',
               onPressed: () {
                 songData.next();
                 // songData.generateColors();
@@ -149,7 +175,9 @@ class MusicControllers extends StatelessWidget {
             final loopMode = snapshot.data;
             if (loopMode == LoopMode.one) {
               return IconButton(
+                tooltip: 'Looping to This SONG only',
                 onPressed: () {
+                  showToast(context, 'Loop mode ALL');
                   audioPlayer.setLoopMode(LoopMode.all);
                 },
                 icon: const Icon(
@@ -160,7 +188,9 @@ class MusicControllers extends StatelessWidget {
               );
             } else if (loopMode == LoopMode.all) {
               return IconButton(
+                tooltip: 'Looping to ALL SONGS',
                 onPressed: () {
+                  showToast(context, 'Loop mode OFF');
                   audioPlayer.setLoopMode(LoopMode.off);
                 },
                 icon: const Icon(
@@ -171,7 +201,9 @@ class MusicControllers extends StatelessWidget {
               );
             }
             return IconButton(
+              tooltip: 'No Looping',
               onPressed: () {
+                showToast(context, 'Loop mode ONE');
                 audioPlayer.setLoopMode(LoopMode.one);
               },
               icon: const Icon(

@@ -28,16 +28,16 @@ class SongsLocal with ChangeNotifier {
   }
 
   ConcatenatingAudioSource initializePlaylist(List<SongModel> songsToPlay) {
-    print('songs before :${songsToPlay.length}=============================');
-    if (sources.isEmpty || sources.length != songsToPlay.length) {
+    // sources.isNotEmpty && sources.length != songsToPlay.length
+    //     ?
+    sources.clear();
+    // : null;
+    if (sources.isEmpty) {
       for (var song in songsToPlay) {
         sources.add(AudioSource.uri(Uri.parse(song.uri!)));
       }
-      print(
-          'songs initialized :${songsToPlay.length}=============================');
       return ConcatenatingAudioSource(children: sources);
     }
-    print('songs after :${songsToPlay.length}=============================');
     return ConcatenatingAudioSource(children: sources);
   }
 
@@ -93,8 +93,8 @@ class SongsLocal with ChangeNotifier {
   }
 
   void setCurrentSong(int index) async {
-    if (currentPlaylist.isNotEmpty && songs.isNotEmpty) {
-      currentSong = songs[index].title ?? currentPlaylist[index].title;
+    if (currentPlaylist.isNotEmpty) {
+      currentSong = currentPlaylist[index].title;
       currentIndex = index;
       isPlaying = true;
     }

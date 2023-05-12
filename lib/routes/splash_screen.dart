@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -41,11 +42,6 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     final songData = Provider.of<SongsLocal>(context, listen: false);
     final playlistData = Provider.of<Playlists>(context, listen: false);
-    // void _loadingMusics() async {
-    //   if (songData.songs.isEmpty) {
-    //     await Navigator.pushReplacementNamed(context, '/home');
-    //   }
-    // }
 
     return Scaffold(
       body: Container(
@@ -141,18 +137,16 @@ class _SplashScreenState extends State<SplashScreen> {
                 songData.songs.clear();
                 songData.songs = item.data!;
                 songData.currentPlaylist = songData.songs;
-                // _loadingMusics();
-                return TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(
-                        context, CustomTabScreenBottomBar.routeName);
-                  },
-                  child: const Text('Skip'),
+                Timer(
+                  const Duration(seconds: 5),
+                  () => Navigator.pushReplacementNamed(
+                      context, CustomTabScreenBottomBar.routeName),
                 );
+                return const SizedBox();
               },
             ),
             const Text(
-              'LOADING Songs.....',
+              'LOADING Songs',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ],

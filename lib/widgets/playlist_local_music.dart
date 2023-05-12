@@ -15,25 +15,44 @@ class LocalPlaylistMusic extends StatelessWidget {
     final songData = Provider.of<SongsLocal>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.all(19),
-      child: Column(
-        children: [
-          SectionHeader(
-            title: 'All Songs',
-            action: () => null, // songData.refreshSongList(),
-            actionText: 'Refresh',
-            afterActionText: 'Refresh',
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            padding: const EdgeInsets.only(top: 14),
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: songData.songs.length,
-            itemBuilder: ((context, index) {
-              return SongCardLocal(song: songData.songs[index], index: index);
-            }),
-          ),
-        ],
-      ),
+      child: songData.songs.isEmpty
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(
+                  Icons.do_not_disturb_alt,
+                  size: 55,
+                ),
+                Text(
+                  'Musics Not Found probably Musics list is Empty',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            )
+          : Column(
+              children: [
+                SectionHeader(
+                  title: 'All Songs',
+                  action: () => null, // songData.refreshSongList(),
+                  actionText: 'Refresh',
+                  afterActionText: 'Refresh',
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.only(top: 14),
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: songData.songs.length,
+                  itemBuilder: ((context, index) {
+                    return SongCardLocal(
+                        song: songData.songs[index], index: index);
+                  }),
+                ),
+              ],
+            ),
     );
   }
 }
