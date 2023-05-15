@@ -88,20 +88,24 @@ class _PlaylistInfo extends StatelessWidget {
     return Column(
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(20),
           child: QueryArtworkWidget(
             id: playlist.id,
-            artworkBorder: BorderRadius.circular(15),
+            artworkBorder: BorderRadius.circular(20),
             type: ArtworkType.ALBUM,
             artworkFit: BoxFit.cover,
             artworkWidth: mediaQuery.height * 0.3,
             artworkHeight: mediaQuery.height * 0.3,
             nullArtworkWidget: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(20),
               child: Container(
                 color: Colors.white.withOpacity(0.7),
-                child: FlutterLogo(
-                  size: mediaQuery.height * 0.3,
+                child: Image.asset(
+                  color: Colors.deepOrange,
+                  'assets/musiccovers/musiking_logo.png',
+                  width: mediaQuery.height * 0.3,
+                  height: mediaQuery.height * 0.3,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),

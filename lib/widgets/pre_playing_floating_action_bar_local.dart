@@ -55,7 +55,7 @@ class PrePlayingSong extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               child: Row(
                 children: [
-                  const SizedBox(width: 6),
+                  const SizedBox(width: 4),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(7),
                     child: Consumer<SongsLocal>(
@@ -66,13 +66,17 @@ class PrePlayingSong extends StatelessWidget {
                                 .currentPlaylist[songData.currentIndex].id,
                         type: ArtworkType.AUDIO,
                         artworkBorder: BorderRadius.zero,
-                        artworkHeight: 38,
-                        artworkWidth: 38,
+                        artworkHeight: 42,
+                        artworkWidth: 42,
                         nullArtworkWidget: ClipRRect(
                           child: Container(
-                            color: Colors.white.withOpacity(0.7),
-                            child: const FlutterLogo(
-                              size: 38,
+                            color: Colors.deepOrange,
+                            child: Image.asset(
+                              color: Colors.white,
+                              'assets/musiccovers/musiking_logo.png',
+                              width: 42,
+                              height: 42,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),

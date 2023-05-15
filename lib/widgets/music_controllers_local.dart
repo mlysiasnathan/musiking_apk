@@ -57,9 +57,12 @@ class MusicControllers extends StatelessWidget {
           stream: audioPlayer.sequenceStateStream,
           builder: (context, index) {
             return IconButton(
-              tooltip: songData.audioPlayer.currentIndex! > 0
-                  ? songData.currentPlaylist[songData.currentIndex - 1].title
-                  : 'This is the first song of the playlist',
+              tooltip: songData.audioPlayer.currentIndex != null
+                  ? songData.audioPlayer.currentIndex! > 0
+                      ? songData
+                          .currentPlaylist[songData.currentIndex - 1].title
+                      : 'This is the first song of the playlist'
+                  : null,
               onPressed: () {
                 songData.prev();
                 // songData.generateColors();
@@ -155,10 +158,13 @@ class MusicControllers extends StatelessWidget {
           stream: audioPlayer.sequenceStateStream,
           builder: (context, index) {
             return IconButton(
-              tooltip: songData.audioPlayer.currentIndex! <
-                      songData.currentPlaylist.length - 1
-                  ? songData.currentPlaylist[songData.currentIndex + 1].title
-                  : 'End of the playlist',
+              tooltip: songData.audioPlayer.currentIndex != null
+                  ? songData.audioPlayer.currentIndex! <
+                          songData.currentPlaylist.length - 1
+                      ? songData
+                          .currentPlaylist[songData.currentIndex + 1].title
+                      : 'End of the playlist'
+                  : null,
               onPressed: () {
                 songData.next();
                 // songData.generateColors();

@@ -21,7 +21,7 @@ class SongsLocal with ChangeNotifier {
   List<AudioSource> sources = [];
   Duration songPosition = Duration.zero;
   Color defaultLightColor = Colors.orange;
-  Color defaultDarkColor = Colors.deepOrange;
+  Color defaultDarkColor = Colors.red;
   void refreshSongList() {
     pageLoaded = !pageLoaded;
     notifyListeners();
@@ -103,7 +103,7 @@ class SongsLocal with ChangeNotifier {
 
   Future<PaletteGenerator?> generateColors() async {
     paletteGenerator = await PaletteGenerator.fromImageProvider(
-      Image.asset('assets/musiccovers/smoker.jpg').image,
+      Image.asset('assets/musiccovers/musiking_logo.jpg').image,
       size: const Size.square(1000),
       region: const Rect.fromLTRB(0, 0, 1000, 1000),
     );

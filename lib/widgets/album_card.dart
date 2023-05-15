@@ -22,42 +22,29 @@ class AlbumCard extends StatelessWidget {
         Navigator.of(context)
             .pushNamed(PlaylistScreen.routeName, arguments: playlist);
       },
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(20),
       child: Container(
         margin: const EdgeInsets.only(right: 10),
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
             SizedBox(
-              width: mediaQuery.width * 0.43,
+              width: mediaQuery.width * 0.45,
               height: mediaQuery.height * 0.43,
-              // decoration: BoxDecoration(
-              // borderRadius: BorderRadius.circular(15),
-              //   image: DecorationImage(
-              //     image: Image.asset(
-              //       QueryArtworkWidget(
-              //         id: playlist.id,
-              //         type: ArtworkType.ALBUM,
-              //       ).toString(),
-              //     ).image,
-              //     fit: BoxFit.cover,
-              //   ),
-              //   // AssetImage(
-              //   //     playlist.album,
-              //   //   ),
-              //   //   fit: BoxFit.cover,
-              //   //   ),
-              // ),
               child: QueryArtworkWidget(
                 id: playlist.id,
-                artworkBorder: BorderRadius.circular(15),
+                artworkBorder: BorderRadius.circular(20),
                 type: ArtworkType.ALBUM,
                 nullArtworkWidget: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(20),
                   child: Container(
-                    color: Colors.white.withOpacity(0.7),
-                    child: const FlutterLogo(
-                      size: 40,
+                    color: Colors.white.withOpacity(0.4),
+                    child: Image.asset(
+                      color: Colors.deepOrange,
+                      'assets/musiccovers/musiking_logo.png',
+                      width: mediaQuery.width * 0.45,
+                      height: mediaQuery.height * 0.43,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),

@@ -46,7 +46,7 @@ class SongCardLocal extends StatelessWidget {
       child: Container(
         height: 50,
         margin: const EdgeInsets.all(3),
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
         decoration: BoxDecoration(
           color: Colors.deepOrange.withOpacity(0.7),
           borderRadius: BorderRadius.circular(10),
@@ -59,14 +59,18 @@ class SongCardLocal extends StatelessWidget {
               child: QueryArtworkWidget(
                 id: song.id,
                 type: ArtworkType.AUDIO,
-                artworkHeight: 40,
-                artworkWidth: 40,
+                artworkHeight: 43,
+                artworkWidth: 43,
                 artworkBorder: BorderRadius.zero,
                 nullArtworkWidget: ClipRRect(
                   child: Container(
                     color: Colors.white.withOpacity(0.7),
-                    child: const FlutterLogo(
-                      size: 40,
+                    child: Image.asset(
+                      color: Colors.deepOrange,
+                      'assets/musiccovers/musiking_logo.png',
+                      width: 43,
+                      height: 43,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),

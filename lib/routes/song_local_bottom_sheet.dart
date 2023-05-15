@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/background_filter_local.dart';
@@ -14,21 +15,27 @@ class SongBottomSheet extends StatelessWidget {
     songData.audioPlayer.currentIndexStream.listen((index) {
       index != null ? songData.setCurrentSong(index) : null;
     });
-    return Stack(children: const [
-      // Consumer<SongsLocal>(
-      //   builder: (ctx, songData, child) => QueryArtworkWidget(
-      //     id: songData.songs[songData.currentIndex].id,
-      //     type: ArtworkType.AUDIO,
-      //     artworkFit: BoxFit.cover,
-      //     artworkHeight: double.infinity,
-      //     artworkWidth: double.infinity,
-      //     artworkBorder: BorderRadius.zero,
-      //     nullArtworkWidget:
-      //         const Icon(CupertinoIcons.music_note_2, color: Colors.white),
-      //   ),
-      // ),
-      BackgroundFilter(),
-      MusicTimer(),
+    return Stack(children: [
+      Consumer<SongsLocal>(
+        builder: (ctx, songData, child) => QueryArtworkWidget(
+          id: songData.songs[songData.currentIndex].id,
+          type: ArtworkType.AUDIO,
+          artworkFit: BoxFit.cover,
+          artworkHeight: double.infinity,
+          artworkWidth: double.infinity,
+          artworkBorder: BorderRadius.zero,
+          nullArtworkWidget: ClipRRect(
+            child: Image.asset(
+              'assets/musiccovers/musiking_logo.jpg',
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+            ),
+          ),
+        ),
+      ),
+      const BackgroundFilter(),
+      const MusicTimer(),
     ]);
     // );
   }

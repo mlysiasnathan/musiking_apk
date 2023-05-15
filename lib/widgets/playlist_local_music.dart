@@ -23,6 +23,7 @@ class LocalPlaylistMusic extends StatelessWidget {
                 Icon(
                   Icons.do_not_disturb_alt,
                   size: 55,
+                  color: Colors.white,
                 ),
                 Text(
                   'Musics Not Found probably Musics list is Empty',

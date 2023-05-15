@@ -43,31 +43,24 @@ class MusicTimer extends StatelessWidget {
           // ),
           Center(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(30),
               child: Consumer<SongsLocal>(
                 builder: (ctx, songData, _) => QueryArtworkWidget(
-                    id: songData.currentPlaylist[songData.currentIndex].id,
-                    type: ArtworkType.AUDIO,
-                    artworkBorder: BorderRadius.zero,
-                    artworkHeight: mediaQuery.height * 0.45,
-                    artworkWidth: mediaQuery.height * 0.45,
-                    artworkFit: BoxFit.cover,
-                    nullArtworkWidget: ClipRRect(
-                      child: Container(
-                        color: Colors.white.withOpacity(0.7),
-                        child: FlutterLogo(
-                          size: mediaQuery.height * 0.45,
-                        ),
-                      ),
-                    )
-                    // Image.asset(
-                    //   'assets/musiccovers/smoker.jpg',
-                    //   width: mediaQuery.height * 0.45,
-                    //   height: mediaQuery.height * 0.45,
-                    //   fit: BoxFit.cover,
-                    // )),
-
+                  id: songData.currentPlaylist[songData.currentIndex].id,
+                  type: ArtworkType.AUDIO,
+                  artworkBorder: BorderRadius.zero,
+                  artworkHeight: mediaQuery.height * 0.45,
+                  artworkWidth: mediaQuery.height * 0.45,
+                  artworkFit: BoxFit.cover,
+                  nullArtworkWidget: ClipRRect(
+                    child: Image.asset(
+                      'assets/musiccovers/musiking_logo.jpg',
+                      width: mediaQuery.height * 0.45,
+                      height: mediaQuery.height * 0.45,
+                      fit: BoxFit.cover,
                     ),
+                  ),
+                ),
               ),
             ),
           ),
@@ -276,7 +269,7 @@ class MusicTimer extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
-                                      const SizedBox(width: 7),
+                                      const SizedBox(width: 4),
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
                                         child: QueryArtworkWidget(
@@ -284,14 +277,17 @@ class MusicTimer extends StatelessWidget {
                                               .currentPlaylist[index].id,
                                           type: ArtworkType.AUDIO,
                                           artworkBorder: BorderRadius.zero,
-                                          artworkWidth: 40,
-                                          artworkHeight: 40,
+                                          artworkWidth: 42,
+                                          artworkHeight: 42,
                                           nullArtworkWidget: ClipRRect(
                                             child: Container(
-                                              color:
-                                                  Colors.white.withOpacity(0.7),
-                                              child: const FlutterLogo(
-                                                size: 40,
+                                              color: Colors.white,
+                                              child: Image.asset(
+                                                color: Colors.deepOrange,
+                                                'assets/musiccovers/musiking_logo.png',
+                                                width: 42,
+                                                height: 42,
+                                                fit: BoxFit.cover,
                                               ),
                                             ),
                                           ),

@@ -42,6 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     final songData = Provider.of<SongsLocal>(context, listen: false);
     final playlistData = Provider.of<Playlists>(context, listen: false);
+    final mediaQuery = MediaQuery.of(context).size;
 
     return Scaffold(
       body: Container(
@@ -77,8 +78,21 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
             ),
-            const Center(
-              child: CircularProgressIndicator(color: Colors.white),
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              elevation: 19,
+              color: Colors.transparent,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset(
+                  'assets/musiccovers/musiking_logo.jpg',
+                  width: mediaQuery.height * 0.20,
+                  height: mediaQuery.height * 0.20,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             FutureBuilder<List<AlbumModel>>(
               //default values
@@ -145,9 +159,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 return const SizedBox();
               },
             ),
-            const Text(
-              'LOADING Songs',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            const Center(
+              child: CircularProgressIndicator(color: Colors.white),
             ),
           ],
         ),

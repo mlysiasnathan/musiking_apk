@@ -1,11 +1,9 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:musiking/models/songs_provider_local.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
-import '../models/songs_provider.dart';
+import '../models/songs_provider_local.dart';
 
 class BackgroundFilter extends StatelessWidget {
   const BackgroundFilter({
@@ -17,26 +15,27 @@ class BackgroundFilter extends StatelessWidget {
     final songData = Provider.of<SongsLocal>(context, listen: false);
     final paletteGenerator = songData.paletteGenerator;
     return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/musiccovers/smoker.jpg'),
-          // image: Image.asset(
-          //   Consumer<SongsLocal>(
-          //                     builder: (ctx, songData, child) =>QueryArtworkWidget(
-          //     id: songData.songs[songData.currentIndex].id,
-          //     type: ArtworkType.AUDIO,
-          //   ).toString(),
-          // )).image,
-          fit: BoxFit.cover,
-        ),
-      ),
+      // decoration: const BoxDecoration(
+      //   image: DecorationImage(
+      //     image: AssetImage('assets/musiccovers/musiking_logo.jpg'),
+      //     // image: Image.asset(
+      //     //   Consumer<SongsLocal>(
+      //     //     builder: (ctx, songData, child) => QueryArtworkWidget(
+      //     //       id: songData.songs[songData.currentIndex].id,
+      //     //       type: ArtworkType.AUDIO,
+      //     //     ),
+      //     //   ).toString(),
+      //     // ).image,
+      //     fit: BoxFit.cover,
+      //   ),
+      // ),
       child: BackdropFilter(
         filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
         child: Container(
           decoration: BoxDecoration(
             color: paletteGenerator != null
-                ? paletteGenerator.dominantColor != null
-                    ? paletteGenerator.dominantColor!.color.withOpacity(0.7)
+                ? paletteGenerator.darkVibrantColor != null
+                    ? paletteGenerator.darkVibrantColor!.color.withOpacity(0.7)
                     : songData.defaultDarkColor
                 : songData.defaultDarkColor,
           ),
