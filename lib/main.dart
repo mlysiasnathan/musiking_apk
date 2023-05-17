@@ -47,10 +47,12 @@ class MyApp extends StatelessWidget {
           textTheme: Theme.of(context).textTheme.apply(
                 bodyColor: Colors.white,
                 displayColor: Colors.white,
+                fontFamily: 'PlusJakartaSans',
               ),
         ),
         home: const SplashScreen(),
         routes: {
+          SplashScreen.routeName: (ctx) => const SplashScreen(),
           CustomTabScreenBottomBar.routeName: (ctx) =>
               const CustomTabScreenBottomBar(),
           HomeScreen.routeName: (ctx) => const HomeScreen(),

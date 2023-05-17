@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../widgets/album_music.dart';
 import '../widgets/discover_music.dart';
 import '../widgets/playlist_local_music.dart';
-import '../widgets/playlist_music.dart';
+// import '../widgets/playlist_music.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,8 +16,8 @@ class HomeScreen extends StatelessWidget {
           DiscoverMusic(),
           AlbumMusic(),
           LocalPlaylistMusic(),
-          PlaylistMusic(),
-          SizedBox(height: 32),
+          // PlaylistMusic(),
+          SizedBox(height: 43),
         ],
       ),
     );

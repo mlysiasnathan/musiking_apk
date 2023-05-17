@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musiking/routes/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../models/songs_provider_local.dart';
@@ -38,7 +39,8 @@ class LocalPlaylistMusic extends StatelessWidget {
               children: [
                 SectionHeader(
                   title: 'All Songs',
-                  action: () => null, // songData.refreshSongList(),
+                  action: () => Navigator.pushReplacementNamed(
+                      context, SplashScreen.routeName),
                   actionText: 'Refresh',
                   afterActionText: 'Refresh',
                 ),

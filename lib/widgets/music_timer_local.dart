@@ -79,7 +79,11 @@ class MusicTimer extends StatelessWidget {
           const SizedBox(height: 10),
           Consumer<SongsLocal>(
             builder: (ctx, songData, _) => Text(
-              songData.currentPlaylist[songData.currentIndex].artist.toString(),
+              songData.currentPlaylist[songData.currentIndex].artist ==
+                      '<unknown>'
+                  ? 'Unknown Artist'
+                  : songData.currentPlaylist[songData.currentIndex].artist
+                      .toString(),
               style: Theme.of(context)
                   .textTheme
                   .bodySmall!
@@ -171,8 +175,14 @@ class MusicTimer extends StatelessWidget {
                         leading: const Icon(Icons.person_2),
                         title: Consumer<SongsLocal>(
                           builder: (ctx, songData, _) => Text(
-                              songData.songs[songData.currentIndex].artist
-                                  .toString(),
+                              songData.currentPlaylist[songData.currentIndex]
+                                          .artist ==
+                                      '<unknown>'
+                                  ? 'Unknown Artist'
+                                  : songData
+                                      .currentPlaylist[songData.currentIndex]
+                                      .artist
+                                      .toString(),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
@@ -234,9 +244,9 @@ class MusicTimer extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      title: const Text(
-                        'Playlist and Queue',
-                        style: TextStyle(color: Colors.deepOrange),
+                      title: Text(
+                        'Playlist of ${songData.currentPlaylist.length} song${songData.currentPlaylist.length > 1 ? 's' : ''}',
+                        style: const TextStyle(color: Colors.deepOrange),
                       ),
                       content: SizedBox(
                         height: mediaQuery.height * 0.50,

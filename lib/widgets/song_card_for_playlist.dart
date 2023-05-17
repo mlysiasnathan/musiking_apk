@@ -11,17 +11,16 @@ class SongCardForPlaylist extends StatelessWidget {
   final SongModel song;
   final List<SongModel> songs;
   final int index;
-  String _formatDuration(int duration) {
-    int h, m, s;
-    h = duration ~/ 3600;
-    m = ((duration - h * 3600)) ~/ 60;
-    s = duration - (h * 3600) - (m * 60);
-
-    // String hours = h.toString().length < 2 ? "0$h" : h.toString();
-    String minutes = m.toString().length < 2 ? "0$m" : m.toString();
-    String seconds = s.toString().length < 2 ? "0$s" : s.toString();
-
-    return '$minutes:$seconds';
+  String _formatDuration(int? dur) {
+    final duration = Duration(milliseconds: dur!.toInt());
+    if (duration == null) {
+      return '00:00';
+    } else {
+      String minutes = duration.inMinutes.toString().padLeft(2, '0');
+      String seconds =
+          duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+      return '$minutes:$seconds';
+    }
   }
 
   @override
@@ -35,11 +34,13 @@ class SongCardForPlaylist extends StatelessWidget {
           initialIndex: index,
         );
         await songData.audioPlayer.play();
+        songData.isPlaying = true;
         songData.setCurrentSong(index);
-        // songData.generateColors();
+        songData.generateColors();
       },
       borderRadius: BorderRadius.circular(10),
       child: ListTile(
+        minLeadingWidth: 1,
         leading: Consumer<SongsLocal>(builder: (ctx, songData, _) {
           if (song.title == songData.currentSong) {
             return const Icon(Icons.play_arrow, color: Colors.white, size: 30);
@@ -59,9 +60,15 @@ class SongCardForPlaylist extends StatelessWidget {
               .textTheme
               .bodyLarge!
               .copyWith(fontWeight: FontWeight.bold),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
-        subtitle:
-            Text('${song.album} - ${_formatDuration(song.duration as int)}'),
+        subtitle: Text(
+          '${song.album} - ${_formatDuration(song.duration as int)}',
+          style: Theme.of(context).textTheme.labelSmall!,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
         trailing: IconButton(
           onPressed: () {},
           icon: const Icon(

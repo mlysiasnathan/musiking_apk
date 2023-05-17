@@ -12,6 +12,7 @@ import './custom_tab_screen_bottom_bar.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
+  static const routeName = '/splash';
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -56,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
               // margin: const EdgeInsets.only(bottom: 10.0),
               padding:
                   const EdgeInsets.symmetric(vertical: 8.0, horizontal: 80.0),
-              transform: Matrix4.rotationZ(-8 * pi / 180)..translate(-10.0),
+              transform: Matrix4.rotationZ(-14 * pi / 180)..translate(-10.0),
               // ..translate(-10.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -74,7 +75,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 style: TextStyle(
                   fontSize: 35,
                   color: Colors.deepOrange,
-                  fontWeight: FontWeight.normal,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
@@ -125,9 +126,7 @@ class _SplashScreenState extends State<SplashScreen> {
               builder: (context, item) {
                 //loading content indicator
                 if (item.data == null) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const SizedBox();
                 }
                 // no songs found
                 if (item.data!.isEmpty) {
@@ -152,7 +151,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 songData.songs = item.data!;
                 songData.currentPlaylist = songData.songs;
                 Timer(
-                  const Duration(seconds: 5),
+                  const Duration(seconds: 8),
                   () => Navigator.pushReplacementNamed(
                       context, CustomTabScreenBottomBar.routeName),
                 );

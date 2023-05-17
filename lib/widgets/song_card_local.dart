@@ -15,17 +15,16 @@ class SongCardLocal extends StatelessWidget {
 
   final SongModel song;
   final int index;
-  String _formatDuration(int duration) {
-    int h, m, s;
-    h = duration ~/ 3600;
-    m = ((duration - h * 3600)) ~/ 60;
-    s = duration - (h * 3600) - (m * 60);
-
-    // String hours = h.toString().length < 2 ? "0$h" : h.toString();
-    String minutes = m.toString().length < 2 ? "0$m" : m.toString();
-    String seconds = s.toString().length < 2 ? "0$s" : s.toString();
-
-    return '$minutes:$seconds';
+  String _formatDuration(int? dur) {
+    final duration = Duration(milliseconds: dur!.toInt());
+    if (duration == null) {
+      return '00:00';
+    } else {
+      String minutes = duration.inMinutes.toString().padLeft(2, '0');
+      String seconds =
+          duration.inSeconds.remainder(60).toString().padLeft(2, '0');
+      return '$minutes:$seconds';
+    }
   }
 
   @override
@@ -39,6 +38,7 @@ class SongCardLocal extends StatelessWidget {
           initialIndex: index,
         );
         await songData.audioPlayer.play();
+        songData.isPlaying = true;
         songData.setCurrentSong(index);
         songData.generateColors();
       },
@@ -91,9 +91,9 @@ class SongCardLocal extends StatelessWidget {
                         ),
                   ),
                   Text(
-                    '${song.artist} - ${_formatDuration(song.duration as int)}',
+                    '${song.artist == '<unknown>' ? 'Unknown Artist' : song.artist} - ${_formatDuration(song.duration!)}',
                     maxLines: 1,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.labelSmall,
                     overflow: TextOverflow.ellipsis,
                   )
                 ],

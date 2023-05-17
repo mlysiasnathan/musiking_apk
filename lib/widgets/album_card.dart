@@ -22,27 +22,33 @@ class AlbumCard extends StatelessWidget {
         Navigator.of(context)
             .pushNamed(PlaylistScreen.routeName, arguments: playlist);
       },
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: playlistData.isViewMoreAlbum
+          ? BorderRadius.circular(15)
+          : BorderRadius.circular(20),
       child: Container(
         margin: const EdgeInsets.only(right: 10),
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
             SizedBox(
-              width: mediaQuery.width * 0.45,
+              width: mediaQuery.width * 0.43,
               height: mediaQuery.height * 0.43,
               child: QueryArtworkWidget(
                 id: playlist.id,
-                artworkBorder: BorderRadius.circular(20),
+                artworkBorder: playlistData.isViewMoreAlbum
+                    ? BorderRadius.circular(15)
+                    : BorderRadius.circular(20),
                 type: ArtworkType.ALBUM,
                 nullArtworkWidget: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: playlistData.isViewMoreAlbum
+                      ? BorderRadius.circular(15)
+                      : BorderRadius.circular(20),
                   child: Container(
                     color: Colors.white.withOpacity(0.4),
                     child: Image.asset(
                       color: Colors.deepOrange,
                       'assets/musiccovers/musiking_logo.png',
-                      width: mediaQuery.width * 0.45,
+                      width: mediaQuery.width * 0.43,
                       height: mediaQuery.height * 0.43,
                       fit: BoxFit.cover,
                     ),
@@ -54,7 +60,7 @@ class AlbumCard extends StatelessWidget {
               height: playlistData.isViewMoreAlbum ? 40 : 50,
               width: playlistData.isViewMoreAlbum
                   ? mediaQuery.width * 0.27
-                  : mediaQuery.width * 0.35,
+                  : mediaQuery.width * 0.37,
               margin: EdgeInsets.only(
                   bottom: playlistData.isViewMoreAlbum ? 4 : 10),
               decoration: BoxDecoration(
@@ -79,6 +85,8 @@ class AlbumCard extends StatelessWidget {
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
                                     color: Colors.red,
                                     fontWeight: FontWeight.bold,
+                                    fontSize:
+                                        playlistData.isViewMoreAlbum ? 10 : 16,
                                   ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -86,10 +94,10 @@ class AlbumCard extends StatelessWidget {
                       ),
                       Text(
                         '${playlist.numOfSongs} songs',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(color: Colors.blueGrey),
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              color: Colors.blueGrey,
+                              fontSize: playlistData.isViewMoreAlbum ? 9 : 13,
+                            ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

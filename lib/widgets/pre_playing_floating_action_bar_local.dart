@@ -42,59 +42,61 @@ class PrePlayingSong extends StatelessWidget {
         color: Colors.white,
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Flexible(
-            fit: FlexFit.tight,
-            child: InkWell(
-              onTap: () {
-                songData.paletteGenerator == null
-                    ? songData.generateColors()
-                    : null;
-                songBottomSheet(context);
-              },
-              borderRadius: BorderRadius.circular(5),
-              child: Row(
-                children: [
-                  const SizedBox(width: 4),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(7),
-                    child: Consumer<SongsLocal>(
-                      builder: (ctx, songData, _) => QueryArtworkWidget(
-                        id: songData.currentPlaylist.isEmpty
-                            ? 0
-                            : songData
-                                .currentPlaylist[songData.currentIndex].id,
-                        type: ArtworkType.AUDIO,
-                        artworkBorder: BorderRadius.zero,
-                        artworkHeight: 42,
-                        artworkWidth: 42,
-                        nullArtworkWidget: ClipRRect(
-                          child: Container(
-                            color: Colors.deepOrange,
-                            child: Image.asset(
-                              color: Colors.white,
-                              'assets/musiccovers/musiking_logo.png',
-                              width: 42,
-                              height: 42,
-                              fit: BoxFit.cover,
-                            ),
+          InkWell(
+            onTap: () {
+              songData.paletteGenerator == null
+                  ? songData.generateColors()
+                  : null;
+              songBottomSheet(context);
+            },
+            borderRadius: BorderRadius.circular(5),
+            child: Row(
+              children: [
+                const SizedBox(width: 4),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(7),
+                  child: Consumer<SongsLocal>(
+                    builder: (ctx, songData, _) => QueryArtworkWidget(
+                      id: songData.currentPlaylist.isEmpty
+                          ? 0
+                          : songData.currentPlaylist[songData.currentIndex].id,
+                      type: ArtworkType.AUDIO,
+                      artworkBorder: BorderRadius.zero,
+                      artworkHeight: 42,
+                      artworkWidth: 42,
+                      nullArtworkWidget: ClipRRect(
+                        child: Container(
+                          color: Colors.deepOrange,
+                          child: Image.asset(
+                            color: Colors.white,
+                            'assets/musiccovers/musiking_logo.png',
+                            width: 42,
+                            height: 42,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 18),
-                  Consumer<SongsLocal>(
-                    builder: (ctx, songData, _) => Text(
+                ),
+                const SizedBox(width: 18),
+                Consumer<SongsLocal>(
+                  builder: (ctx, songData, _) => SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.60,
+                    child: Text(
                       songData.currentSong,
                       style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.deepOrange,
                           ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
           IconButton(
@@ -107,6 +109,7 @@ class PrePlayingSong extends StatelessWidget {
                   initialIndex: songData.currentIndex,
                 );
                 await songData.audioPlayer.play();
+                songData.isPlaying = true;
                 songData.setCurrentSong(songData.currentIndex);
                 songData.generateColors();
               } else {
