@@ -3,9 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/seekbar.dart';
-import '../widgets/music_controllers_local.dart';
-import '../models/songs_provider_local.dart';
+import '../widgets/widgets.dart';
+import '../models/models.dart';
 
 class MusicTimer extends StatelessWidget {
   const MusicTimer({

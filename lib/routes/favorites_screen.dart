@@ -1,25 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/songs_provider_local.dart';
-import '../widgets/play_or_shuffle.dart';
-import '../widgets/song_card_for_playlist.dart';
+import '../models/models.dart';
+import '../widgets/widgets.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({Key? key}) : super(key: key);
   static const routeName = '/favorites-songs';
-  String _formatDuration(int duration) {
-    int h, m, s;
-    h = duration ~/ 3600;
-    m = ((duration - h * 3600)) ~/ 60;
-    s = duration - (h * 3600) - (m * 60);
-
-    // String hours = h.toString().length < 2 ? "0$h" : h.toString();
-    String minutes = m.toString().length < 2 ? "0$m" : m.toString();
-    String seconds = s.toString().length < 2 ? "0$s" : s.toString();
-
-    return '$minutes:$seconds';
-  }
 
   @override
   Widget build(BuildContext context) {

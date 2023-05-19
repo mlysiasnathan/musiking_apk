@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
-import '../models/playlists_provider_local.dart';
-import '../routes/playlist_screen.dart';
+import '../models/models.dart';
+import '../routes/screens.dart';
 
 class AlbumCard extends StatelessWidget {
   const AlbumCard({

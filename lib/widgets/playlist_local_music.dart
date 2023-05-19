@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:musiking/routes/splash_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../models/songs_provider_local.dart';
-import './section_header.dart';
-import './song_card_local.dart';
+import '../models/models.dart';
+import './widgets.dart';
 
 class LocalPlaylistMusic extends StatelessWidget {
   const LocalPlaylistMusic({

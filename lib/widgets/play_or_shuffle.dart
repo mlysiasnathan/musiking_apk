@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 
-import '../models/songs_provider_local.dart';
+import '../models/models.dart';
 
 class PlayOrShuffleSwitch extends StatelessWidget {
   const PlayOrShuffleSwitch({

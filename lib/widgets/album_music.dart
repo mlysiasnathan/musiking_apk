@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/playlists_provider_local.dart';
-import './album_card.dart';
-import './section_header.dart';
+import '../models/models.dart';
+import './widgets.dart';
 
 class AlbumMusic extends StatelessWidget {
   const AlbumMusic({

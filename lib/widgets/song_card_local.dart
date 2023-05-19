@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
-import '../models/songs_provider_local.dart';
-
-// import '../models/song_model.dart';
+import '../models/models.dart';
 
 class SongCardLocal extends StatelessWidget {
   const SongCardLocal({

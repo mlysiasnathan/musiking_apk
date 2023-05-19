@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'custom_tab_screen_bottom_bar.dart';
-
 class EqualizerScreen extends StatelessWidget {
   const EqualizerScreen({Key? key}) : super(key: key);
   static const routeName = '/equalizer';

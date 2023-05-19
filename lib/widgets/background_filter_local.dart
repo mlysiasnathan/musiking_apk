@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/songs_provider_local.dart';
+import '../models/models.dart';
 
 class BackgroundFilter extends StatelessWidget {
   const BackgroundFilter({

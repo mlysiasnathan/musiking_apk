@@ -2,17 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import './routes/custom_tab_screen_bottom_bar.dart';
-import './routes/equalizer_screen.dart';
-import './routes/favorites_screen.dart';
-import './routes/song_screen_local.dart';
-import './routes/splash_screen.dart';
-import './routes/playlist_screen.dart';
-import './routes/song_screen.dart';
-import './routes/home_screen.dart';
-import './models/playlists_provider_local.dart';
-import './models/songs_provider.dart';
-import './models/songs_provider_local.dart';
+import './routes/screens.dart';
+import './models/models.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,9 +20,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (ctx) => Songs(),
-        ),
         ChangeNotifierProvider(
           create: (ctx) => SongsLocal(),
         ),
@@ -56,8 +44,6 @@ class MyApp extends StatelessWidget {
           CustomTabScreenBottomBar.routeName: (ctx) =>
               const CustomTabScreenBottomBar(),
           HomeScreen.routeName: (ctx) => const HomeScreen(),
-          SongScreen.routeName: (ctx) => const SongScreen(),
-          SongScreenLocal.routeName: (ctx) => const SongScreenLocal(),
           PlaylistScreen.routeName: (ctx) => const PlaylistScreen(),
           FavoritesScreen.routeName: (ctx) => const FavoritesScreen(),
           EqualizerScreen.routeName: (ctx) => const EqualizerScreen(),

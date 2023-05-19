@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
-import '../models/songs_provider_local.dart';
-import '../widgets/play_or_shuffle.dart';
-import '../widgets/pre_playing_floating_action_bar_local.dart';
-import '../widgets/song_card_for_playlist.dart';
+import '../models/models.dart';
+import '../widgets/widgets.dart';
 
 class PlaylistScreen extends StatelessWidget {
   const PlaylistScreen({Key? key}) : super(key: key);
@@ -112,12 +110,14 @@ class _PlaylistInfo extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 30),
-        Text(
-          playlist.album,
-          style: Theme.of(context)
-              .textTheme
-              .headlineSmall!
-              .copyWith(fontWeight: FontWeight.bold),
+        FittedBox(
+          child: Text(
+            playlist.album,
+            style: Theme.of(context)
+                .textTheme
+                .headlineSmall!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
         )
       ],
     );

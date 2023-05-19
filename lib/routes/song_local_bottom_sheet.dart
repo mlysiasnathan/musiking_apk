@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/background_filter_local.dart';
-import '../widgets/music_timer_local.dart';
-import '../models/songs_provider_local.dart';
+import '../models/models.dart';
+import '../widgets/widgets.dart';
 
 class SongBottomSheet extends StatelessWidget {
   const SongBottomSheet({super.key});
+  static const routeName = '/songScreen-local';
   @override
   Widget build(BuildContext context) {
     final songData = Provider.of<SongsLocal>(context, listen: false);

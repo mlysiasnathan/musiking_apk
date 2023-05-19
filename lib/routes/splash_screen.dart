@@ -6,9 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
-import '../models/playlists_provider_local.dart';
-import '../models/songs_provider_local.dart';
-import './custom_tab_screen_bottom_bar.dart';
+import '../models/models.dart';
+import './screens.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -151,7 +150,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 songData.songs = item.data!;
                 songData.currentPlaylist = songData.songs;
                 Timer(
-                  const Duration(seconds: 8),
+                  const Duration(seconds: 5),
                   () => Navigator.pushReplacementNamed(
                       context, CustomTabScreenBottomBar.routeName),
                 );

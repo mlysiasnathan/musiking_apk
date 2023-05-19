@@ -1,11 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import './equalizer_screen.dart';
-import './favorites_screen.dart';
-import './home_screen.dart';
-import '../widgets/custom_app_bar.dart';
-import '../widgets/pre_playing_floating_action_bar_local.dart';
+import './screens.dart';
+import '../widgets/widgets.dart';
 
 class CustomTabScreenBottomBar extends StatefulWidget {
   const CustomTabScreenBottomBar({
