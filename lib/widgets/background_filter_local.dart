@@ -1,6 +1,8 @@
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 import '../models/models.dart';
@@ -14,28 +16,51 @@ class BackgroundFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     final songData = Provider.of<SongsLocal>(context, listen: false);
     final paletteGenerator = songData.paletteGenerator;
+    ImageProvider getImage() {
+      Image image = Image.asset('assets/musiccovers/musiking_logo.jpg');
+      FutureBuilder<Uint8List?>(
+          future: OnAudioQuery().queryArtwork(
+            songData.songs[songData.currentIndex].id,
+            ArtworkType.AUDIO,
+          ),
+          builder: (context, item) {
+            print('try load image============================');
+            if (item.data != null && item.data!.isNotEmpty) {
+              return image = Image.memory(
+                item.data!,
+                gaplessPlayback: false,
+                repeat: ImageRepeat.noRepeat,
+                scale: 1.0,
+                width: 300,
+                height: 300,
+                fit: BoxFit.cover,
+                filterQuality: FilterQuality.low,
+                errorBuilder: (context, exception, stackTrace) {
+                  return image;
+                },
+              );
+            }
+            return image;
+          });
+      print(image);
+      return image.image;
+    }
+
     return Container(
-      // decoration: const BoxDecoration(
-      //   image: DecorationImage(
-      //     image: AssetImage('assets/musiccovers/musiking_logo.jpg'),
-      //     // image: Image.asset(
-      //     //   Consumer<SongsLocal>(
-      //     //     builder: (ctx, songData, child) => QueryArtworkWidget(
-      //     //       id: songData.songs[songData.currentIndex].id,
-      //     //       type: ArtworkType.AUDIO,
-      //     //     ),
-      //     //   ).toString(),
-      //     // ).image,
-      //     fit: BoxFit.cover,
-      //   ),
-      // ),
+      decoration: BoxDecoration(
+          // image: DecorationImage(
+          //   // image: AssetImage('assets/musiccovers/musiking_logo.jpg'),
+          //   image: getImage(),
+          //   fit: BoxFit.cover,
+          // ),
+          ),
       child: BackdropFilter(
         filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
         child: Container(
           decoration: BoxDecoration(
             color: paletteGenerator != null
-                ? paletteGenerator.darkVibrantColor != null
-                    ? paletteGenerator.darkVibrantColor!.color.withOpacity(0.7)
+                ? paletteGenerator.vibrantColor != null
+                    ? paletteGenerator.vibrantColor!.color.withOpacity(0.7)
                     : songData.defaultDarkColor
                 : songData.defaultDarkColor,
           ),

@@ -87,23 +87,26 @@ class _PlaylistInfo extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(20),
-          child: QueryArtworkWidget(
-            id: playlist.id,
-            artworkBorder: BorderRadius.circular(20),
-            type: ArtworkType.ALBUM,
-            artworkFit: BoxFit.cover,
-            artworkWidth: mediaQuery.height * 0.3,
-            artworkHeight: mediaQuery.height * 0.3,
-            nullArtworkWidget: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Container(
-                color: Colors.white.withOpacity(0.7),
-                child: Image.asset(
-                  color: Colors.deepOrange,
-                  'assets/musiccovers/musiking_logo.png',
-                  width: mediaQuery.height * 0.3,
-                  height: mediaQuery.height * 0.3,
-                  fit: BoxFit.cover,
+          child: Hero(
+            tag: playlist.id,
+            child: QueryArtworkWidget(
+              id: playlist.id,
+              artworkBorder: BorderRadius.circular(20),
+              type: ArtworkType.ALBUM,
+              artworkFit: BoxFit.cover,
+              artworkWidth: mediaQuery.height * 0.3,
+              artworkHeight: mediaQuery.height * 0.3,
+              nullArtworkWidget: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  color: Colors.white.withOpacity(0.7),
+                  child: Image.asset(
+                    color: Colors.deepOrange,
+                    'assets/musiccovers/musiking_logo.png',
+                    width: mediaQuery.height * 0.3,
+                    height: mediaQuery.height * 0.3,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

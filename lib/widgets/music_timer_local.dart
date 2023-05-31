@@ -44,19 +44,22 @@ class MusicTimer extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(30),
               child: Consumer<SongsLocal>(
-                builder: (ctx, songData, _) => QueryArtworkWidget(
-                  id: songData.currentPlaylist[songData.currentIndex].id,
-                  type: ArtworkType.AUDIO,
-                  artworkBorder: BorderRadius.zero,
-                  artworkHeight: mediaQuery.height * 0.45,
-                  artworkWidth: mediaQuery.height * 0.45,
-                  artworkFit: BoxFit.cover,
-                  nullArtworkWidget: ClipRRect(
-                    child: Image.asset(
-                      'assets/musiccovers/musiking_logo.jpg',
-                      width: mediaQuery.height * 0.45,
-                      height: mediaQuery.height * 0.45,
-                      fit: BoxFit.cover,
+                builder: (ctx, songData, _) => Hero(
+                  tag: songData.currentPlaylist[songData.currentIndex].id,
+                  child: QueryArtworkWidget(
+                    id: songData.currentPlaylist[songData.currentIndex].id,
+                    type: ArtworkType.AUDIO,
+                    artworkBorder: BorderRadius.zero,
+                    artworkHeight: mediaQuery.height * 0.45,
+                    artworkWidth: mediaQuery.height * 0.45,
+                    artworkFit: BoxFit.cover,
+                    nullArtworkWidget: ClipRRect(
+                      child: Image.asset(
+                        'assets/musiccovers/musiking_logo.jpg',
+                        width: mediaQuery.height * 0.45,
+                        height: mediaQuery.height * 0.45,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
@@ -98,7 +101,7 @@ class MusicTimer extends StatelessWidget {
               final positionData = snapshot.data;
               return Consumer<SongsLocal>(
                 builder: (ctx, songData, _) => SeekBar(
-                  position: positionData?.position ?? Duration.zero,
+                  position: positionData?.position ?? songData.position,
                   duration: positionData?.duration ?? Duration.zero,
                   onChangedEnd: audioPlayer.seek,
                 ),

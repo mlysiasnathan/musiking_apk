@@ -33,24 +33,27 @@ class AlbumCard extends StatelessWidget {
             SizedBox(
               width: mediaQuery.width * 0.43,
               height: mediaQuery.height * 0.43,
-              child: QueryArtworkWidget(
-                id: playlist.id,
-                artworkBorder: playlistData.isViewMoreAlbum
-                    ? BorderRadius.circular(15)
-                    : BorderRadius.circular(20),
-                type: ArtworkType.ALBUM,
-                nullArtworkWidget: ClipRRect(
-                  borderRadius: playlistData.isViewMoreAlbum
+              child: Hero(
+                tag: playlist.id,
+                child: QueryArtworkWidget(
+                  id: playlist.id,
+                  artworkBorder: playlistData.isViewMoreAlbum
                       ? BorderRadius.circular(15)
                       : BorderRadius.circular(20),
-                  child: Container(
-                    color: Colors.white.withOpacity(0.4),
-                    child: Image.asset(
-                      color: Colors.deepOrange,
-                      'assets/musiccovers/musiking_logo.png',
-                      width: mediaQuery.width * 0.43,
-                      height: mediaQuery.height * 0.43,
-                      fit: BoxFit.cover,
+                  type: ArtworkType.ALBUM,
+                  nullArtworkWidget: ClipRRect(
+                    borderRadius: playlistData.isViewMoreAlbum
+                        ? BorderRadius.circular(15)
+                        : BorderRadius.circular(20),
+                    child: Container(
+                      color: Colors.white.withOpacity(0.4),
+                      child: Image.asset(
+                        color: Colors.deepOrange,
+                        'assets/musiccovers/musiking_logo.png',
+                        width: mediaQuery.width * 0.43,
+                        height: mediaQuery.height * 0.43,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),

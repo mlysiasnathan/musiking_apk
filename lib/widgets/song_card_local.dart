@@ -13,6 +13,7 @@ class SongCardLocal extends StatelessWidget {
 
   final SongModel song;
   final int index;
+
   String _formatDuration(int? dur) {
     final duration = Duration(milliseconds: dur!.toInt());
     if (duration == null) {
@@ -27,6 +28,7 @@ class SongCardLocal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final OnAudioQuery _audioQuery = OnAudioQuery();
     final songData = Provider.of<SongsLocal>(context, listen: false);
     return InkWell(
       onTap: () async {
@@ -73,6 +75,39 @@ class SongCardLocal extends StatelessWidget {
                   ),
                 ),
               ),
+              // FutureBuilder(
+              //   future: _audioQuery.queryArtwork(
+              //     song.id,
+              //     ArtworkType.AUDIO,
+              //   ),
+              //   builder: (context, queryArt) {
+              //     if (queryArt.connectionState == ConnectionState.waiting) {
+              //       return const Center(
+              //         child: CircularProgressIndicator(),
+              //       );
+              //     }
+              //
+              //     return QueryArtworkWidget(
+              //       id: song.id,
+              //       type: ArtworkType.AUDIO,
+              //       artworkHeight: 43,
+              //       artworkWidth: 43,
+              //       artworkBorder: BorderRadius.zero,
+              //       nullArtworkWidget: ClipRRect(
+              //         child: Container(
+              //           color: Colors.white.withOpacity(0.7),
+              //           child: Image.asset(
+              //             color: Colors.deepOrange,
+              //             'assets/musiccovers/musiking_logo.png',
+              //             width: 43,
+              //             height: 43,
+              //             fit: BoxFit.cover,
+              //           ),
+              //         ),
+              //       ),
+              //     );
+              //   },
+              // ),
             ),
             const SizedBox(width: 14),
             Expanded(

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+// import 'package:musiking/helpers/custom_route_animation.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
@@ -14,21 +15,21 @@ class PrePlayingSong extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final songData = Provider.of<SongsLocal>(context, listen: false);
-    void songBottomSheet(BuildContext ctx) {
-      showModalBottomSheet(
-        isDismissible: true,
-        isScrollControlled: true,
-        context: ctx,
-        builder: (_) {
-          return const Scaffold(
-            body: FractionallySizedBox(
-              heightFactor: 1.0,
-              child: SongBottomSheet(),
-            ),
-          );
-        },
-      );
-    }
+    // void songBottomSheet(BuildContext ctx) {
+    //   showModalBottomSheet(
+    //     isDismissible: true,
+    //     isScrollControlled: true,
+    //     context: ctx,
+    //     builder: (_) {
+    //       return const Scaffold(
+    //         body: FractionallySizedBox(
+    //           heightFactor: 1.0,
+    //           child: SongBottomSheet(),
+    //         ),
+    //       );
+    //     },
+    //   );
+    // }
 
     songData.audioPlayer.currentIndexStream.listen((index) {
       index != null ? songData.setCurrentSong(index) : null;
@@ -49,7 +50,34 @@ class PrePlayingSong extends StatelessWidget {
               songData.paletteGenerator == null
                   ? songData.generateColors()
                   : null;
-              songBottomSheet(context);
+              // songData.generateColors();
+              // songBottomSheet(context);
+              // Navigator.push(
+              //   context,
+              //   CustomRouteAnimation(
+              //     builder: (ctx) => const SongPlayerScreen(),
+              //   ),
+              // );
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondAnimation) =>
+                      const SongPlayerScreen(),
+                  transitionDuration: const Duration(milliseconds: 800),
+                  transitionsBuilder:
+                      (context, animation, secondAnimation, child) =>
+                          SlideTransition(
+                    position: animation.drive(
+                      Tween(begin: const Offset(0.0, 0.1), end: Offset.zero)
+                          .chain(
+                        CurveTween(
+                          curve: Curves.ease,
+                        ),
+                      ),
+                    ),
+                    child: child,
+                  ),
+                ),
+              );
             },
             borderRadius: BorderRadius.circular(5),
             child: Row(
@@ -58,23 +86,24 @@ class PrePlayingSong extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(7),
                   child: Consumer<SongsLocal>(
-                    builder: (ctx, songData, _) => QueryArtworkWidget(
-                      id: songData.currentPlaylist.isEmpty
-                          ? 0
-                          : songData.currentPlaylist[songData.currentIndex].id,
-                      type: ArtworkType.AUDIO,
-                      artworkBorder: BorderRadius.zero,
-                      artworkHeight: 42,
-                      artworkWidth: 42,
-                      nullArtworkWidget: ClipRRect(
-                        child: Container(
-                          color: Colors.deepOrange,
-                          child: Image.asset(
-                            color: Colors.white,
-                            'assets/musiccovers/musiking_logo.png',
-                            width: 42,
-                            height: 42,
-                            fit: BoxFit.cover,
+                    builder: (ctx, songData, _) => Hero(
+                      tag: songData.currentPlaylist[songData.currentIndex].id,
+                      child: QueryArtworkWidget(
+                        id: songData.currentPlaylist[songData.currentIndex].id,
+                        type: ArtworkType.AUDIO,
+                        artworkBorder: BorderRadius.zero,
+                        artworkHeight: 42,
+                        artworkWidth: 42,
+                        nullArtworkWidget: ClipRRect(
+                          child: Container(
+                            color: Colors.deepOrange,
+                            child: Image.asset(
+                              color: Colors.white,
+                              'assets/musiccovers/musiking_logo.png',
+                              width: 42,
+                              height: 42,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),

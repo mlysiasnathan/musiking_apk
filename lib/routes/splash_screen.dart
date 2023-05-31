@@ -55,8 +55,8 @@ class _SplashScreenState extends State<SplashScreen> {
             Container(
               // margin: const EdgeInsets.only(bottom: 10.0),
               padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 80.0),
-              transform: Matrix4.rotationZ(-14 * pi / 180)..translate(-10.0),
+                  const EdgeInsets.symmetric(vertical: 18.0, horizontal: 70.0),
+              transform: Matrix4.rotationZ(-14 * pi / 180)..translate(-0.0),
               // ..translate(-10.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -139,20 +139,31 @@ class _SplashScreenState extends State<SplashScreen> {
                           style: TextStyle(fontSize: 19),
                         ),
                         TextButton(
-                          child: const Text('Try again'),
+                          child: const Text(
+                            'Try again',
+                            style: TextStyle(color: Colors.white),
+                          ),
                           onPressed: () => Navigator.pop(context),
                         )
                       ],
                     ),
                   );
                 }
-                songData.songs.clear();
-                songData.songs = item.data!;
-                songData.currentPlaylist = songData.songs;
-                Timer(
-                  const Duration(seconds: 5),
-                  () => Navigator.pushReplacementNamed(
-                      context, CustomTabScreenBottomBar.routeName),
+                Future(
+                  () {
+                    songData.songs.clear();
+                    songData.songs = item.data!;
+                    songData.currentPlaylist = songData.songs;
+                  },
+                ).then((value) {
+                  songData.fetchAndSetCurrentSong();
+                  songData.audioPlayer;
+                }).then(
+                  (_) => Timer(
+                    const Duration(seconds: 3),
+                    () => Navigator.pushReplacementNamed(
+                        context, CustomTabScreenBottomBar.routeName),
+                  ),
                 );
                 return const SizedBox();
               },

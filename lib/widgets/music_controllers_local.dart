@@ -15,8 +15,11 @@ class MusicControllers extends StatelessWidget {
     final songData = Provider.of<SongsLocal>(context);
     final audioPlayer = songData.audioPlayer;
     void showToast(BuildContext ctx, String message) {
+      ScaffoldMessenger.of(ctx).hideCurrentSnackBar();
       ScaffoldMessenger.of(ctx).showSnackBar(
         SnackBar(
+          showCloseIcon: true,
+          closeIconColor: Colors.white,
           dismissDirection: DismissDirection.startToEnd,
           content: Text(message),
           behavior: SnackBarBehavior.floating,
