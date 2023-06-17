@@ -47,9 +47,9 @@ class PrePlayingSong extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              songData.paletteGenerator == null
-                  ? songData.generateColors()
-                  : null;
+              // songData.paletteGenerator == null
+              //     ? songData.generateColors()
+              //     : null;
               // songData.generateColors();
               // songBottomSheet(context);
               // Navigator.push(
@@ -62,7 +62,7 @@ class PrePlayingSong extends StatelessWidget {
                 PageRouteBuilder(
                   pageBuilder: (context, animation, secondAnimation) =>
                       const SongPlayerScreen(),
-                  transitionDuration: const Duration(milliseconds: 800),
+                  transitionDuration: const Duration(milliseconds: 1000),
                   transitionsBuilder:
                       (context, animation, secondAnimation, child) =>
                           SlideTransition(
@@ -139,8 +139,8 @@ class PrePlayingSong extends StatelessWidget {
                 );
                 await songData.audioPlayer.play();
                 songData.isPlaying = true;
-                songData.setCurrentSong(songData.currentIndex);
-                songData.generateColors();
+                // songData.setCurrentSong(songData.currentIndex);
+                // songData.generateColors();
               } else {
                 songData
                     .playPause(songData.currentPlaylist[songData.currentIndex]);

@@ -13,6 +13,7 @@ class LocalPlaylistMusic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final songData = Provider.of<SongsLocal>(context, listen: false);
+
     return Padding(
       padding: const EdgeInsets.all(19),
       child: songData.songs.isEmpty

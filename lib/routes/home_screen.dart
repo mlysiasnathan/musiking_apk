@@ -13,7 +13,6 @@ class HomeScreen extends StatelessWidget {
           DiscoverMusic(),
           AlbumMusic(),
           LocalPlaylistMusic(),
-          // PlaylistMusic(),
           SizedBox(height: 43),
         ],
       ),

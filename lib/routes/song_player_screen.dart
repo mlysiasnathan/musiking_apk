@@ -14,27 +14,28 @@ class SongPlayerScreen extends StatelessWidget {
     final songData = Provider.of<SongsLocal>(context, listen: false);
     songData.audioPlayer.currentIndexStream.listen((index) {
       index != null ? songData.setCurrentSong(index) : null;
+      songData.generateColors();
     });
     return Scaffold(
       body: Stack(children: [
-        // Consumer<SongsLocal>(
-        //   builder: (ctx, songData, child) => QueryArtworkWidget(
-        //     id: songData.songs[songData.currentIndex].id,
-        //     type: ArtworkType.AUDIO,
-        //     artworkFit: BoxFit.cover,
-        //     artworkHeight: double.infinity,
-        //     artworkWidth: double.infinity,
-        //     artworkBorder: BorderRadius.zero,
-        //     nullArtworkWidget: ClipRRect(
-        //       child: Image.asset(
-        //         'assets/musiccovers/musiking_logo.jpg',
-        //         fit: BoxFit.cover,
-        //         width: double.infinity,
-        //         height: double.infinity,
-        //       ),
-        //     ),
-        //   ),
-        // ),
+        Consumer<SongsLocal>(
+          builder: (ctx, songData, child) => QueryArtworkWidget(
+            id: songData.songs[songData.currentIndex].id,
+            type: ArtworkType.AUDIO,
+            artworkFit: BoxFit.cover,
+            artworkHeight: double.infinity,
+            artworkWidth: double.infinity,
+            artworkBorder: BorderRadius.zero,
+            nullArtworkWidget: ClipRRect(
+              child: Image.asset(
+                'assets/musiccovers/musiking_logo.jpg',
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              ),
+            ),
+          ),
+        ),
         const BackgroundFilter(),
         const MusicTimer(),
       ]),

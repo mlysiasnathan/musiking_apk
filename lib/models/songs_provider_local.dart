@@ -175,6 +175,7 @@ class SongsLocal with ChangeNotifier {
   }
 
   Future<PaletteGenerator?> generateColors() async {
+    print('color generated');
     paletteGenerator = await PaletteGenerator.fromImageProvider(
       // Image.asset('assets/musiccovers/musiking_logo.jpg').image,
       getImage(),

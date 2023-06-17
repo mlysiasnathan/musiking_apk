@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
@@ -28,8 +29,38 @@ class SongCardLocal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final OnAudioQuery _audioQuery = OnAudioQuery();
     final songData = Provider.of<SongsLocal>(context, listen: false);
+    var _isLoading = true;
+    Future<void> showPicture() async {
+      try {
+        QueryArtworkWidget(
+          id: song.id,
+          type: ArtworkType.AUDIO,
+          artworkHeight: 43,
+          artworkWidth: 43,
+          artworkBorder: BorderRadius.zero,
+          nullArtworkWidget: ClipRRect(
+            child: Container(
+              color: Colors.white.withOpacity(0.7),
+              child: Image.asset(
+                color: Colors.deepOrange,
+                'assets/musiccovers/musiking_logo.png',
+                width: 43,
+                height: 43,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        );
+        _isLoading = false;
+      } catch (error) {
+        print('error here : $error');
+        _isLoading = true;
+        rethrow;
+      }
+    }
+
+    showPicture();
     return InkWell(
       onTap: () async {
         songData.currentPlaylist = songData.songs;
@@ -56,58 +87,31 @@ class SongCardLocal extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(7),
-              child: QueryArtworkWidget(
-                id: song.id,
-                type: ArtworkType.AUDIO,
-                artworkHeight: 43,
-                artworkWidth: 43,
-                artworkBorder: BorderRadius.zero,
-                nullArtworkWidget: ClipRRect(
-                  child: Container(
-                    color: Colors.white.withOpacity(0.7),
-                    child: Image.asset(
-                      color: Colors.deepOrange,
-                      'assets/musiccovers/musiking_logo.png',
-                      width: 43,
-                      height: 43,
-                      fit: BoxFit.cover,
+              child: _isLoading == true
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    )
+                  : QueryArtworkWidget(
+                      id: song.id,
+                      type: ArtworkType.AUDIO,
+                      artworkHeight: 43,
+                      artworkWidth: 43,
+                      artworkBorder: BorderRadius.zero,
+                      nullArtworkWidget: ClipRRect(
+                        child: Container(
+                          color: Colors.white.withOpacity(0.7),
+                          child: Image.asset(
+                            color: Colors.deepOrange,
+                            'assets/musiccovers/musiking_logo.png',
+                            width: 43,
+                            height: 43,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              // FutureBuilder(
-              //   future: _audioQuery.queryArtwork(
-              //     song.id,
-              //     ArtworkType.AUDIO,
-              //   ),
-              //   builder: (context, queryArt) {
-              //     if (queryArt.connectionState == ConnectionState.waiting) {
-              //       return const Center(
-              //         child: CircularProgressIndicator(),
-              //       );
-              //     }
-              //
-              //     return QueryArtworkWidget(
-              //       id: song.id,
-              //       type: ArtworkType.AUDIO,
-              //       artworkHeight: 43,
-              //       artworkWidth: 43,
-              //       artworkBorder: BorderRadius.zero,
-              //       nullArtworkWidget: ClipRRect(
-              //         child: Container(
-              //           color: Colors.white.withOpacity(0.7),
-              //           child: Image.asset(
-              //             color: Colors.deepOrange,
-              //             'assets/musiccovers/musiking_logo.png',
-              //             width: 43,
-              //             height: 43,
-              //             fit: BoxFit.cover,
-              //           ),
-              //         ),
-              //       ),
-              //     );
-              //   },
-              // ),
             ),
             const SizedBox(width: 14),
             Expanded(

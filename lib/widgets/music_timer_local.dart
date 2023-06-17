@@ -203,7 +203,7 @@ class MusicTimer extends StatelessWidget {
                         leading: const Icon(Icons.folder_open),
                         title: Consumer<SongsLocal>(
                           builder: (ctx, songData, _) => Text(
-                              songData.songs[songData.currentIndex].uri
+                              songData.songs[songData.currentIndex].data
                                   .toString(),
                               style: Theme.of(context)
                                   .textTheme
