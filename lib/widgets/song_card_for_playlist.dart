@@ -30,13 +30,13 @@ class SongCardForPlaylist extends StatelessWidget {
       onTap: () async {
         songData.currentPlaylist = songs;
         await songData.audioPlayer.setAudioSource(
-          songData.initializePlaylist(songs),
+          songData.initializePlaylist(songData.currentPlaylist),
           initialIndex: index,
         );
+        songData.generateColors();
         await songData.audioPlayer.play();
         songData.isPlaying = true;
         songData.setCurrentSong(index);
-        songData.generateColors();
       },
       borderRadius: BorderRadius.circular(10),
       child: ListTile(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
@@ -39,6 +38,7 @@ class SongCardLocal extends StatelessWidget {
           artworkHeight: 43,
           artworkWidth: 43,
           artworkBorder: BorderRadius.zero,
+          keepOldArtwork: true,
           nullArtworkWidget: ClipRRect(
             child: Container(
               color: Colors.white.withOpacity(0.7),
@@ -52,6 +52,7 @@ class SongCardLocal extends StatelessWidget {
             ),
           ),
         );
+        print('no error here ');
         _isLoading = false;
       } catch (error) {
         print('error here : $error');
@@ -60,7 +61,7 @@ class SongCardLocal extends StatelessWidget {
       }
     }
 
-    showPicture();
+    // showPicture();
     return InkWell(
       onTap: () async {
         songData.currentPlaylist = songData.songs;
@@ -68,11 +69,12 @@ class SongCardLocal extends StatelessWidget {
           songData.initializePlaylist(songData.songs),
           initialIndex: index,
         );
+        songData.generateColors();
         await songData.audioPlayer.play();
         songData.isPlaying = true;
         songData.setCurrentSong(index);
-        songData.generateColors();
       },
+      key: ValueKey(song.id),
       borderRadius: BorderRadius.circular(10),
       child: Container(
         height: 50,
@@ -87,7 +89,7 @@ class SongCardLocal extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(7),
-              child: _isLoading == true
+              child: _isLoading == false
                   ? const Center(
                       child: CircularProgressIndicator(
                         color: Colors.white,
@@ -123,9 +125,10 @@ class SongCardLocal extends StatelessWidget {
                     song.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(fontWeight: FontWeight.bold),
                   ),
                   Text(
                     '${song.artist == '<unknown>' ? 'Unknown Artist' : song.artist} - ${_formatDuration(song.duration!)}',
@@ -138,9 +141,11 @@ class SongCardLocal extends StatelessWidget {
             ),
             Consumer<SongsLocal>(
               builder: (ctx, songData, _) => Icon(
-                  song.title == songData.currentSong ? Icons.play_arrow : null,
+                  song.title == songData.currentSong
+                      ? Icons.play_circle_outline
+                      : null,
                   color: Colors.white,
-                  size: 16),
+                  size: 20),
             ),
             IconButton(
               splashRadius: 23,

@@ -152,6 +152,9 @@ class AlbumMusic extends StatelessWidget {
                           : mediaQuery.size.height * 0.25,
                       child: playlistData.isViewMoreAlbum
                           ? GridView.builder(
+                              shrinkWrap: true,
+                              addRepaintBoundaries: true,
+                              addAutomaticKeepAlives: true,
                               physics: playlistData.playlists.length > 9
                                   ? null
                                   : const NeverScrollableScrollPhysics(),
@@ -168,12 +171,17 @@ class AlbumMusic extends StatelessWidget {
                               },
                             )
                           : ListView.builder(
+                              shrinkWrap: true,
+                              addRepaintBoundaries: true,
+                              addAutomaticKeepAlives: true,
                               scrollDirection: Axis.horizontal,
                               itemCount: playlistData.playlists.length >= 6
                                   ? 6
                                   : playlistData.playlists.length,
                               itemBuilder: (context, index) {
                                 return AlbumCard(
+                                    key: ValueKey(
+                                        playlistData.playlists[index].id),
                                     playlist: playlistData.playlists[index]);
                               },
                             ),

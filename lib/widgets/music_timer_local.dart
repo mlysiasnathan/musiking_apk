@@ -42,6 +42,7 @@ class MusicTimer extends StatelessWidget {
           // ),
           Center(
             child: ClipRRect(
+              key: ValueKey(songData.currentPlaylist[songData.currentIndex].id),
               borderRadius: BorderRadius.circular(30),
               child: Consumer<SongsLocal>(
                 builder: (ctx, songData, _) => Hero(
@@ -53,6 +54,7 @@ class MusicTimer extends StatelessWidget {
                     artworkHeight: mediaQuery.height * 0.45,
                     artworkWidth: mediaQuery.height * 0.45,
                     artworkFit: BoxFit.cover,
+                    keepOldArtwork: true,
                     nullArtworkWidget: ClipRRect(
                       child: Image.asset(
                         'assets/musiccovers/musiking_logo.jpg',
@@ -146,7 +148,8 @@ class MusicTimer extends StatelessWidget {
                         // ),
                         title: Consumer<SongsLocal>(
                           builder: (ctx, songData, _) => Text(
-                              songData.songs[songData.currentIndex].displayName,
+                              songData.currentPlaylist[songData.currentIndex]
+                                  .displayName,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyLarge!
@@ -164,7 +167,8 @@ class MusicTimer extends StatelessWidget {
                         leading: const Icon(Icons.album),
                         title: Consumer<SongsLocal>(
                           builder: (ctx, songData, _) => Text(
-                              songData.songs[songData.currentIndex].album
+                              songData
+                                  .currentPlaylist[songData.currentIndex].album
                                   .toString(),
                               style: const TextStyle(color: Colors.deepOrange),
                               maxLines: 2,
@@ -203,7 +207,8 @@ class MusicTimer extends StatelessWidget {
                         leading: const Icon(Icons.folder_open),
                         title: Consumer<SongsLocal>(
                           builder: (ctx, songData, _) => Text(
-                              songData.songs[songData.currentIndex].data
+                              songData
+                                  .currentPlaylist[songData.currentIndex].data
                                   .toString(),
                               style: Theme.of(context)
                                   .textTheme
@@ -308,7 +313,7 @@ class MusicTimer extends StatelessWidget {
                                       const SizedBox(width: 14),
                                       Expanded(
                                         child: Text(
-                                          '${songData.currentPlaylist.indexOf(songData.songs[index]) + 1} - \t${songData.currentPlaylist[index].title}',
+                                          '${songData.currentPlaylist.indexOf(songData.currentPlaylist[index]) + 1} - \t${songData.currentPlaylist[index].title}',
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyLarge!

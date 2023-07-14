@@ -96,6 +96,7 @@ class _PlaylistInfo extends StatelessWidget {
               artworkFit: BoxFit.cover,
               artworkWidth: mediaQuery.height * 0.3,
               artworkHeight: mediaQuery.height * 0.3,
+              keepOldArtwork: true,
               nullArtworkWidget: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Container(

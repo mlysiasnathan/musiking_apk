@@ -36,23 +36,28 @@ class MusicControllers extends StatelessWidget {
         StreamBuilder<SequenceState?>(
           stream: audioPlayer.sequenceStateStream,
           builder: (context, index) {
-            return IconButton(
-              tooltip: 'Shuffle Mode',
-              onPressed: () {
-                showToast(
-                    context,
-                    songData.audioPlayer.shuffleModeEnabled
-                        ? 'Shuffle mode Disabled'
-                        : 'Shuffle mode Enabled');
-                audioPlayer.shuffleModeEnabled
-                    ? audioPlayer.setShuffleModeEnabled(false)
-                    : audioPlayer.setShuffleModeEnabled(true);
-              },
-              icon: Icon(CupertinoIcons.shuffle,
-                  color: audioPlayer.shuffleModeEnabled
-                      ? Colors.deepOrange
-                      : Colors.white),
-              iconSize: 20,
+            return CircleAvatar(
+              backgroundColor: audioPlayer.shuffleModeEnabled
+                  ? Colors.white
+                  : Colors.transparent,
+              child: IconButton(
+                tooltip: 'Shuffle Mode',
+                onPressed: () {
+                  audioPlayer.shuffleModeEnabled
+                      ? audioPlayer.setShuffleModeEnabled(false)
+                      : audioPlayer.setShuffleModeEnabled(true);
+                  showToast(
+                      context,
+                      songData.audioPlayer.shuffleModeEnabled
+                          ? 'Shuffle mode Disabled'
+                          : 'Shuffle mode Enabled');
+                },
+                icon: Icon(CupertinoIcons.shuffle,
+                    color: audioPlayer.shuffleModeEnabled
+                        ? Colors.deepOrange
+                        : Colors.white),
+                iconSize: 20,
+              ),
             );
           },
         ),
@@ -94,11 +99,12 @@ class MusicControllers extends StatelessWidget {
                 return IconButton(
                   color: Colors.white,
                   iconSize: 70,
-                  onPressed: () {
-                    if (songData.currentSong == 'Click to play' &&
-                        audioPlayer.position == Duration.zero) {
-                      songData.audioPlayer.setAudioSource(
-                        songData.initializePlaylist(songData.songs),
+                  onPressed: () async {
+                    if (songData.currentSong == 'Click to play' ||
+                        songData.audioPlayer.currentIndex == null) {
+                      songData.currentPlaylist = songData.songs;
+                      await songData.audioPlayer.setAudioSource(
+                        songData.initializePlaylist(songData.currentPlaylist),
                         initialIndex: songData.currentIndex,
                       );
                       songData.setCurrentSong(songData.currentIndex);
@@ -183,30 +189,36 @@ class MusicControllers extends StatelessWidget {
           builder: (context, snapshot) {
             final loopMode = snapshot.data;
             if (loopMode == LoopMode.one) {
-              return IconButton(
-                tooltip: 'Looping to This SONG only',
-                onPressed: () {
-                  showToast(context, 'Loop mode ALL');
-                  audioPlayer.setLoopMode(LoopMode.all);
-                },
-                icon: const Icon(
-                  Icons.refresh,
+              return CircleAvatar(
+                backgroundColor: Colors.white,
+                child: IconButton(
+                  tooltip: 'Looping to This SONG only',
+                  onPressed: () {
+                    showToast(context, 'Loop mode ALL');
+                    audioPlayer.setLoopMode(LoopMode.all);
+                  },
+                  icon: const Icon(
+                    Icons.refresh,
+                  ),
+                  color: Colors.deepOrange,
+                  iconSize: 20,
                 ),
-                color: Colors.deepOrange,
-                iconSize: 20,
               );
             } else if (loopMode == LoopMode.all) {
-              return IconButton(
-                tooltip: 'Looping to ALL SONGS',
-                onPressed: () {
-                  showToast(context, 'Loop mode OFF');
-                  audioPlayer.setLoopMode(LoopMode.off);
-                },
-                icon: const Icon(
-                  Icons.loop_outlined,
+              return CircleAvatar(
+                backgroundColor: Colors.white,
+                child: IconButton(
+                  tooltip: 'Looping to ALL SONGS',
+                  onPressed: () {
+                    showToast(context, 'Loop mode OFF');
+                    audioPlayer.setLoopMode(LoopMode.off);
+                  },
+                  icon: const Icon(
+                    Icons.loop_outlined,
+                  ),
+                  color: Colors.deepOrange,
+                  iconSize: 20,
                 ),
-                color: Colors.deepOrange,
-                iconSize: 20,
               );
             }
             return IconButton(

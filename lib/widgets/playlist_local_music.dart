@@ -21,10 +21,13 @@ class LocalPlaylistMusic extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Icon(
-                  Icons.do_not_disturb_alt,
-                  size: 55,
-                  color: Colors.white,
+                CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.do_not_disturb_alt,
+                    size: 55,
+                    color: Colors.deepOrange,
+                  ),
                 ),
                 Text(
                   'Musics Not Found probably Musics list is Empty',
@@ -46,12 +49,16 @@ class LocalPlaylistMusic extends StatelessWidget {
                 ),
                 ListView.builder(
                   shrinkWrap: true,
+                  addRepaintBoundaries: true,
+                  addAutomaticKeepAlives: true,
                   padding: const EdgeInsets.only(top: 14),
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: songData.songs.length,
                   itemBuilder: ((context, index) {
                     return SongCardLocal(
-                        song: songData.songs[index], index: index);
+                        key: ValueKey(index),
+                        song: songData.songs[index],
+                        index: index);
                   }),
                 ),
               ],

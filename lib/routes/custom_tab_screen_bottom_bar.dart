@@ -16,12 +16,16 @@ class CustomTabScreenBottomBar extends StatefulWidget {
 }
 
 class _CustomBottomBarState extends State<CustomTabScreenBottomBar> {
+  final PageController _controller = PageController();
   late List<Map<String, Object>> _pages;
   late int _selectedIndex = 0;
   void _selectPage(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if (_selectedIndex != index) {
+      _controller.jumpToPage(index);
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
@@ -50,7 +54,16 @@ class _CustomBottomBarState extends State<CustomTabScreenBottomBar> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: const CustomAppBar(),
-        body: _pages[_selectedIndex]['page'] as Widget,
+        body: PageView(
+          controller: _controller,
+          onPageChanged: _selectPage,
+          // children: _pages[_selectedIndex]['page'] as Widget,
+          children: const [
+            HomeScreen(),
+            FavoritesScreen(),
+            EqualizerScreen(),
+          ],
+        ),
         floatingActionButton: const PrePlayingSong(),
         floatingActionButtonLocation:
             FloatingActionButtonLocation.miniCenterFloat,

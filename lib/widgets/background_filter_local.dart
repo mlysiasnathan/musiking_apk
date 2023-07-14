@@ -18,6 +18,11 @@ class BackgroundFilter extends StatelessWidget {
     final paletteGenerator = songData.paletteGenerator;
     ImageProvider getImage() {
       Image image = Image.asset('assets/musiccovers/musiking_logo.jpg');
+      // image = QueryArtworkWidget(
+      //   id: songData.songs[songData.currentIndex].id,
+      //   type: ArtworkType.AUDIO,
+      //   // artworkBlendMode: BlendMode.dst,
+      // ) as Image;
       FutureBuilder<Uint8List?>(
           future: OnAudioQuery().queryArtwork(
             songData.songs[songData.currentIndex].id,
@@ -31,8 +36,8 @@ class BackgroundFilter extends StatelessWidget {
                 gaplessPlayback: false,
                 repeat: ImageRepeat.noRepeat,
                 scale: 1.0,
-                width: 300,
-                height: 300,
+                width: 30,
+                height: 30,
                 fit: BoxFit.cover,
                 filterQuality: FilterQuality.low,
                 errorBuilder: (context, exception, stackTrace) {
@@ -48,12 +53,11 @@ class BackgroundFilter extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-          // image: DecorationImage(
-          //   // image: AssetImage('assets/musiccovers/musiking_logo.jpg'),
-          //   image: getImage(),
-          //   fit: BoxFit.cover,
-          // ),
-          ),
+        image: DecorationImage(
+          image: getImage(),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: BackdropFilter(
         filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
         child: Container(

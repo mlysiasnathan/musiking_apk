@@ -22,6 +22,7 @@ class AlbumCard extends StatelessWidget {
         Navigator.of(context)
             .pushNamed(PlaylistScreen.routeName, arguments: playlist);
       },
+      key: ValueKey(playlist.id),
       borderRadius: playlistData.isViewMoreAlbum
           ? BorderRadius.circular(15)
           : BorderRadius.circular(20),
@@ -41,6 +42,7 @@ class AlbumCard extends StatelessWidget {
                       ? BorderRadius.circular(15)
                       : BorderRadius.circular(20),
                   type: ArtworkType.ALBUM,
+                  keepOldArtwork: true,
                   nullArtworkWidget: ClipRRect(
                     borderRadius: playlistData.isViewMoreAlbum
                         ? BorderRadius.circular(15)
