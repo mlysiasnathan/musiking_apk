@@ -33,7 +33,7 @@ class AlbumCard extends StatelessWidget {
           children: [
             SizedBox(
               width: mediaQuery.width * 0.43,
-              height: mediaQuery.height * 0.43,
+              height: mediaQuery.width * 0.43,
               child: Hero(
                 tag: playlist.id,
                 child: QueryArtworkWidget(
@@ -62,7 +62,9 @@ class AlbumCard extends StatelessWidget {
               ),
             ),
             Container(
-              height: playlistData.isViewMoreAlbum ? 40 : 50,
+              height: playlistData.isViewMoreAlbum
+                  ? mediaQuery.height * 0.053
+                  : mediaQuery.height * 0.073,
               width: playlistData.isViewMoreAlbum
                   ? mediaQuery.width * 0.27
                   : mediaQuery.width * 0.37,

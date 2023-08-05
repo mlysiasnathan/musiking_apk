@@ -18,7 +18,9 @@ class MusicTimer extends StatelessWidget {
     final seekBarDataStream = songData.seekBarDataStream;
     final audioPlayer = songData.audioPlayer;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 19, vertical: 50),
+      padding: EdgeInsets.symmetric(
+          horizontal: mediaQuery.height * 0.020,
+          vertical: mediaQuery.height * 0.025),
       // padding: const EdgeInsets.symmetric(horizontal: 19, vertical: 70),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -68,7 +70,7 @@ class MusicTimer extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: mediaQuery.height * 0.023),
           Consumer<SongsLocal>(
             builder: (ctx, songData, _) => Text(
               songData.currentPlaylist[songData.currentIndex].title,
@@ -80,7 +82,7 @@ class MusicTimer extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: mediaQuery.height * 0.023),
           Consumer<SongsLocal>(
             builder: (ctx, songData, _) => Text(
               songData.currentPlaylist[songData.currentIndex].artist ==
@@ -96,7 +98,7 @@ class MusicTimer extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: mediaQuery.height * 0.023),
           StreamBuilder<SeekBarData>(
             stream: seekBarDataStream,
             builder: (context, snapshot) {
@@ -111,7 +113,7 @@ class MusicTimer extends StatelessWidget {
             },
           ),
           const MusicControllers(),
-          const SizedBox(height: 10),
+          SizedBox(height: mediaQuery.height * 0.023),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,

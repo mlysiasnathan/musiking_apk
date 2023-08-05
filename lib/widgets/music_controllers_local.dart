@@ -31,7 +31,7 @@ class MusicControllers extends StatelessWidget {
     }
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         StreamBuilder<SequenceState?>(
           stream: audioPlayer.sequenceStateStream,
@@ -49,8 +49,8 @@ class MusicControllers extends StatelessWidget {
                   showToast(
                       context,
                       songData.audioPlayer.shuffleModeEnabled
-                          ? 'Shuffle mode Disabled'
-                          : 'Shuffle mode Enabled');
+                          ? 'Shuffle mode Enabled'
+                          : 'Shuffle mode Disabled');
                 },
                 icon: Icon(CupertinoIcons.shuffle,
                     color: audioPlayer.shuffleModeEnabled
