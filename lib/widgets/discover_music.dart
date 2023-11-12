@@ -7,6 +7,7 @@ class DiscoverMusic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColorLight = Theme.of(context).primaryColorLight;
     return Padding(
       padding: const EdgeInsets.all(14.0),
       child: Column(
@@ -26,8 +27,8 @@ class DiscoverMusic extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           TextFormField(
-            style: const TextStyle(
-                color: Colors.deepOrange, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: primaryColorLight, fontWeight: FontWeight.bold),
             decoration: InputDecoration(
               fillColor: Colors.white,
               filled: true,

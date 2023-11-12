@@ -12,6 +12,8 @@ class PlayOrShuffleSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColor = Theme.of(context).primaryColor;
+    final Color primaryColorLight = Theme.of(context).primaryColorLight;
     double width = MediaQuery.of(context).size.width * 0.7;
     final songData = Provider.of<SongsLocal>(context);
     void showToast(BuildContext ctx, String message) {
@@ -42,12 +44,12 @@ class PlayOrShuffleSwitch extends StatelessWidget {
             songData.audioPlayer.shuffleModeEnabled
                 ? songData.audioPlayer.setShuffleModeEnabled(false)
                 : songData.audioPlayer.setShuffleModeEnabled(true);
-            songData.generateColors();
-            showToast(
+            songData.generateColors().then((_) => showToast(
                 context,
                 songData.audioPlayer.shuffleModeEnabled
                     ? 'Shuffle mode Enabled'
-                    : 'Shuffle mode Disabled');
+                    : 'Shuffle mode Disabled'));
+            ;
           },
           child: Container(
             height: 40,
@@ -71,7 +73,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                     height: 40,
                     width: width * 0.40,
                     decoration: BoxDecoration(
-                      color: Colors.deepOrange,
+                      color: primaryColorLight,
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -88,7 +90,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                               style: TextStyle(
                                 color: !songData.audioPlayer.shuffleModeEnabled
                                     ? Colors.white
-                                    : Colors.orange,
+                                    : primaryColor,
                                 fontSize: 13,
                               ),
                             ),
@@ -98,7 +100,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                             Icons.play_circle_outline,
                             color: !songData.audioPlayer.shuffleModeEnabled
                                 ? Colors.white
-                                : Colors.orange,
+                                : primaryColor,
                           ),
                         ],
                       ),
@@ -112,7 +114,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                               'Shuffle',
                               style: TextStyle(
                                 color: !songData.audioPlayer.shuffleModeEnabled
-                                    ? Colors.orange
+                                    ? primaryColor
                                     : Colors.white,
                                 fontSize: 13,
                               ),
@@ -122,7 +124,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                           Icon(
                             CupertinoIcons.shuffle,
                             color: !songData.audioPlayer.shuffleModeEnabled
-                                ? Colors.orange
+                                ? primaryColor
                                 : Colors.white,
                           ),
                         ],

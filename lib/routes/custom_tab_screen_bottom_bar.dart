@@ -40,14 +40,16 @@ class _CustomBottomBarState extends State<CustomTabScreenBottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColor = Theme.of(context).primaryColor;
+    final Color primaryColorDark = Theme.of(context).primaryColorDark;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.red.withOpacity(0.8),
-            Colors.orange.withOpacity(0.8),
+            primaryColorDark.withOpacity(0.8),
+            primaryColor.withOpacity(0.8),
           ],
         ),
       ),

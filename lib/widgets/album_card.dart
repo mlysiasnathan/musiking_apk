@@ -15,6 +15,8 @@ class AlbumCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColorLight = Theme.of(context).primaryColorLight;
+    final Color primaryColorDark = Theme.of(context).primaryColorDark;
     final playlistData = Provider.of<Playlists>(context);
     final mediaQuery = MediaQuery.of(context).size;
     return InkWell(
@@ -50,7 +52,7 @@ class AlbumCard extends StatelessWidget {
                     child: Container(
                       color: Colors.white.withOpacity(0.4),
                       child: Image.asset(
-                        color: Colors.deepOrange,
+                        color: primaryColorLight,
                         'assets/musiccovers/musiking_logo.png',
                         width: mediaQuery.width * 0.43,
                         height: mediaQuery.height * 0.43,
@@ -90,7 +92,7 @@ class AlbumCard extends StatelessWidget {
                           playlist.album,
                           style:
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                    color: Colors.red,
+                                    color: primaryColorDark,
                                     fontWeight: FontWeight.bold,
                                     fontSize:
                                         playlistData.isViewMoreAlbum ? 10 : 16,
@@ -111,9 +113,9 @@ class AlbumCard extends StatelessWidget {
                     ],
                   ),
                   if (!playlistData.isViewMoreAlbum)
-                    const Icon(
+                    Icon(
                       Icons.play_circle,
-                      color: Colors.red,
+                      color: primaryColorDark,
                     ),
                   if (!playlistData.isViewMoreAlbum) const SizedBox(width: 4),
                 ],

@@ -40,13 +40,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColorLight = Theme.of(context).primaryColorLight;
     final songData = Provider.of<SongsLocal>(context, listen: false);
     final playlistData = Provider.of<Playlists>(context, listen: false);
     final mediaQuery = MediaQuery.of(context).size;
 
     return Scaffold(
       body: Container(
-        color: Colors.deepOrange,
+        color: primaryColorLight,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -68,11 +69,11 @@ class _SplashScreenState extends State<SplashScreen> {
                   )
                 ],
               ),
-              child: const Text(
+              child: Text(
                 'MusiKing',
                 style: TextStyle(
                   fontSize: 35,
-                  color: Colors.deepOrange,
+                  color: primaryColorLight,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -109,66 +110,31 @@ class _SplashScreenState extends State<SplashScreen> {
                 if (item.data!.isEmpty) {
                   return const SizedBox();
                 }
+
                 playlistData.playlists.clear();
                 playlistData.playlists = item.data!;
                 return const SizedBox();
               },
             ),
-            FutureBuilder<List<SongModel>>(
-              //default values
-              future: _audioQuery.querySongs(
-                  sortType: null,
-                  ignoreCase: true,
-                  uriType: UriType.EXTERNAL,
-                  orderType: OrderType.ASC_OR_SMALLER),
-              builder: (context, item) {
-                //loading content indicator
-                if (item.data == null) {
-                  return const SizedBox();
-                }
-                // no songs found
-                if (item.data!.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'No songs found in this device',
-                          style: TextStyle(fontSize: 19),
-                        ),
-                        TextButton(
-                          child: const Text(
-                            'Try again',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () => Navigator.pop(context),
-                        )
-                      ],
-                    ),
-                  );
-                }
-                Future(
-                  () {
-                    songData.songs.clear();
-                    songData.songs = item.data!;
-                    songData.currentPlaylist = songData.songs;
-                  },
-                ).then((value) {
-                  songData.fetchAndSetCurrentSong();
-                  songData.audioPlayer;
-                }).then(
-                  (_) => Timer(
-                    const Duration(seconds: 3),
-                    () => Navigator.pushReplacementNamed(
-                        context, CustomTabScreenBottomBar.routeName),
+            Column(
+              children: [
+                const Text(
+                  'From',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    fontSize: 12,
+                    letterSpacing: 4.0,
                   ),
-                );
-                return const SizedBox();
-              },
-            ),
-            const Center(
-              child: CircularProgressIndicator(color: Colors.white),
+                ),
+                Image.asset(
+                  'assets/musiccovers/lysnB_land_logo_png.png',
+                  width: mediaQuery.width * 0.3,
+                  fit: BoxFit.fitWidth,
+                ),
+                const SizedBox(height: 10),
+                LinearProgressIndicator(color: primaryColorLight),
+              ],
             ),
           ],
         ),

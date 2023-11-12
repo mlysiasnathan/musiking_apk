@@ -13,6 +13,7 @@ class MusicTimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColorLight = Theme.of(context).primaryColorLight;
     final songData = Provider.of<SongsLocal>(context, listen: false);
     final mediaQuery = MediaQuery.of(context).size;
     final seekBarDataStream = songData.seekBarDataStream;
@@ -142,7 +143,7 @@ class MusicTimer extends StatelessWidget {
                         //           .textTheme
                         //           .bodyLarge!
                         //           .copyWith(
-                        //             color: Colors.deepOrange,
+                        //             color: primaryColorLight,
                         //             fontWeight: FontWeight.bold,
                         //           ),
                         //       maxLines: 2,
@@ -156,7 +157,7 @@ class MusicTimer extends StatelessWidget {
                                   .textTheme
                                   .bodyLarge!
                                   .copyWith(
-                                    color: Colors.deepOrange,
+                                    color: primaryColorLight,
                                     fontWeight: FontWeight.bold,
                                   ),
                               maxLines: 2,
@@ -172,7 +173,7 @@ class MusicTimer extends StatelessWidget {
                               songData
                                   .currentPlaylist[songData.currentIndex].album
                                   .toString(),
-                              style: const TextStyle(color: Colors.deepOrange),
+                              style: TextStyle(color: primaryColorLight),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis),
                         ),
@@ -195,7 +196,7 @@ class MusicTimer extends StatelessWidget {
                                   .textTheme
                                   .bodyMedium!
                                   .copyWith(
-                                    color: Colors.deepOrange,
+                                    color: primaryColorLight,
                                     fontWeight: FontWeight.bold,
                                   ),
                               maxLines: 2,
@@ -216,7 +217,7 @@ class MusicTimer extends StatelessWidget {
                                   .textTheme
                                   .labelMedium!
                                   .copyWith(
-                                    color: Colors.deepOrange,
+                                    color: primaryColorLight,
                                     fontWeight: FontWeight.bold,
                                   ),
                               maxLines: 2,
@@ -239,125 +240,126 @@ class MusicTimer extends StatelessWidget {
               IconButton(
                 tooltip: 'Show the current Playlist',
                 onPressed: () {
-                  showDialog<void>(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                      actionsAlignment: MainAxisAlignment.center,
-                      elevation: 10,
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 10,
-                      ),
-                      backgroundColor: Colors.white.withOpacity(0.8),
-                      alignment: Alignment.center,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      title: Text(
-                        'Playlist of ${songData.currentPlaylist.length} song${songData.currentPlaylist.length > 1 ? 's' : ''}',
-                        style: const TextStyle(color: Colors.deepOrange),
-                      ),
-                      content: SizedBox(
-                        height: mediaQuery.height * 0.50,
-                        width: mediaQuery.width,
-                        child: ListView.builder(
-                          itemCount: songData.currentPlaylist.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                songData.audioPlayer.setAudioSource(
-                                  songData.initializePlaylist(
-                                      songData.currentPlaylist),
-                                  initialIndex: index,
-                                );
-                                songData.audioPlayer.play();
-                                songData.setCurrentSong(index);
-                                songData.generateColors();
-                              },
-                              borderRadius: BorderRadius.circular(10),
-                              child: Consumer<SongsLocal>(
-                                builder: (ctx, songData, _) => Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    color: index == songData.currentIndex
-                                        ? Colors.deepOrange
-                                        : null,
-                                  ),
-                                  height: 50,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      const SizedBox(width: 4),
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: QueryArtworkWidget(
-                                          id: songData
-                                              .currentPlaylist[index].id,
-                                          type: ArtworkType.AUDIO,
-                                          artworkBorder: BorderRadius.zero,
-                                          artworkWidth: 42,
-                                          artworkHeight: 42,
-                                          nullArtworkWidget: ClipRRect(
-                                            child: Container(
-                                              color: Colors.white,
-                                              child: Image.asset(
-                                                color: Colors.deepOrange,
-                                                'assets/musiccovers/musiking_logo.png',
-                                                width: 42,
-                                                height: 42,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 14),
-                                      Expanded(
-                                        child: Text(
-                                          '${songData.currentPlaylist.indexOf(songData.currentPlaylist[index]) + 1} - \t${songData.currentPlaylist[index].title}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .copyWith(
-                                                color: index ==
-                                                        songData.currentIndex
-                                                    ? null
-                                                    : Colors.deepOrange,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      IconButton(
-                                        splashRadius: 23,
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.more_horiz_outlined,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(ctx);
-                          },
-                          child: const Text(
-                            'Close',
-                            style: TextStyle(color: Colors.deepOrange),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+                  Scaffold.of(context).openEndDrawer();
+                  // showDialog<void>(
+                  //   context: context,
+                  //   builder: (ctx) => AlertDialog(
+                  //     actionsAlignment: MainAxisAlignment.center,
+                  //     elevation: 10,
+                  //     contentPadding: const EdgeInsets.symmetric(
+                  //       vertical: 10,
+                  //       horizontal: 10,
+                  //     ),
+                  //     backgroundColor: Colors.white.withOpacity(0.8),
+                  //     alignment: Alignment.center,
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(20),
+                  //     ),
+                  //     title: Text(
+                  //       'Playlist of ${songData.currentPlaylist.length} song${songData.currentPlaylist.length > 1 ? 's' : ''}',
+                  //       style: TextStyle(color: primaryColorLight),
+                  //     ),
+                  //     content: SizedBox(
+                  //       height: mediaQuery.height * 0.50,
+                  //       width: mediaQuery.width,
+                  //       child: ListView.builder(
+                  //         itemCount: songData.currentPlaylist.length,
+                  //         itemBuilder: (context, index) {
+                  //           return InkWell(
+                  //             onTap: () {
+                  //               songData.audioPlayer.setAudioSource(
+                  //                 songData.initializePlaylist(
+                  //                     songData.currentPlaylist),
+                  //                 initialIndex: index,
+                  //               );
+                  //               songData.audioPlayer.play();
+                  //               songData.setCurrentSong(index);
+                  //               songData.generateColors();
+                  //             },
+                  //             borderRadius: BorderRadius.circular(10),
+                  //             child: Consumer<SongsLocal>(
+                  //               builder: (ctx, songData, _) => Container(
+                  //                 decoration: BoxDecoration(
+                  //                   borderRadius: BorderRadius.circular(8),
+                  //                   color: index == songData.currentIndex
+                  //                       ? primaryColorLight
+                  //                       : null,
+                  //                 ),
+                  //                 height: 50,
+                  //                 child: Row(
+                  //                   mainAxisAlignment:
+                  //                       MainAxisAlignment.spaceAround,
+                  //                   children: [
+                  //                     const SizedBox(width: 4),
+                  //                     ClipRRect(
+                  //                       borderRadius: BorderRadius.circular(8),
+                  //                       child: QueryArtworkWidget(
+                  //                         id: songData
+                  //                             .currentPlaylist[index].id,
+                  //                         type: ArtworkType.AUDIO,
+                  //                         artworkBorder: BorderRadius.zero,
+                  //                         artworkWidth: 42,
+                  //                         artworkHeight: 42,
+                  //                         nullArtworkWidget: ClipRRect(
+                  //                           child: Container(
+                  //                             color: Colors.white,
+                  //                             child: Image.asset(
+                  //                               color: primaryColorLight,
+                  //                               'assets/musiccovers/musiking_logo.png',
+                  //                               width: 42,
+                  //                               height: 42,
+                  //                               fit: BoxFit.cover,
+                  //                             ),
+                  //                           ),
+                  //                         ),
+                  //                       ),
+                  //                     ),
+                  //                     const SizedBox(width: 14),
+                  //                     Expanded(
+                  //                       child: Text(
+                  //                         '${songData.currentPlaylist.indexOf(songData.currentPlaylist[index]) + 1} - \t${songData.currentPlaylist[index].title}',
+                  //                         style: Theme.of(context)
+                  //                             .textTheme
+                  //                             .bodyLarge!
+                  //                             .copyWith(
+                  //                               color: index ==
+                  //                                       songData.currentIndex
+                  //                                   ? null
+                  //                                   : primaryColorLight,
+                  //                               fontWeight: FontWeight.bold,
+                  //                             ),
+                  //                         maxLines: 1,
+                  //                         overflow: TextOverflow.ellipsis,
+                  //                       ),
+                  //                     ),
+                  //                     IconButton(
+                  //                       splashRadius: 23,
+                  //                       onPressed: () {},
+                  //                       icon: const Icon(
+                  //                         Icons.more_horiz_outlined,
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           );
+                  //         },
+                  //       ),
+                  //     ),
+                  //     actions: [
+                  //       TextButton(
+                  //         onPressed: () {
+                  //           Navigator.pop(ctx);
+                  //         },
+                  //         child: Text(
+                  //           'Close',
+                  //           style: TextStyle(color: primaryColorLight),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // );
                 },
                 icon: const Icon(
                   CupertinoIcons.square_list,

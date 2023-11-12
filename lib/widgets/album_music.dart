@@ -12,7 +12,7 @@ class AlbumMusic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final playlistData = Provider.of<Playlists>(context);
+    final playlistData = Provider.of<Playlists>(context, listen: false);
     return Padding(
       padding: const EdgeInsets.only(
         left: 14,

@@ -28,40 +28,9 @@ class SongCardLocal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColorLight = Theme.of(context).primaryColorLight;
     final songData = Provider.of<SongsLocal>(context, listen: false);
-    var _isLoading = true;
-    Future<void> showPicture() async {
-      try {
-        QueryArtworkWidget(
-          id: song.id,
-          type: ArtworkType.AUDIO,
-          artworkHeight: 43,
-          artworkWidth: 43,
-          artworkBorder: BorderRadius.zero,
-          keepOldArtwork: true,
-          nullArtworkWidget: ClipRRect(
-            child: Container(
-              color: Colors.white.withOpacity(0.7),
-              child: Image.asset(
-                color: Colors.deepOrange,
-                'assets/musiccovers/musiking_logo.png',
-                width: 43,
-                height: 43,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        );
-        print('no error here ');
-        _isLoading = false;
-      } catch (error) {
-        print('error here : $error');
-        _isLoading = true;
-        rethrow;
-      }
-    }
 
-    // showPicture();
     return InkWell(
       onTap: () async {
         songData.currentPlaylist = songData.songs;
@@ -81,7 +50,7 @@ class SongCardLocal extends StatelessWidget {
         margin: const EdgeInsets.all(3),
         padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 3),
         decoration: BoxDecoration(
-          color: Colors.deepOrange.withOpacity(0.7),
+          color: primaryColorLight.withOpacity(0.7),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -89,31 +58,25 @@ class SongCardLocal extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(7),
-              child: _isLoading == false
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    )
-                  : QueryArtworkWidget(
-                      id: song.id,
-                      type: ArtworkType.AUDIO,
-                      artworkHeight: 43,
-                      artworkWidth: 43,
-                      artworkBorder: BorderRadius.zero,
-                      nullArtworkWidget: ClipRRect(
-                        child: Container(
-                          color: Colors.white.withOpacity(0.7),
-                          child: Image.asset(
-                            color: Colors.deepOrange,
-                            'assets/musiccovers/musiking_logo.png',
-                            width: 43,
-                            height: 43,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+              child: QueryArtworkWidget(
+                id: song.id,
+                type: ArtworkType.AUDIO,
+                artworkHeight: 43,
+                artworkWidth: 43,
+                artworkBorder: BorderRadius.zero,
+                nullArtworkWidget: ClipRRect(
+                  child: Container(
+                    color: Colors.white.withOpacity(0.7),
+                    child: Image.asset(
+                      color: primaryColorLight,
+                      'assets/musiccovers/musiking_logo.png',
+                      width: 43,
+                      height: 43,
+                      fit: BoxFit.cover,
                     ),
+                  ),
+                ),
+              ),
             ),
             const SizedBox(width: 14),
             Expanded(

@@ -14,6 +14,7 @@ class BackgroundFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColorDark = Theme.of(context).primaryColorDark;
     final songData = Provider.of<SongsLocal>(context, listen: false);
     final paletteGenerator = songData.paletteGenerator;
     ImageProvider getImage() {
@@ -65,8 +66,8 @@ class BackgroundFilter extends StatelessWidget {
             color: paletteGenerator != null
                 ? paletteGenerator.vibrantColor != null
                     ? paletteGenerator.vibrantColor!.color.withOpacity(0.7)
-                    : songData.defaultDarkColor
-                : songData.defaultDarkColor,
+                    : primaryColorDark
+                : primaryColorDark,
           ),
         ),
       ),

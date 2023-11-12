@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:musiking/helpers/custom_route_animation.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
@@ -14,16 +14,130 @@ class PrePlayingSong extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColorLight = Theme.of(context).primaryColorLight;
     final PageStorageBucket bucket = PageStorageBucket();
     final songData = Provider.of<SongsLocal>(context, listen: false);
+    final audioPlayer = songData.audioPlayer;
     void songBottomSheet(BuildContext ctx) {
       showModalBottomSheet(
         isDismissible: true,
         isScrollControlled: true,
         context: ctx,
         builder: (_) {
-          return const Scaffold(
-            body: FractionallySizedBox(
+          return Scaffold(
+            endDrawer: Drawer(
+              // width: 0.9,
+              backgroundColor: Colors.white.withOpacity(0.8),
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).viewInsets.top + 30,
+                  right: 10,
+                  left: 10,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Playlist of ${songData.currentPlaylist.length} song${songData.currentPlaylist.length > 1 ? 's' : ''}',
+                      style: TextStyle(
+                        color: primaryColorLight,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w900,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      maxLines: 1,
+                    ),
+                    Divider(color: primaryColorLight),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: songData.currentPlaylist.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              songData.audioPlayer.setAudioSource(
+                                songData.initializePlaylist(
+                                    songData.currentPlaylist),
+                                initialIndex: index,
+                              );
+                              songData.audioPlayer.play();
+                              songData.setCurrentSong(index);
+                              songData.generateColors();
+                            },
+                            borderRadius: BorderRadius.circular(10),
+                            child: Consumer<SongsLocal>(
+                              builder: (ctx, songData, _) => Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: index == songData.currentIndex
+                                      ? primaryColorLight
+                                      : null,
+                                ),
+                                height: 50,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    const SizedBox(width: 4),
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8),
+                                      child: QueryArtworkWidget(
+                                        id: songData.currentPlaylist[index].id,
+                                        type: ArtworkType.AUDIO,
+                                        artworkBorder: BorderRadius.zero,
+                                        artworkWidth: 42,
+                                        artworkHeight: 42,
+                                        nullArtworkWidget: ClipRRect(
+                                          child: Container(
+                                            color: Colors.white,
+                                            child: Image.asset(
+                                              color: primaryColorLight,
+                                              'assets/musiccovers/musiking_logo.png',
+                                              width: 42,
+                                              height: 42,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 14),
+                                    Expanded(
+                                      child: Text(
+                                        '${songData.currentPlaylist.indexOf(songData.currentPlaylist[index]) + 1} - \t${songData.currentPlaylist[index].title}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge!
+                                            .copyWith(
+                                              color:
+                                                  index == songData.currentIndex
+                                                      ? null
+                                                      : primaryColorLight,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      splashRadius: 23,
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        Icons.more_horiz_outlined,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            body: const FractionallySizedBox(
               heightFactor: 1.0,
               child: SongBottomSheet(key: PageStorageKey<String>('song')),
             ),
@@ -75,41 +189,53 @@ class PrePlayingSong extends StatelessWidget {
                 //   ),
                 // );
               },
-              key: ValueKey(songData.currentPlaylist[songData.currentIndex].id),
               borderRadius: BorderRadius.circular(5),
               child: Row(
                 children: [
-                  const SizedBox(width: 4),
+                  const SizedBox(width: 5),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(7),
-                    child: Consumer<SongsLocal>(
-                      builder: (ctx, songData, _) =>
-                          //   Hero(
-                          // tag: songData.currentPlaylist[songData.currentIndex].id,
-                          // child:
-                          QueryArtworkWidget(
-                        keepOldArtwork: true,
-                        id: songData.currentPlaylist[songData.currentIndex].id,
-                        type: ArtworkType.AUDIO,
-                        artworkBorder: BorderRadius.zero,
-                        artworkHeight: 42,
-                        artworkWidth: 42,
-                        nullArtworkWidget: ClipRRect(
-                          child: Container(
-                            color: Colors.deepOrange,
-                            child: Image.asset(
-                              color: Colors.white,
-                              'assets/musiccovers/musiking_logo.png',
-                              width: 42,
-                              height: 42,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
+                    child: FutureBuilder(
+                      future: songData.setSongsList(),
+                      builder: (context, snapshots) =>
+                          snapshots.connectionState == ConnectionState.waiting
+                              ? Container(
+                                  color: primaryColorLight,
+                                  child: Image.asset(
+                                    color: Colors.white,
+                                    'assets/musiccovers/musiking_logo.png',
+                                    width: 42,
+                                    height: 42,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : Consumer<SongsLocal>(
+                                  builder: (ctx, songData, _) =>
+                                      QueryArtworkWidget(
+                                    keepOldArtwork: true,
+                                    id: songData
+                                        .currentPlaylist[songData.currentIndex]
+                                        .id,
+                                    type: ArtworkType.AUDIO,
+                                    artworkBorder: BorderRadius.zero,
+                                    artworkHeight: 42,
+                                    artworkWidth: 42,
+                                    nullArtworkWidget: ClipRRect(
+                                      child: Container(
+                                        color: primaryColorLight,
+                                        child: Image.asset(
+                                          color: Colors.white,
+                                          'assets/musiccovers/musiking_logo.png',
+                                          width: 42,
+                                          height: 42,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                     ),
                   ),
-                  // ),
                   const SizedBox(width: 18),
                   Consumer<SongsLocal>(
                     builder: (ctx, songData, _) => SizedBox(
@@ -118,7 +244,7 @@ class PrePlayingSong extends StatelessWidget {
                         songData.currentSong,
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: Colors.deepOrange,
+                              color: primaryColorLight,
                             ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -128,34 +254,93 @@ class PrePlayingSong extends StatelessWidget {
                 ],
               ),
             ),
-            IconButton(
-              splashRadius: 40,
-              splashColor: Colors.deepOrange,
-              onPressed: () async {
-                if (songData.currentSong == 'Click to play' ||
-                    songData.audioPlayer.currentIndex == null) {
-                  songData.currentPlaylist = songData.songs;
-                  await songData.audioPlayer.setAudioSource(
-                    songData.initializePlaylist(songData.currentPlaylist),
-                    initialIndex: songData.currentIndex,
-                  );
-                  songData.generateColors();
-                  await songData.audioPlayer.play();
-                  songData.isPlaying = true;
-                  songData.setCurrentSong(songData.currentIndex);
+            StreamBuilder<PlayerState>(
+              stream: songData.audioPlayer.playerStateStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.processingState ==
+                          ProcessingState.loading ||
+                      snapshot.data!.processingState ==
+                          ProcessingState.buffering) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: primaryColorLight,
+                      ),
+                    );
+                  } else if (!songData.audioPlayer.playing) {
+                    return IconButton(
+                      splashRadius: 40,
+                      splashColor: primaryColorLight,
+                      onPressed: () async {
+                        if (songData.currentSong == 'Click to play' ||
+                            songData.audioPlayer.currentIndex == null) {
+                          songData.currentPlaylist = songData.songs;
+                          await songData.audioPlayer.setAudioSource(
+                            songData
+                                .initializePlaylist(songData.currentPlaylist),
+                            initialIndex: songData.currentIndex,
+                          );
+                          songData.setCurrentSong(songData.currentIndex);
+                        }
+                        audioPlayer.play();
+                        songData.isPlaying = true;
+                      },
+                      icon: Icon(
+                        color: primaryColorLight,
+                        CupertinoIcons.play_circle,
+                      ),
+                    );
+                  } else if (snapshot.data!.processingState !=
+                      ProcessingState.completed) {
+                    return IconButton(
+                      splashRadius: 40,
+                      splashColor: primaryColorLight,
+                      onPressed: () {
+                        audioPlayer.pause();
+                        songData.isPlaying = false;
+                      },
+                      icon: Icon(
+                        color: primaryColorLight,
+                        CupertinoIcons.pause_circle,
+                      ),
+                    );
+                  } else if (snapshot.data!.processingState ==
+                      ProcessingState.completed) {
+                    return IconButton(
+                      splashRadius: 40,
+                      splashColor: primaryColorLight,
+                      onPressed: () {
+                        audioPlayer.pause();
+                        songData.isPlaying = false;
+                      },
+                      icon: Icon(
+                        color: primaryColorLight,
+                        CupertinoIcons.pause_circle,
+                      ),
+                    );
+                  } else {
+                    return IconButton(
+                      splashRadius: 40,
+                      splashColor: primaryColorLight,
+                      onPressed: () {
+                        audioPlayer.seek(
+                          Duration.zero,
+                          index: audioPlayer.effectiveIndices!.first,
+                        );
+                        songData.isPlaying = false;
+                      },
+                      icon: Icon(
+                        CupertinoIcons.memories,
+                        color: primaryColorLight,
+                      ),
+                    );
+                  }
                 } else {
-                  songData.playPause(
-                      songData.currentPlaylist[songData.currentIndex]);
+                  return Center(
+                    child: CircularProgressIndicator(color: primaryColorLight),
+                  );
                 }
               },
-              icon: Consumer<SongsLocal>(
-                builder: (ctx, songData, _) => Icon(
-                  songData.isPlaying
-                      ? CupertinoIcons.pause_circle
-                      : CupertinoIcons.play_circle,
-                  color: Colors.deepOrange,
-                ),
-              ),
             ),
           ],
         ),

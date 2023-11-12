@@ -12,6 +12,7 @@ class MusicControllers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColorLight = Theme.of(context).primaryColorLight;
     final songData = Provider.of<SongsLocal>(context);
     final audioPlayer = songData.audioPlayer;
     void showToast(BuildContext ctx, String message) {
@@ -54,7 +55,7 @@ class MusicControllers extends StatelessWidget {
                 },
                 icon: Icon(CupertinoIcons.shuffle,
                     color: audioPlayer.shuffleModeEnabled
-                        ? Colors.deepOrange
+                        ? primaryColorLight
                         : Colors.white),
                 iconSize: 20,
               ),
@@ -200,7 +201,7 @@ class MusicControllers extends StatelessWidget {
                   icon: const Icon(
                     Icons.refresh,
                   ),
-                  color: Colors.deepOrange,
+                  color: primaryColorLight,
                   iconSize: 20,
                 ),
               );
@@ -216,7 +217,7 @@ class MusicControllers extends StatelessWidget {
                   icon: const Icon(
                     Icons.loop_outlined,
                   ),
-                  color: Colors.deepOrange,
+                  color: primaryColorLight,
                   iconSize: 20,
                 ),
               );

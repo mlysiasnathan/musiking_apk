@@ -14,6 +14,7 @@ class SongsLocal with ChangeNotifier {
   List<SongModel> songs = <SongModel>[];
   List<SongModel> currentPlaylist = <SongModel>[];
   AudioPlayer audioPlayer = AudioPlayer();
+  final OnAudioQuery _audioQuery = OnAudioQuery();
   PaletteGenerator? paletteGenerator;
 
   String currentSong = 'Click to play';
@@ -23,11 +24,28 @@ class SongsLocal with ChangeNotifier {
   bool pageLoaded = false;
   Duration position = Duration.zero;
   List<AudioSource> sources = [];
-  Color defaultLightColor = Colors.orange;
-  Color defaultDarkColor = Colors.red;
   void refreshSongList() {
     pageLoaded = !pageLoaded;
     notifyListeners();
+  }
+
+  Future<void> setSongsList() async {
+    _audioQuery
+        .querySongs(
+            sortType: null,
+            ignoreCase: true,
+            uriType: UriType.EXTERNAL,
+            orderType: OrderType.ASC_OR_SMALLER)
+        .then((songsList) {
+      if (songsList.isNotEmpty) {
+        songs.clear();
+        songs = songsList;
+        currentPlaylist = songs;
+        notifyListeners();
+      } else {
+        songs.clear();
+      }
+    });
   }
 
   ConcatenatingAudioSource initializePlaylist(List<SongModel> songsToPlay) {
@@ -140,7 +158,7 @@ class SongsLocal with ChangeNotifier {
       minutes: int.parse(timeParts[1]),
       seconds: double.parse(timeParts[2]).toInt(),
     );
-    notifyListeners();
+    // notifyListeners();
     return true;
   }
 

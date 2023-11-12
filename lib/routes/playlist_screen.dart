@@ -11,6 +11,8 @@ class PlaylistScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColor = Theme.of(context).primaryColor;
+    final Color primaryColorDark = Theme.of(context).primaryColorDark;
     final playlist = ModalRoute.of(context)?.settings.arguments as AlbumModel;
     final List<SongModel> songs =
         Provider.of<SongsLocal>(context, listen: false)
@@ -24,8 +26,8 @@ class PlaylistScreen extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Colors.red.withOpacity(0.8),
-            Colors.orange.withOpacity(0.8),
+            primaryColorDark.withOpacity(0.8),
+            primaryColor.withOpacity(0.8),
           ],
         ),
       ),
@@ -82,6 +84,7 @@ class _PlaylistInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color primaryColorLight = Theme.of(context).primaryColorLight;
     final mediaQuery = MediaQuery.of(context).size;
     return Column(
       children: [
@@ -102,7 +105,7 @@ class _PlaylistInfo extends StatelessWidget {
                 child: Container(
                   color: Colors.white.withOpacity(0.7),
                   child: Image.asset(
-                    color: Colors.deepOrange,
+                    color: primaryColorLight,
                     'assets/musiccovers/musiking_logo.png',
                     width: mediaQuery.height * 0.3,
                     height: mediaQuery.height * 0.3,

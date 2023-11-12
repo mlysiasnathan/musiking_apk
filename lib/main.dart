@@ -28,25 +28,41 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
         title: 'MusiKing',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: Colors.deepOrange,
+          primaryColor: Colors.orange,
+          primaryColorDark: Colors.red,
+          primaryColorLight: Colors.deepOrangeAccent,
+          // colorScheme: const ColorScheme.light(
+          //   primary: Colors.deepOrange,
+          //   secondary: Colors.red,
+          // ),
           textTheme: Theme.of(context).textTheme.apply(
                 bodyColor: Colors.white,
                 displayColor: Colors.white,
                 fontFamily: 'PlusJakartaSans',
               ),
         ),
-        home: const SplashScreen(),
+        home: Builder(
+          builder: (context) => FutureBuilder(
+            future: Provider.of<SongsLocal>(context, listen: false)
+                .fetchAndSetCurrentSong()
+                .then((_) => Future.delayed(const Duration(seconds: 2))),
+            builder: (context, snapshots) =>
+                snapshots.connectionState == ConnectionState.waiting
+                    ? const SplashScreen()
+                    : const CustomTabScreenBottomBar(),
+          ),
+        ),
         routes: {
           SplashScreen.routeName: (ctx) => const SplashScreen(),
-          CustomTabScreenBottomBar.routeName: (ctx) =>
-              const CustomTabScreenBottomBar(),
           HomeScreen.routeName: (ctx) => const HomeScreen(),
           PlaylistScreen.routeName: (ctx) => const PlaylistScreen(),
           FavoritesScreen.routeName: (ctx) => const FavoritesScreen(),
           EqualizerScreen.routeName: (ctx) => const EqualizerScreen(),
+          CustomTabScreenBottomBar.routeName: (ctx) =>
+              const CustomTabScreenBottomBar(),
         },
       ),
     );
