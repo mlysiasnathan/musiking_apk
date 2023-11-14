@@ -31,7 +31,7 @@ class LocalPlaylistMusic extends StatelessWidget {
                         actionText: 'Wait',
                         afterActionText: 'Wait',
                       ),
-                      const LinearProgressIndicator(color: Colors.white),
+                      LinearProgressIndicator(color: primaryColorLight),
                     ],
                   )
                 : songData.songs.isEmpty
@@ -43,16 +43,17 @@ class LocalPlaylistMusic extends StatelessWidget {
                             title: 'No Songs found',
                             action: () => songData.setSongsList(),
                             actionText: 'Refresh',
-                            afterActionText: 'Refresh',
+                            afterActionText: 'Refreshed',
                           ),
+                          const SizedBox(height: 30),
                           CircleAvatar(
                             backgroundColor: Colors.white,
                             child: Icon(
                               Icons.do_not_disturb_alt,
-                              size: 55,
                               color: primaryColorLight,
                             ),
                           ),
+                          const SizedBox(height: 30),
                           const Text(
                             'Musics Not Found probably Musics list is Empty',
                             style: TextStyle(
@@ -68,8 +69,6 @@ class LocalPlaylistMusic extends StatelessWidget {
                             SectionHeader(
                               title: 'All Songs (${songData.songs.length})',
                               action: () => songData.setSongsList(),
-                              // action: () => Navigator.pushReplacementNamed(
-                              //     context, SplashScreen.routeName),
                               actionText: 'Refresh',
                               afterActionText: 'Refresh',
                             ),
@@ -77,7 +76,7 @@ class LocalPlaylistMusic extends StatelessWidget {
                               shrinkWrap: true,
                               addRepaintBoundaries: true,
                               addAutomaticKeepAlives: true,
-                              padding: const EdgeInsets.only(top: 14),
+                              padding: const EdgeInsets.only(top: 4),
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: songData.songs.length,
                               itemBuilder: ((context, index) {

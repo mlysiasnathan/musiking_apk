@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../models/songs_provider_local.dart';
 import './screens.dart';
 import '../widgets/widgets.dart';
 
@@ -40,6 +42,7 @@ class _CustomBottomBarState extends State<CustomTabScreenBottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    final songData = Provider.of<SongsLocal>(context, listen: false);
     final Color primaryColor = Theme.of(context).primaryColor;
     final Color primaryColorDark = Theme.of(context).primaryColorDark;
     return Container(
@@ -66,7 +69,11 @@ class _CustomBottomBarState extends State<CustomTabScreenBottomBar> {
             EqualizerScreen(),
           ],
         ),
-        floatingActionButton: const PrePlayingSong(),
+        floatingActionButton: Consumer<SongsLocal>(
+          builder: (ctx, songData, _) => songData.songs.isNotEmpty
+              ? const PrePlayingSong()
+              : const SizedBox(),
+        ),
         floatingActionButtonLocation:
             FloatingActionButtonLocation.miniCenterFloat,
         bottomNavigationBar: BottomNavigationBar(

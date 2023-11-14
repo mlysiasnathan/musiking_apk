@@ -1,13 +1,8 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import 'package:provider/provider.dart';
-
-import '../models/models.dart';
-import './screens.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -41,8 +36,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     final Color primaryColorLight = Theme.of(context).primaryColorLight;
-    final songData = Provider.of<SongsLocal>(context, listen: false);
-    final playlistData = Provider.of<Playlists>(context, listen: false);
     final mediaQuery = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -50,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
         color: primaryColorLight,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const SizedBox(height: 50),
             Container(
@@ -94,28 +87,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
             ),
-            FutureBuilder<List<AlbumModel>>(
-              //default values
-              future: _audioQuery.queryAlbums(
-                  sortType: null,
-                  ignoreCase: true,
-                  uriType: UriType.EXTERNAL,
-                  orderType: OrderType.ASC_OR_SMALLER),
-              builder: (context, item) {
-                //loading content indicator
-                if (item.data == null) {
-                  return const SizedBox();
-                }
-                // no album found
-                if (item.data!.isEmpty) {
-                  return const SizedBox();
-                }
-
-                playlistData.playlists.clear();
-                playlistData.playlists = item.data!;
-                return const SizedBox();
-              },
-            ),
             Column(
               children: [
                 const Text(
@@ -134,6 +105,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 const SizedBox(height: 10),
                 LinearProgressIndicator(color: primaryColorLight),
+                const SizedBox(height: 20),
               ],
             ),
           ],

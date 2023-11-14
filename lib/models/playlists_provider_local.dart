@@ -17,10 +17,10 @@ class Playlists with ChangeNotifier {
             ignoreCase: true,
             uriType: UriType.EXTERNAL,
             orderType: OrderType.ASC_OR_SMALLER)
-        .then((songsList) {
-      if (songsList.isNotEmpty) {
+        .then((albumsList) {
+      if (albumsList.isNotEmpty) {
         playlists.clear();
-        playlists = songsList;
+        playlists = albumsList;
         notifyListeners();
       } else {
         playlists.clear();

@@ -19,17 +19,15 @@ class AlbumCard extends StatelessWidget {
     final Color primaryColorDark = Theme.of(context).primaryColorDark;
     final playlistData = Provider.of<Playlists>(context);
     final mediaQuery = MediaQuery.of(context).size;
-    return InkWell(
-      onTap: () {
-        Navigator.of(context)
-            .pushNamed(PlaylistScreen.routeName, arguments: playlist);
-      },
-      key: ValueKey(playlist.id),
-      borderRadius: playlistData.isViewMoreAlbum
-          ? BorderRadius.circular(15)
-          : BorderRadius.circular(20),
-      child: Container(
-        margin: const EdgeInsets.only(right: 10),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+      child: InkWell(
+        onTap: () => Navigator.of(context)
+            .pushNamed(PlaylistScreen.routeName, arguments: playlist),
+        key: ValueKey(playlist.id),
+        borderRadius: playlistData.isViewMoreAlbum
+            ? BorderRadius.circular(15)
+            : BorderRadius.circular(20),
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
@@ -55,7 +53,7 @@ class AlbumCard extends StatelessWidget {
                         color: primaryColorLight,
                         'assets/musiccovers/musiking_logo.png',
                         width: mediaQuery.width * 0.43,
-                        height: mediaQuery.height * 0.43,
+                        height: mediaQuery.width * 0.43,
                         fit: BoxFit.cover,
                       ),
                     ),
