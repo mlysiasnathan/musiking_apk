@@ -31,7 +31,29 @@ class LocalPlaylistMusic extends StatelessWidget {
                         actionText: 'Wait',
                         afterActionText: 'Wait',
                       ),
-                      LinearProgressIndicator(color: primaryColorLight),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        addRepaintBoundaries: true,
+                        addAutomaticKeepAlives: true,
+                        padding: const EdgeInsets.only(top: 4),
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: 6,
+                        itemBuilder: ((context, index) {
+                          return Container(
+                            height: 50,
+                            margin: const EdgeInsets.all(3),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 3, vertical: 3),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 2,
+                                color: Colors.white,
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          );
+                        }),
+                      ),
                     ],
                   )
                 : songData.songs.isEmpty

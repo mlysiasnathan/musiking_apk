@@ -37,19 +37,23 @@ class PrePlayingSong extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Playlist of ${songData.currentPlaylist.length} song${songData.currentPlaylist.length > 1 ? 's' : ''}',
-                      style: TextStyle(
-                        color: primaryColorLight,
-                        fontSize: 25,
-                        fontWeight: FontWeight.w900,
-                        overflow: TextOverflow.ellipsis,
+                    InkWell(
+                      onTap: songData.autoScroll,
+                      child: Text(
+                        'Playlist of ${songData.currentPlaylist.length} song${songData.currentPlaylist.length > 1 ? 's' : ''}',
+                        style: TextStyle(
+                          color: primaryColorLight,
+                          fontSize: 25,
+                          fontWeight: FontWeight.w900,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        maxLines: 1,
                       ),
-                      maxLines: 1,
                     ),
                     Divider(color: primaryColorLight),
                     Expanded(
                       child: ListView.builder(
+                        controller: songData.scrollCtrl,
                         itemCount: songData.currentPlaylist.length,
                         itemBuilder: (context, index) {
                           return InkWell(

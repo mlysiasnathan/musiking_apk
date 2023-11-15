@@ -31,8 +31,32 @@ class AlbumMusic extends StatelessWidget {
                     actionText: 'Wait',
                     afterActionText: 'Wait',
                   ),
-                  LinearProgressIndicator(color: primaryColorLight),
-                  SizedBox(height: mediaQuery.size.height * 0.2),
+                  SizedBox(
+                    height: mediaQuery.size.height * 0.22,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      addRepaintBoundaries: true,
+                      addAutomaticKeepAlives: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 6,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 2,
+                              color: Colors.white,
+                            ),
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          child: SizedBox(
+                            width: mediaQuery.size.width * 0.43,
+                            height: mediaQuery.size.width * 0.43,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               )
             : playlistData.playlists.isEmpty

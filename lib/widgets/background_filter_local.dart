@@ -1,8 +1,6 @@
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 import '../models/models.dart';
@@ -16,58 +14,30 @@ class BackgroundFilter extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color primaryColorDark = Theme.of(context).primaryColorDark;
     final songData = Provider.of<SongsLocal>(context, listen: false);
-    final paletteGenerator = songData.paletteGenerator;
-    ImageProvider getImage() {
-      Image image = Image.asset('assets/musiccovers/musiking_logo.jpg');
-      // image = QueryArtworkWidget(
-      //   id: songData.songs[songData.currentIndex].id,
-      //   type: ArtworkType.AUDIO,
-      //   // artworkBlendMode: BlendMode.dst,
-      // ) as Image;
-      FutureBuilder<Uint8List?>(
-          future: OnAudioQuery().queryArtwork(
-            songData.songs[songData.currentIndex].id,
-            ArtworkType.AUDIO,
-          ),
-          builder: (context, item) {
-            print('try load image============================');
-            if (item.data != null && item.data!.isNotEmpty) {
-              return image = Image.memory(
-                item.data!,
-                gaplessPlayback: false,
-                repeat: ImageRepeat.noRepeat,
-                scale: 1.0,
-                width: 30,
-                height: 30,
-                fit: BoxFit.cover,
-                filterQuality: FilterQuality.low,
-                errorBuilder: (context, exception, stackTrace) {
-                  return image;
-                },
-              );
-            }
-            return image;
-          });
-      print(image);
-      return image.image;
-    }
+    // final paletteGenerator = songData.paletteGenerator;
 
     return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: getImage(),
-          fit: BoxFit.cover,
-        ),
-      ),
+      decoration: const BoxDecoration(
+          // image: DecorationImage(
+          //   image: Image.memory(
+          //     QueryArtworkWidget(
+          //       id: songData.songs[songData.currentIndex].id,
+          //       type: ArtworkType.AUDIO,
+          //     ) as Uint8List,
+          //   ).image,
+          //   fit: BoxFit.cover,
+          // ),
+          ),
       child: BackdropFilter(
-        filter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+        filter: ui.ImageFilter.blur(sigmaX: 48, sigmaY: 28),
         child: Container(
           decoration: BoxDecoration(
-            color: paletteGenerator != null
-                ? paletteGenerator.vibrantColor != null
-                    ? paletteGenerator.vibrantColor!.color.withOpacity(0.7)
-                    : primaryColorDark
-                : primaryColorDark,
+            color: primaryColorDark.withOpacity(0.3),
+            // paletteGenerator != null
+            //     ? paletteGenerator.vibrantColor != null
+            //         ? paletteGenerator.vibrantColor!.color.withOpacity(0.7)
+            //         : Colors.black.withOpacity(0.7)
+            //     : Colors.black.withOpacity(0.7),
           ),
         ),
       ),
@@ -87,8 +57,8 @@ class BackgroundFilter extends StatelessWidget {
     //       ],
     //       stops: const [
     //         0.0,
-    //         0.2,
-    //         0.9,
+    //         0.5,
+    //         0.8,
     //       ],
     //     ).createShader(item);
     //   },
@@ -101,14 +71,14 @@ class BackgroundFilter extends StatelessWidget {
     //         colors: [
     //           paletteGenerator != null
     //               ? paletteGenerator.vibrantColor != null
-    //                   ? paletteGenerator.vibrantColor!.color
-    //                   : songData.defaultLightColor
-    //               : songData.defaultLightColor,
+    //                   ? paletteGenerator.vibrantColor!.color.withOpacity(0.7)
+    //                   : primaryColorDark
+    //               : primaryColorDark,
     //           paletteGenerator != null
-    //               ? paletteGenerator.dominantColor != null
-    //                   ? paletteGenerator.dominantColor!.color
-    //                   : songData.defaultDarkColor
-    //               : songData.defaultDarkColor,
+    //               ? paletteGenerator.vibrantColor != null
+    //                   ? paletteGenerator.vibrantColor!.color.withOpacity(0.7)
+    //                   : primaryColorDark
+    //               : primaryColorDark,
     //         ],
     //       ),
     //     ),

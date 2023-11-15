@@ -29,6 +29,16 @@ class SongsLocal with ChangeNotifier {
     notifyListeners();
   }
 
+  final ScrollController scrollCtrl = ScrollController();
+  void autoScroll() {
+    scrollCtrl.animateTo(
+      scrollCtrl.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 800),
+      curve: Curves.decelerate,
+    );
+    print('scrolled============================');
+  }
+
   Future<void> setSongsList() async {
     _audioQuery
         .querySongs(
