@@ -13,7 +13,8 @@ class MusicTimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColorLight = Theme.of(context).primaryColorLight;
+    final ThemeData theme = Theme.of(context);
+    final Color primaryColorLight = theme.primaryColorLight;
     final songData = Provider.of<SongsLocal>(context, listen: false);
     final mediaQuery = MediaQuery.of(context).size;
     final seekBarDataStream = songData.seekBarDataStream;
@@ -34,36 +35,43 @@ class MusicTimer extends StatelessWidget {
           //       onPressed: () => Navigator.pop(context),
           //       label: const Text(
           //         'Close',
-          //         style: TextStyle(color: Colors.white),
+          //         style: TextStyle(color: theme.colorScheme.background),
           //       ),
           //       icon: const Icon(
           //         Icons.keyboard_arrow_down_outlined,
-          //         color: Colors.white,
+          //         color: theme.colorScheme.background,
           //       ),
           //     ),
           //   ],
           // ),
           Center(
-            child: ClipRRect(
-              key: ValueKey(songData.currentPlaylist[songData.currentIndex].id),
-              borderRadius: BorderRadius.circular(30),
-              child: Consumer<SongsLocal>(
-                builder: (ctx, songData, _) => Hero(
-                  tag: songData.currentPlaylist[songData.currentIndex].id,
-                  child: QueryArtworkWidget(
-                    id: songData.currentPlaylist[songData.currentIndex].id,
-                    type: ArtworkType.AUDIO,
-                    artworkBorder: BorderRadius.zero,
-                    artworkHeight: mediaQuery.height * 0.45,
-                    artworkWidth: mediaQuery.height * 0.45,
-                    artworkFit: BoxFit.cover,
-                    keepOldArtwork: true,
-                    nullArtworkWidget: ClipRRect(
-                      child: Image.asset(
-                        'assets/musiccovers/musiking_logo.jpg',
-                        width: mediaQuery.height * 0.45,
-                        height: mediaQuery.height * 0.45,
-                        fit: BoxFit.cover,
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(32),
+              ),
+              elevation: 20,
+              child: ClipRRect(
+                key: ValueKey(
+                    songData.currentPlaylist[songData.currentIndex].id),
+                borderRadius: BorderRadius.circular(30),
+                child: Consumer<SongsLocal>(
+                  builder: (ctx, songData, _) => Hero(
+                    tag: songData.currentPlaylist[songData.currentIndex].id,
+                    child: QueryArtworkWidget(
+                      id: songData.currentPlaylist[songData.currentIndex].id,
+                      type: ArtworkType.AUDIO,
+                      artworkBorder: BorderRadius.zero,
+                      artworkHeight: mediaQuery.height * 0.45,
+                      artworkWidth: mediaQuery.height * 0.45,
+                      artworkFit: BoxFit.cover,
+                      keepOldArtwork: true,
+                      nullArtworkWidget: ClipRRect(
+                        child: Image.asset(
+                          'assets/musiccovers/musiking_logo.jpg',
+                          width: mediaQuery.height * 0.45,
+                          height: mediaQuery.height * 0.45,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -75,10 +83,10 @@ class MusicTimer extends StatelessWidget {
           Consumer<SongsLocal>(
             builder: (ctx, songData, _) => Text(
               songData.currentPlaylist[songData.currentIndex].title,
-              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: theme.textTheme.headlineSmall!.copyWith(
+                color: theme.colorScheme.background,
+                fontWeight: FontWeight.bold,
+              ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -91,10 +99,8 @@ class MusicTimer extends StatelessWidget {
                   ? 'Unknown Artist'
                   : songData.currentPlaylist[songData.currentIndex].artist
                       .toString(),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: Colors.white),
+              style: theme.textTheme.bodySmall!
+                  .copyWith(color: theme.colorScheme.background),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -125,10 +131,10 @@ class MusicTimer extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                color: Colors.white.withOpacity(0.8),
-                icon: const Icon(
+                color: theme.colorScheme.background.withOpacity(0.8),
+                icon: Icon(
                   CupertinoIcons.info_circle,
-                  color: Colors.white,
+                  color: theme.colorScheme.background,
                 ),
                 itemBuilder: (BuildContext context) {
                   return [
@@ -139,7 +145,7 @@ class MusicTimer extends StatelessWidget {
                         //   builder: (ctx, songData, _) => Text(
                         //       songData.songs[songData.currentIndex].size
                         //           .toString(),
-                        //       style: Theme.of(context)
+                        //       style: theme
                         //           .textTheme
                         //           .bodyLarge!
                         //           .copyWith(
@@ -153,13 +159,10 @@ class MusicTimer extends StatelessWidget {
                           builder: (ctx, songData, _) => Text(
                               songData.currentPlaylist[songData.currentIndex]
                                   .displayName,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(
-                                    color: primaryColorLight,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              style: theme.textTheme.bodyLarge!.copyWith(
+                                color: primaryColorLight,
+                                fontWeight: FontWeight.bold,
+                              ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis),
                         ),
@@ -192,13 +195,10 @@ class MusicTimer extends StatelessWidget {
                                       .currentPlaylist[songData.currentIndex]
                                       .artist
                                       .toString(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: primaryColorLight,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              style: theme.textTheme.bodyMedium!.copyWith(
+                                color: primaryColorLight,
+                                fontWeight: FontWeight.bold,
+                              ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               softWrap: true),
@@ -213,13 +213,10 @@ class MusicTimer extends StatelessWidget {
                               songData
                                   .currentPlaylist[songData.currentIndex].data
                                   .toString(),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium!
-                                  .copyWith(
-                                    color: primaryColorLight,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              style: theme.textTheme.labelMedium!.copyWith(
+                                color: primaryColorLight,
+                                fontWeight: FontWeight.bold,
+                              ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               softWrap: true),
@@ -232,9 +229,9 @@ class MusicTimer extends StatelessWidget {
               IconButton(
                 tooltip: 'Add This song to favorite Playlist',
                 onPressed: () {},
-                icon: const Icon(
+                icon: Icon(
                   CupertinoIcons.heart,
-                  color: Colors.white,
+                  color: theme.colorScheme.background,
                 ),
               ),
               IconButton(
@@ -243,9 +240,9 @@ class MusicTimer extends StatelessWidget {
                   Scaffold.of(context).openEndDrawer();
                   songData.autoScroll();
                 },
-                icon: const Icon(
+                icon: Icon(
                   CupertinoIcons.square_list,
-                  color: Colors.white,
+                  color: theme.colorScheme.background,
                 ),
               ),
             ],

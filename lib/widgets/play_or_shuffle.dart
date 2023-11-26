@@ -12,19 +12,17 @@ class PlayOrShuffleSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = Theme.of(context).primaryColor;
-    final Color primaryColorLight = Theme.of(context).primaryColorLight;
+    final ThemeData theme = Theme.of(context);
+
+    final Color primaryColor = theme.primaryColor;
+    final Color primaryColorLight = theme.primaryColorLight;
     double width = MediaQuery.of(context).size.width * 0.7;
     final songData = Provider.of<SongsLocal>(context);
     void showToast(BuildContext ctx, String message) {
       ScaffoldMessenger.of(ctx).showSnackBar(
         SnackBar(
           dismissDirection: DismissDirection.startToEnd,
-          content: Text(message),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
+          content: Text(message, style: TextStyle(color: theme.primaryColor)),
         ),
       );
     }
@@ -42,20 +40,18 @@ class PlayOrShuffleSwitch extends StatelessWidget {
             }
             await songData.audioPlayer.play();
             songData.audioPlayer.shuffleModeEnabled
-                ? songData.audioPlayer.setShuffleModeEnabled(false)
-                : songData.audioPlayer.setShuffleModeEnabled(true);
-            songData.generateColors().then((_) => showToast(
-                context,
-                songData.audioPlayer.shuffleModeEnabled
-                    ? 'Shuffle mode Enabled'
-                    : 'Shuffle mode Disabled'));
-            ;
+                ? songData.audioPlayer
+                    .setShuffleModeEnabled(false)
+                    .then((_) => showToast(context, 'Shuffle mode Enabled'))
+                : songData.audioPlayer
+                    .setShuffleModeEnabled(true)
+                    .then((_) => showToast(context, 'Shuffle mode Disabled'));
           },
           child: Container(
             height: 40,
             width: width,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: theme.colorScheme.background,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Stack(
@@ -89,7 +85,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                               'Play',
                               style: TextStyle(
                                 color: !songData.audioPlayer.shuffleModeEnabled
-                                    ? Colors.white
+                                    ? theme.colorScheme.background
                                     : primaryColor,
                                 fontSize: 13,
                               ),
@@ -99,7 +95,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                           Icon(
                             Icons.play_circle_outline,
                             color: !songData.audioPlayer.shuffleModeEnabled
-                                ? Colors.white
+                                ? theme.colorScheme.background
                                 : primaryColor,
                           ),
                         ],
@@ -115,7 +111,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                               style: TextStyle(
                                 color: !songData.audioPlayer.shuffleModeEnabled
                                     ? primaryColor
-                                    : Colors.white,
+                                    : theme.colorScheme.background,
                                 fontSize: 13,
                               ),
                             ),
@@ -125,7 +121,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                             CupertinoIcons.shuffle,
                             color: !songData.audioPlayer.shuffleModeEnabled
                                 ? primaryColor
-                                : Colors.white,
+                                : theme.colorScheme.background,
                           ),
                         ],
                       ),

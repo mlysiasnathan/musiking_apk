@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:musiking/routes/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../models/models.dart';
@@ -12,13 +11,43 @@ class LocalPlaylistMusic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final Color primaryColorLight = theme.primaryColorLight;
     final songData = Provider.of<SongsLocal>(context, listen: false);
-    final Color primaryColorLight = Theme.of(context).primaryColorLight;
 
     return Padding(
       padding: const EdgeInsets.all(19),
-      child: FutureBuilder(
-        future: songData.setSongsList(),
+      child:
+          // songData.songs.isNotEmpty
+          //     ? Consumer<SongsLocal>(
+          //         builder: (ctx, songData, _) => Column(
+          //           children: [
+          //             SectionHeader(
+          //               title: 'All Songs (${songData.songs.length})',
+          //               action: () => songData.setSongs(),
+          //               actionText: 'Refresh',
+          //               afterActionText: 'Refresh',
+          //             ),
+          //             ListView.builder(
+          //               shrinkWrap: true,
+          //               addRepaintBoundaries: true,
+          //               addAutomaticKeepAlives: true,
+          //               padding: const EdgeInsets.only(top: 4),
+          //               physics: const NeverScrollableScrollPhysics(),
+          //               itemCount: songData.songs.length,
+          //               itemBuilder: ((context, index) {
+          //                 return SongCardLocal(
+          //                     key: ValueKey(index),
+          //                     song: songData.songs[index],
+          //                     index: index);
+          //               }),
+          //             ),
+          //           ],
+          //         ),
+          //       )
+          //     :
+          FutureBuilder(
+        future: songData.getSongsList(),
         builder: (context, snapshots) =>
             snapshots.connectionState == ConnectionState.waiting
                 ? Column(
@@ -47,7 +76,7 @@ class LocalPlaylistMusic extends StatelessWidget {
                             decoration: BoxDecoration(
                               border: Border.all(
                                 width: 2,
-                                color: Colors.white,
+                                color: theme.colorScheme.background,
                               ),
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -56,20 +85,20 @@ class LocalPlaylistMusic extends StatelessWidget {
                       ),
                     ],
                   )
-                : songData.songs.isEmpty
+                : songData.songs.isEmpty && songData.isSongsSaved
                     ? Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SectionHeader(
                             title: 'No Songs found',
-                            action: () => songData.setSongsList(),
+                            action: () {},
                             actionText: 'Refresh',
                             afterActionText: 'Refreshed',
                           ),
                           const SizedBox(height: 30),
                           CircleAvatar(
-                            backgroundColor: Colors.white,
+                            backgroundColor: theme.colorScheme.background,
                             child: Icon(
                               Icons.do_not_disturb_alt,
                               color: primaryColorLight,
@@ -90,7 +119,7 @@ class LocalPlaylistMusic extends StatelessWidget {
                           children: [
                             SectionHeader(
                               title: 'All Songs (${songData.songs.length})',
-                              action: () => songData.setSongsList(),
+                              action: () => songData.setSongs(),
                               actionText: 'Refresh',
                               afterActionText: 'Refresh',
                             ),

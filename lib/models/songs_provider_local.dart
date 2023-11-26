@@ -1,10 +1,9 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:rxdart/rxdart.dart' as rxdart;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,47 +14,21 @@ class SongsLocal with ChangeNotifier {
   List<SongModel> currentPlaylist = <SongModel>[];
   AudioPlayer audioPlayer = AudioPlayer();
   final OnAudioQuery _audioQuery = OnAudioQuery();
-  PaletteGenerator? paletteGenerator;
+  bool isSongsSaved = false;
+  // PaletteGenerator? paletteGenerator;
 
   String currentSong = 'Click to play';
   int currentIndex = 0;
-  bool isPlaying = false;
-  bool isLoading = false;
-  bool pageLoaded = false;
   Duration position = Duration.zero;
   List<AudioSource> sources = [];
-  void refreshSongList() {
-    pageLoaded = !pageLoaded;
-    notifyListeners();
-  }
 
   final ScrollController scrollCtrl = ScrollController();
   void autoScroll() {
     scrollCtrl.animateTo(
       scrollCtrl.position.maxScrollExtent,
       duration: const Duration(milliseconds: 800),
-      curve: Curves.decelerate,
+      curve: Curves.elasticInOut,
     );
-    print('scrolled============================');
-  }
-
-  Future<void> setSongsList() async {
-    _audioQuery
-        .querySongs(
-            sortType: null,
-            ignoreCase: true,
-            uriType: UriType.EXTERNAL,
-            orderType: OrderType.ASC_OR_SMALLER)
-        .then((songsList) {
-      if (songsList.isNotEmpty) {
-        songs.clear();
-        songs = songsList;
-        currentPlaylist = songs;
-        notifyListeners();
-      } else {
-        songs.clear();
-      }
-    });
   }
 
   ConcatenatingAudioSource initializePlaylist(List<SongModel> songsToPlay) {
@@ -87,47 +60,22 @@ class SongsLocal with ChangeNotifier {
         },
       );
 
-  void playPause(SongModel song) {
-    if (audioPlayer.playerState.processingState == ProcessingState.loading ||
-        audioPlayer.playerState.processingState == ProcessingState.buffering) {
-      isLoading = true;
-    } else if (!audioPlayer.playing) {
-      audioPlayer.play();
-    } else if (audioPlayer.playerState.processingState !=
-        ProcessingState.completed) {
-      audioPlayer.pause();
-    } else if (audioPlayer.playerState.processingState ==
-        ProcessingState.completed) {
-    } else {
-      audioPlayer.seek(
-        Duration.zero,
-        index: audioPlayer.effectiveIndices!.first,
-      );
-    }
-    isPlaying = !isPlaying;
-    notifyListeners();
-  }
-
   void next() {
     if (audioPlayer.hasNext) {
       audioPlayer.seekToNext();
     }
-    notifyListeners();
   }
 
   void prev() {
     if (audioPlayer.hasPrevious) {
       audioPlayer.seekToPrevious();
     }
-    isPlaying = true;
-    notifyListeners();
   }
 
   void setCurrentSong(int index) async {
     if (currentPlaylist.isNotEmpty) {
       currentSong = currentPlaylist[index].title;
       currentIndex = index;
-      isPlaying = true;
     }
     final pref = await SharedPreferences.getInstance();
     final currentSongInfo = json.encode({
@@ -137,6 +85,43 @@ class SongsLocal with ChangeNotifier {
     });
     pref.setString('currentSongInfo', currentSongInfo);
     notifyListeners();
+  }
+
+  void saveSongList() async {
+    final pref = await SharedPreferences.getInstance();
+    final List<String> songListString = [];
+    for (var song in songs) {
+      songListString.add(song.toString());
+    }
+    pref.setStringList('songList', songListString);
+    // print('saved songs=====================${songListString}');
+  }
+
+  Future<void> setSongs() async {
+    final pref = await SharedPreferences.getInstance();
+    final songListString = pref.getStringList('songList') ?? [];
+    // songs = songListString as List<SongModel>;
+    print(' songs data==============${songListString} ');
+  }
+
+  Future<void> getSongsList() async {
+    _audioQuery
+        .querySongs(
+            sortType: null,
+            ignoreCase: true,
+            uriType: UriType.EXTERNAL,
+            orderType: OrderType.ASC_OR_SMALLER)
+        .then((songsList) {
+      if (songsList.isNotEmpty) {
+        // songs.clear();
+        songs = songsList;
+        currentPlaylist = songs;
+        saveSongList();
+        notifyListeners();
+      } else {
+        songs.clear();
+      }
+    });
   }
 
   Future<bool> fetchAndSetCurrentSong() async {
@@ -170,47 +155,5 @@ class SongsLocal with ChangeNotifier {
     );
     // notifyListeners();
     return true;
-  }
-
-  ImageProvider getImage() {
-    Image image = Image.asset('assets/musiccovers/musiking_logo.jpg');
-    FutureBuilder<Uint8List?>(
-        future: OnAudioQuery().queryArtwork(
-          currentPlaylist[currentIndex].id,
-          ArtworkType.AUDIO,
-        ),
-        builder: (context, item) {
-          print('try generate color inside==============================');
-          if (item.data != null && item.data!.isNotEmpty) {
-            return image = Image.memory(
-              item.data!,
-              gaplessPlayback: false,
-              repeat: ImageRepeat.noRepeat,
-              scale: 1.0,
-              width: 300,
-              height: 300,
-              fit: BoxFit.cover,
-              filterQuality: FilterQuality.low,
-              errorBuilder: (context, exception, stackTrace) {
-                return image;
-              },
-            );
-          }
-          return image;
-        });
-    print('Image ====================================== $image');
-    return image.image;
-  }
-
-  Future<PaletteGenerator?> generateColors() async {
-    print('=================color generated');
-    paletteGenerator = await PaletteGenerator.fromImageProvider(
-      // Image.asset('assets/musiccovers/musiking_logo.jpg').image,
-      getImage(),
-      size: const Size.square(1000),
-      region: const Rect.fromLTRB(0, 0, 1000, 1000),
-    );
-    notifyListeners();
-    return paletteGenerator;
   }
 }

@@ -2,14 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+// import './models/theme_provider.dart';
 import './routes/screens.dart';
 import './models/models.dart';
+import './models/theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(const MyApp());
+  runApp(
+    // ChangeNotifierProvider(
+    //   create: (context) => ThemeProvider(),
+    //   child: const MyApp(),
+    // ),
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -30,25 +38,21 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'MusiKing',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: Colors.orange,
-          primaryColorDark: Colors.red,
-          primaryColorLight: Colors.deepOrangeAccent,
-          // colorScheme: const ColorScheme.light(
-          //   primary: Colors.deepOrange,
-          //   secondary: Colors.red,
-          // ),
-          textTheme: Theme.of(context).textTheme.apply(
-                bodyColor: Colors.white,
-                displayColor: Colors.white,
-                fontFamily: 'PlusJakartaSans',
-              ),
-        ),
+        // theme: Provider.of<ThemeProvider>(context).themeData,
+        theme: lightMode,
+        darkTheme: darkMode,
+        themeMode: ThemeMode.system,
         home: Builder(
           builder: (context) => FutureBuilder(
             future: Provider.of<SongsLocal>(context, listen: false)
-                .fetchAndSetCurrentSong()
-                .then((_) => Future.delayed(const Duration(seconds: 2))),
+                .setSongs()
+                .then((_) => Provider.of<SongsLocal>(context, listen: false)
+                    .fetchAndSetCurrentSong())
+                .then(
+                  (_) => Future.delayed(
+                    const Duration(seconds: 2),
+                  ),
+                ),
             builder: (context, snapshots) =>
                 snapshots.connectionState == ConnectionState.waiting
                     ? const SplashScreen()

@@ -8,21 +8,20 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      leading: const Icon(
-        CupertinoIcons.square_grid_2x2,
-      ),
+      leading: const Icon(CupertinoIcons.square_grid_2x2),
       actions: [
         Container(
           margin: const EdgeInsets.only(right: 19),
           child: IconButton(
             splashRadius: 25,
             onPressed: () {},
-            icon: const Icon(
+            icon: Icon(
               CupertinoIcons.gear_alt,
-              color: Colors.white,
+              color: theme.colorScheme.background,
             ),
           ),
         )

@@ -24,7 +24,6 @@ class _SongPlayerScreenState extends State<SongPlayerScreen>
     final songData = Provider.of<SongsLocal>(context, listen: false);
     songData.audioPlayer.currentIndexStream.listen((index) {
       index != null ? songData.setCurrentSong(index) : null;
-      songData.generateColors();
     });
     return Scaffold(
       body: PageView(

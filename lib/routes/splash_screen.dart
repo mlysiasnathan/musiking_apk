@@ -35,7 +35,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColorLight = Theme.of(context).primaryColorLight;
+    final ThemeData theme = Theme.of(context);
+    final Color primaryColorLight = theme.primaryColorLight;
     final mediaQuery = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -53,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
               transform: Matrix4.rotationZ(-14 * pi / 180)..translate(-0.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: Colors.white,
+                color: theme.colorScheme.background,
                 boxShadow: const [
                   BoxShadow(
                     blurRadius: 8,
@@ -93,7 +94,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   'From',
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
-                    color: Colors.white,
+                    // color: theme.colorScheme.background,
                     fontSize: 12,
                     letterSpacing: 4.0,
                   ),

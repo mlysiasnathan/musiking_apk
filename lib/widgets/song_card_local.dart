@@ -28,7 +28,8 @@ class SongCardLocal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColorLight = Theme.of(context).primaryColorLight;
+    final ThemeData theme = Theme.of(context);
+    final Color primaryColorLight = theme.primaryColorLight;
     final songData = Provider.of<SongsLocal>(context, listen: false);
 
     return InkWell(
@@ -38,9 +39,7 @@ class SongCardLocal extends StatelessWidget {
           songData.initializePlaylist(songData.songs),
           initialIndex: index,
         );
-        songData.generateColors();
         await songData.audioPlayer.play();
-        songData.isPlaying = true;
         songData.setCurrentSong(index);
       },
       key: ValueKey(song.id),
@@ -66,7 +65,7 @@ class SongCardLocal extends StatelessWidget {
                 artworkBorder: BorderRadius.zero,
                 nullArtworkWidget: ClipRRect(
                   child: Container(
-                    color: Colors.white.withOpacity(0.7),
+                    color: theme.colorScheme.background.withOpacity(0.7),
                     child: Image.asset(
                       color: primaryColorLight,
                       'assets/musiccovers/musiking_logo.png',
@@ -88,15 +87,17 @@ class SongCardLocal extends StatelessWidget {
                     song.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
+                    style: theme.textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.background,
+                    ),
                   ),
                   Text(
                     '${song.artist == '<unknown>' ? 'Unknown Artist' : song.artist} - ${_formatDuration(song.duration!)}',
                     maxLines: 1,
-                    style: Theme.of(context).textTheme.labelSmall,
+                    style: theme.textTheme.labelSmall!.copyWith(
+                      color: theme.colorScheme.background,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   )
                 ],
@@ -107,15 +108,15 @@ class SongCardLocal extends StatelessWidget {
                   song.title == songData.currentSong
                       ? Icons.play_circle_outline
                       : null,
-                  color: Colors.white,
+                  color: theme.colorScheme.background,
                   size: 20),
             ),
             IconButton(
               splashRadius: 23,
               onPressed: () {},
-              icon: const Icon(
+              icon: Icon(
                 Icons.more_horiz_outlined,
-                color: Colors.white,
+                color: theme.colorScheme.background,
               ),
             ),
           ],

@@ -14,7 +14,8 @@ class PrePlayingSong extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColorLight = Theme.of(context).primaryColorLight;
+    final ThemeData theme = Theme.of(context);
+    final Color primaryColorLight = theme.primaryColorLight;
     final PageStorageBucket bucket = PageStorageBucket();
     final songData = Provider.of<SongsLocal>(context, listen: false);
     final audioPlayer = songData.audioPlayer;
@@ -27,7 +28,7 @@ class PrePlayingSong extends StatelessWidget {
           return Scaffold(
             endDrawer: Drawer(
               // width: 0.9,
-              backgroundColor: Colors.white.withOpacity(0.8),
+              backgroundColor: theme.colorScheme.background.withOpacity(0.8),
               child: Padding(
                 padding: EdgeInsets.only(
                   top: MediaQuery.of(context).viewInsets.top + 30,
@@ -65,7 +66,6 @@ class PrePlayingSong extends StatelessWidget {
                               );
                               songData.audioPlayer.play();
                               songData.setCurrentSong(index);
-                              songData.generateColors();
                             },
                             borderRadius: BorderRadius.circular(10),
                             child: Consumer<SongsLocal>(
@@ -92,7 +92,7 @@ class PrePlayingSong extends StatelessWidget {
                                         artworkHeight: 42,
                                         nullArtworkWidget: ClipRRect(
                                           child: Container(
-                                            color: Colors.white,
+                                            color: theme.colorScheme.background,
                                             child: Image.asset(
                                               color: primaryColorLight,
                                               'assets/musiccovers/musiking_logo.png',
@@ -108,16 +108,13 @@ class PrePlayingSong extends StatelessWidget {
                                     Expanded(
                                       child: Text(
                                         '${songData.currentPlaylist.indexOf(songData.currentPlaylist[index]) + 1} - \t${songData.currentPlaylist[index].title}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge!
-                                            .copyWith(
-                                              color:
-                                                  index == songData.currentIndex
-                                                      ? null
-                                                      : primaryColorLight,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                        style:
+                                            theme.textTheme.bodyLarge!.copyWith(
+                                          color: index == songData.currentIndex
+                                              ? null
+                                              : primaryColorLight,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -161,38 +158,13 @@ class PrePlayingSong extends StatelessWidget {
         width: MediaQuery.of(context).size.width * 0.94,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(13),
-          color: Colors.white,
+          color: theme.colorScheme.background,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             InkWell(
-              onTap: () {
-                songData.paletteGenerator == null
-                    ? songData.generateColors()
-                    : null;
-                songBottomSheet(context);
-                // Navigator.of(context).push(
-                //   PageRouteBuilder(
-                //     pageBuilder: (context, animation, secondAnimation) =>
-                //         const SongPlayerScreen(),
-                //     transitionDuration: const Duration(milliseconds: 1000),
-                //     transitionsBuilder:
-                //         (context, animation, secondAnimation, child) =>
-                //             SlideTransition(
-                //       position: animation.drive(
-                //         Tween(begin: const Offset(0.0, 0.1), end: Offset.zero)
-                //             .chain(
-                //           CurveTween(
-                //             curve: Curves.ease,
-                //           ),
-                //         ),
-                //       ),
-                //       child: child,
-                //     ),
-                //   ),
-                // );
-              },
+              onTap: () => songBottomSheet(context),
               borderRadius: BorderRadius.circular(5),
               child: Row(
                 children: [
@@ -200,13 +172,13 @@ class PrePlayingSong extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(7),
                     child: FutureBuilder(
-                      future: songData.setSongsList(),
+                      future: songData.getSongsList(),
                       builder: (context, snapshots) =>
                           snapshots.connectionState == ConnectionState.waiting
                               ? Container(
                                   color: primaryColorLight,
                                   child: Image.asset(
-                                    color: Colors.white,
+                                    color: theme.colorScheme.background,
                                     'assets/musiccovers/musiking_logo.png',
                                     width: 42,
                                     height: 42,
@@ -228,7 +200,7 @@ class PrePlayingSong extends StatelessWidget {
                                       child: Container(
                                         color: primaryColorLight,
                                         child: Image.asset(
-                                          color: Colors.white,
+                                          color: theme.colorScheme.background,
                                           'assets/musiccovers/musiking_logo.png',
                                           width: 42,
                                           height: 42,
@@ -246,10 +218,10 @@ class PrePlayingSong extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.60,
                       child: Text(
                         songData.currentSong,
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: primaryColorLight,
-                            ),
+                        style: theme.textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: primaryColorLight,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -267,8 +239,12 @@ class PrePlayingSong extends StatelessWidget {
                       snapshot.data!.processingState ==
                           ProcessingState.buffering) {
                     return Center(
-                      child: CircularProgressIndicator(
-                        color: primaryColorLight,
+                      child: SizedBox(
+                        height: 15,
+                        width: 15,
+                        child: CircularProgressIndicator(
+                          color: primaryColorLight,
+                        ),
                       ),
                     );
                   } else if (!songData.audioPlayer.playing) {
@@ -287,7 +263,6 @@ class PrePlayingSong extends StatelessWidget {
                           songData.setCurrentSong(songData.currentIndex);
                         }
                         audioPlayer.play();
-                        songData.isPlaying = true;
                       },
                       icon: Icon(
                         color: primaryColorLight,
@@ -299,10 +274,7 @@ class PrePlayingSong extends StatelessWidget {
                     return IconButton(
                       splashRadius: 40,
                       splashColor: primaryColorLight,
-                      onPressed: () {
-                        audioPlayer.pause();
-                        songData.isPlaying = false;
-                      },
+                      onPressed: audioPlayer.pause,
                       icon: Icon(
                         color: primaryColorLight,
                         CupertinoIcons.pause_circle,
@@ -313,10 +285,7 @@ class PrePlayingSong extends StatelessWidget {
                     return IconButton(
                       splashRadius: 40,
                       splashColor: primaryColorLight,
-                      onPressed: () {
-                        audioPlayer.pause();
-                        songData.isPlaying = false;
-                      },
+                      onPressed: audioPlayer.pause,
                       icon: Icon(
                         color: primaryColorLight,
                         CupertinoIcons.pause_circle,
@@ -326,13 +295,10 @@ class PrePlayingSong extends StatelessWidget {
                     return IconButton(
                       splashRadius: 40,
                       splashColor: primaryColorLight,
-                      onPressed: () {
-                        audioPlayer.seek(
-                          Duration.zero,
-                          index: audioPlayer.effectiveIndices!.first,
-                        );
-                        songData.isPlaying = false;
-                      },
+                      onPressed: () => audioPlayer.seek(
+                        Duration.zero,
+                        index: audioPlayer.effectiveIndices!.first,
+                      ),
                       icon: Icon(
                         CupertinoIcons.memories,
                         color: primaryColorLight,
@@ -341,11 +307,18 @@ class PrePlayingSong extends StatelessWidget {
                   }
                 } else {
                   return Center(
-                    child: CircularProgressIndicator(color: primaryColorLight),
+                    child: SizedBox(
+                      height: 15,
+                      width: 15,
+                      child: CircularProgressIndicator(
+                        color: primaryColorLight,
+                      ),
+                    ),
                   );
                 }
               },
             ),
+            const SizedBox(),
           ],
         ),
       ),

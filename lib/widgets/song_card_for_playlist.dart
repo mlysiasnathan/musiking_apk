@@ -25,6 +25,7 @@ class SongCardForPlaylist extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     final songData = Provider.of<SongsLocal>(context, listen: false);
     return InkWell(
       onTap: () async {
@@ -33,9 +34,7 @@ class SongCardForPlaylist extends StatelessWidget {
           songData.initializePlaylist(songData.currentPlaylist),
           initialIndex: index,
         );
-        songData.generateColors();
         await songData.audioPlayer.play();
-        songData.isPlaying = true;
         songData.setCurrentSong(index);
       },
       borderRadius: BorderRadius.circular(10),
@@ -43,37 +42,38 @@ class SongCardForPlaylist extends StatelessWidget {
         minLeadingWidth: 1,
         leading: Consumer<SongsLocal>(builder: (ctx, songData, _) {
           if (song.title == songData.currentSong) {
-            return const Icon(Icons.play_arrow, color: Colors.white, size: 30);
+            return Icon(Icons.play_arrow,
+                color: theme.colorScheme.background, size: 30);
           } else {
             return Text(
               '${index + 1}',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.background),
             );
           }
         }),
         title: Text(
           song.title,
-          style: Theme.of(context)
-              .textTheme
-              .bodyLarge!
-              .copyWith(fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              fontWeight: FontWeight.bold, color: theme.colorScheme.background),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
         ),
         subtitle: Text(
           '${song.album} - ${_formatDuration(song.duration as int)}',
-          style: Theme.of(context).textTheme.labelSmall!,
+          style: Theme.of(context)
+              .textTheme
+              .labelSmall!
+              .copyWith(color: theme.colorScheme.background),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         trailing: IconButton(
           onPressed: () {},
-          icon: const Icon(
+          icon: Icon(
             Icons.more_vert,
-            color: Colors.white,
+            color: theme.colorScheme.background,
           ),
         ),
       ),

@@ -42,9 +42,9 @@ class _CustomBottomBarState extends State<CustomTabScreenBottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    final songData = Provider.of<SongsLocal>(context, listen: false);
-    final Color primaryColor = Theme.of(context).primaryColor;
-    final Color primaryColorDark = Theme.of(context).primaryColorDark;
+    final ThemeData theme = Theme.of(context);
+    final Color primaryColor = theme.primaryColor;
+    final Color primaryColorDark = theme.primaryColorDark;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -81,8 +81,8 @@ class _CustomBottomBarState extends State<CustomTabScreenBottomBar> {
           selectedFontSize: 10,
           elevation: 0,
           backgroundColor: Colors.transparent,
-          unselectedItemColor: Colors.white70,
-          selectedItemColor: Colors.white,
+          unselectedItemColor: theme.colorScheme.background.withOpacity(0.7),
+          selectedItemColor: theme.colorScheme.background,
           type: BottomNavigationBarType.fixed,
           showUnselectedLabels: false,
           showSelectedLabels: true,

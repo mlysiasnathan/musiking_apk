@@ -11,8 +11,9 @@ class PlaylistScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColor = Theme.of(context).primaryColor;
-    final Color primaryColorDark = Theme.of(context).primaryColorDark;
+    final ThemeData theme = Theme.of(context);
+    final Color primaryColor = theme.primaryColor;
+    final Color primaryColorDark = theme.primaryColorDark;
     final playlist = ModalRoute.of(context)?.settings.arguments as AlbumModel;
     final List<SongModel> songs =
         Provider.of<SongsLocal>(context, listen: false)
@@ -84,7 +85,8 @@ class _PlaylistInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColorLight = Theme.of(context).primaryColorLight;
+    final ThemeData theme = Theme.of(context);
+    final Color primaryColorLight = theme.primaryColorLight;
     final mediaQuery = MediaQuery.of(context).size;
     return Column(
       children: [
@@ -103,7 +105,7 @@ class _PlaylistInfo extends StatelessWidget {
               nullArtworkWidget: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Container(
-                  color: Colors.white.withOpacity(0.7),
+                  color: theme.colorScheme.background.withOpacity(0.7),
                   child: Image.asset(
                     color: primaryColorLight,
                     'assets/musiccovers/musiking_logo.png',
@@ -120,10 +122,10 @@ class _PlaylistInfo extends StatelessWidget {
         FittedBox(
           child: Text(
             playlist.album,
-            style: Theme.of(context)
-                .textTheme
-                .headlineSmall!
-                .copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.background,
+                ),
           ),
         )
       ],

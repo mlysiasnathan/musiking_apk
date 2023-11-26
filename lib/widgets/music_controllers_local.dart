@@ -12,21 +12,16 @@ class MusicControllers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColorLight = Theme.of(context).primaryColorLight;
+    final ThemeData theme = Theme.of(context);
+    final Color primaryColorLight = theme.primaryColorLight;
     final songData = Provider.of<SongsLocal>(context);
     final audioPlayer = songData.audioPlayer;
     void showToast(BuildContext ctx, String message) {
       ScaffoldMessenger.of(ctx).hideCurrentSnackBar();
       ScaffoldMessenger.of(ctx).showSnackBar(
         SnackBar(
-          showCloseIcon: true,
-          closeIconColor: Colors.white,
           dismissDirection: DismissDirection.startToEnd,
-          content: Text(message),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
+          content: Text(message, style: TextStyle(color: theme.primaryColor)),
         ),
       );
     }
@@ -39,7 +34,7 @@ class MusicControllers extends StatelessWidget {
           builder: (context, index) {
             return CircleAvatar(
               backgroundColor: audioPlayer.shuffleModeEnabled
-                  ? Colors.white
+                  ? theme.colorScheme.background
                   : Colors.transparent,
               child: IconButton(
                 tooltip: 'Shuffle Mode',
@@ -56,7 +51,7 @@ class MusicControllers extends StatelessWidget {
                 icon: Icon(CupertinoIcons.shuffle,
                     color: audioPlayer.shuffleModeEnabled
                         ? primaryColorLight
-                        : Colors.white),
+                        : theme.colorScheme.background),
                 iconSize: 20,
               ),
             );
@@ -72,12 +67,11 @@ class MusicControllers extends StatelessWidget {
                           .currentPlaylist[songData.currentIndex - 1].title
                       : 'This is the first song of the playlist'
                   : null,
-              onPressed: () {
-                songData.prev();
-                // songData.generateColors();
-              },
-              icon: const Icon(CupertinoIcons.backward_end_fill,
-                  color: Colors.white),
+              onPressed: songData.prev,
+              icon: Icon(
+                CupertinoIcons.backward_end_fill,
+                color: theme.colorScheme.background,
+              ),
               iconSize: 30,
             );
           },
@@ -94,11 +88,13 @@ class MusicControllers extends StatelessWidget {
                   height: 64,
                   width: 64,
                   margin: const EdgeInsets.all(8),
-                  child: const CircularProgressIndicator(color: Colors.white),
+                  child: CircularProgressIndicator(
+                    color: theme.colorScheme.background,
+                  ),
                 );
               } else if (!audioPlayer.playing) {
                 return IconButton(
-                  color: Colors.white,
+                  color: theme.colorScheme.background,
                   iconSize: 70,
                   onPressed: () async {
                     if (songData.currentSong == 'Click to play' ||
@@ -111,7 +107,6 @@ class MusicControllers extends StatelessWidget {
                       songData.setCurrentSong(songData.currentIndex);
                     }
                     audioPlayer.play();
-                    songData.isPlaying = true;
                   },
                   icon: const Icon(
                     CupertinoIcons.play_circle_fill,
@@ -119,11 +114,10 @@ class MusicControllers extends StatelessWidget {
                 );
               } else if (processingState != ProcessingState.completed) {
                 return IconButton(
-                  color: Colors.white,
+                  color: theme.colorScheme.background,
                   iconSize: 70,
                   onPressed: () {
                     audioPlayer.pause();
-                    songData.isPlaying = false;
                   },
                   icon: const Icon(
                     CupertinoIcons.pause_circle_fill,
@@ -131,11 +125,10 @@ class MusicControllers extends StatelessWidget {
                 );
               } else if (processingState == ProcessingState.completed) {
                 return IconButton(
-                  color: Colors.white,
+                  color: theme.colorScheme.background,
                   iconSize: 70,
                   onPressed: () {
                     audioPlayer.pause();
-                    songData.isPlaying = false;
                   },
                   icon: const Icon(
                     CupertinoIcons.pause_circle_fill,
@@ -143,14 +136,13 @@ class MusicControllers extends StatelessWidget {
                 );
               } else {
                 return IconButton(
-                  color: Colors.white,
+                  color: theme.colorScheme.background,
                   iconSize: 75,
                   onPressed: () {
                     audioPlayer.seek(
                       Duration.zero,
                       index: audioPlayer.effectiveIndices!.first,
                     );
-                    songData.isPlaying = false;
                   },
                   icon: const Icon(
                     CupertinoIcons.memories,
@@ -158,8 +150,10 @@ class MusicControllers extends StatelessWidget {
                 );
               }
             } else {
-              return const Center(
-                child: CircularProgressIndicator(color: Colors.white),
+              return Center(
+                child: CircularProgressIndicator(
+                  color: theme.colorScheme.background,
+                ),
               );
             }
           },
@@ -175,12 +169,11 @@ class MusicControllers extends StatelessWidget {
                           .currentPlaylist[songData.currentIndex + 1].title
                       : 'End of the playlist'
                   : null,
-              onPressed: () {
-                songData.next();
-                // songData.generateColors();
-              },
-              icon: const Icon(CupertinoIcons.forward_end_fill,
-                  color: Colors.white),
+              onPressed: songData.next,
+              icon: Icon(
+                CupertinoIcons.forward_end_fill,
+                color: theme.colorScheme.background,
+              ),
               iconSize: 30,
             );
           },
@@ -191,7 +184,7 @@ class MusicControllers extends StatelessWidget {
             final loopMode = snapshot.data;
             if (loopMode == LoopMode.one) {
               return CircleAvatar(
-                backgroundColor: Colors.white,
+                backgroundColor: theme.colorScheme.background,
                 child: IconButton(
                   tooltip: 'Looping to This SONG only',
                   onPressed: () {
@@ -207,7 +200,7 @@ class MusicControllers extends StatelessWidget {
               );
             } else if (loopMode == LoopMode.all) {
               return CircleAvatar(
-                backgroundColor: Colors.white,
+                backgroundColor: theme.colorScheme.background,
                 child: IconButton(
                   tooltip: 'Looping to ALL SONGS',
                   onPressed: () {
@@ -231,7 +224,7 @@ class MusicControllers extends StatelessWidget {
               icon: const Icon(
                 Icons.loop_outlined,
               ),
-              color: Colors.white,
+              color: theme.colorScheme.background,
               iconSize: 20,
             );
           },

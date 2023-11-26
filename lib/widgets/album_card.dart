@@ -15,8 +15,9 @@ class AlbumCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color primaryColorLight = Theme.of(context).primaryColorLight;
-    final Color primaryColorDark = Theme.of(context).primaryColorDark;
+    final ThemeData theme = Theme.of(context);
+    final Color primaryColorLight = theme.primaryColorLight;
+    final Color primaryColorDark = theme.primaryColorDark;
     final playlistData = Provider.of<Playlists>(context);
     final mediaQuery = MediaQuery.of(context).size;
     return Padding(
@@ -74,7 +75,7 @@ class AlbumCard extends StatelessWidget {
                 borderRadius: playlistData.isViewMoreAlbum
                     ? BorderRadius.circular(10)
                     : BorderRadius.circular(15),
-                color: Colors.white.withOpacity(0.6),
+                color: theme.colorScheme.background.withOpacity(0.6),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -88,23 +89,21 @@ class AlbumCard extends StatelessWidget {
                         width: mediaQuery.width * 0.25,
                         child: Text(
                           playlist.album,
-                          style:
-                              Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                    color: primaryColorDark,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize:
-                                        playlistData.isViewMoreAlbum ? 10 : 16,
-                                  ),
+                          style: theme.textTheme.bodyLarge!.copyWith(
+                            color: primaryColorDark,
+                            fontWeight: FontWeight.bold,
+                            fontSize: playlistData.isViewMoreAlbum ? 10 : 16,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       Text(
                         '${playlist.numOfSongs} songs',
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              color: Colors.blueGrey,
-                              fontSize: playlistData.isViewMoreAlbum ? 9 : 13,
-                            ),
+                        style: theme.textTheme.bodySmall!.copyWith(
+                          color: Colors.blueGrey,
+                          fontSize: playlistData.isViewMoreAlbum ? 9 : 13,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

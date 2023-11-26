@@ -40,11 +40,12 @@ class _SeekBarState extends State<SeekBar> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return Row(
       children: [
         Text(
           _formatDuration(widget.position),
-          style: const TextStyle(fontSize: 10),
+          style: TextStyle(fontSize: 10, color: theme.colorScheme.background),
         ),
         Expanded(
           child: SliderTheme(
@@ -95,7 +96,7 @@ class _SeekBarState extends State<SeekBar> {
         ),
         Text(
           _formatDuration(widget.duration),
-          style: const TextStyle(fontSize: 10),
+          style: TextStyle(fontSize: 10, color: theme.colorScheme.background),
         ),
       ],
     );

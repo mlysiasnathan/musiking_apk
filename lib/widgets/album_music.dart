@@ -12,7 +12,8 @@ class AlbumMusic extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final Color primaryColorLight = Theme.of(context).primaryColorLight;
+    final ThemeData theme = Theme.of(context);
+    final Color primaryColorLight = theme.primaryColorLight;
 
     final playlistData = Provider.of<Playlists>(context, listen: false);
     return Padding(
@@ -45,7 +46,7 @@ class AlbumMusic extends StatelessWidget {
                           decoration: BoxDecoration(
                             border: Border.all(
                               width: 2,
-                              color: Colors.white,
+                              color: theme.colorScheme.background,
                             ),
                             borderRadius: BorderRadius.circular(18),
                           ),
@@ -72,7 +73,7 @@ class AlbumMusic extends StatelessWidget {
                       ),
                       SizedBox(height: mediaQuery.size.height * 0.04),
                       CircleAvatar(
-                        backgroundColor: Colors.white,
+                        backgroundColor: theme.colorScheme.background,
                         child: Icon(
                           Icons.do_not_disturb_alt,
                           color: primaryColorLight,
