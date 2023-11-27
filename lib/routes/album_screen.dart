@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import '../models/models.dart';
 import '../widgets/widgets.dart';
 
-class PlaylistScreen extends StatelessWidget {
-  const PlaylistScreen({Key? key}) : super(key: key);
+class AlbumScreen extends StatelessWidget {
+  const AlbumScreen({Key? key}) : super(key: key);
   static const routeName = '/playlist';
 
   @override
@@ -15,11 +15,10 @@ class PlaylistScreen extends StatelessWidget {
     final Color primaryColor = theme.primaryColor;
     final Color primaryColorDark = theme.primaryColorDark;
     final playlist = ModalRoute.of(context)?.settings.arguments as AlbumModel;
-    final List<SongModel> songs =
-        Provider.of<SongsLocal>(context, listen: false)
-            .songs
-            .where((song) => song.albumId == playlist.id)
-            .toList();
+    final List<SongModel> songs = Provider.of<Songs>(context, listen: false)
+        .songs
+        .where((song) => song.albumId == playlist.id)
+        .toList();
 
     return Container(
       decoration: BoxDecoration(
@@ -33,7 +32,7 @@ class PlaylistScreen extends StatelessWidget {
         ),
       ),
       child: Scaffold(
-        floatingActionButton: const PrePlayingSong(),
+        floatingActionButton: const MusicFloating(),
         floatingActionButtonLocation:
             FloatingActionButtonLocation.miniCenterFloat,
         backgroundColor: Colors.transparent,
@@ -59,8 +58,11 @@ class PlaylistScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
-                        SongCardForPlaylist(
-                            song: songs[index], index: index, songs: songs),
+                        SongCardTwo(
+                          song: songs[index],
+                          index: index,
+                          songs: songs,
+                        ),
                         const Divider(color: Colors.white),
                       ],
                     );

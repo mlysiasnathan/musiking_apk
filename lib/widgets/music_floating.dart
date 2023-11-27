@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 import '../models/models.dart';
 import '../routes/screens.dart';
 
-class PrePlayingSong extends StatelessWidget {
-  const PrePlayingSong({
+class MusicFloating extends StatelessWidget {
+  const MusicFloating({
     Key? key,
   }) : super(key: key);
 
@@ -17,7 +17,7 @@ class PrePlayingSong extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final Color primaryColorLight = theme.primaryColorLight;
     final PageStorageBucket bucket = PageStorageBucket();
-    final songData = Provider.of<SongsLocal>(context, listen: false);
+    final songData = Provider.of<Songs>(context, listen: false);
     final audioPlayer = songData.audioPlayer;
     void songBottomSheet(BuildContext ctx) {
       showModalBottomSheet(
@@ -68,7 +68,7 @@ class PrePlayingSong extends StatelessWidget {
                               songData.setCurrentSong(index);
                             },
                             borderRadius: BorderRadius.circular(10),
-                            child: Consumer<SongsLocal>(
+                            child: Consumer<Songs>(
                               builder: (ctx, songData, _) => Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
@@ -185,7 +185,7 @@ class PrePlayingSong extends StatelessWidget {
                                     fit: BoxFit.cover,
                                   ),
                                 )
-                              : Consumer<SongsLocal>(
+                              : Consumer<Songs>(
                                   builder: (ctx, songData, _) =>
                                       QueryArtworkWidget(
                                     keepOldArtwork: true,
@@ -213,7 +213,7 @@ class PrePlayingSong extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 18),
-                  Consumer<SongsLocal>(
+                  Consumer<Songs>(
                     builder: (ctx, songData, _) => SizedBox(
                       width: MediaQuery.of(context).size.width * 0.60,
                       child: Text(

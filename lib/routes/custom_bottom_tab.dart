@@ -2,22 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/songs_provider_local.dart';
+import '../models/songs_provider.dart';
 import './screens.dart';
 import '../widgets/widgets.dart';
 
-class CustomTabScreenBottomBar extends StatefulWidget {
-  const CustomTabScreenBottomBar({
+class CustomBottomTab extends StatefulWidget {
+  const CustomBottomTab({
     // required this.indexPage,
     Key? key,
   }) : super(key: key);
   static const routeName = '/tabs-bottom-bar';
 
   @override
-  State<CustomTabScreenBottomBar> createState() => _CustomBottomBarState();
+  State<CustomBottomTab> createState() => _CustomBottomBarState();
 }
 
-class _CustomBottomBarState extends State<CustomTabScreenBottomBar> {
+class _CustomBottomBarState extends State<CustomBottomTab> {
   final PageController _controller = PageController();
   late List<Map<String, Object>> _pages;
   late int _selectedIndex = 0;
@@ -58,20 +58,19 @@ class _CustomBottomBarState extends State<CustomTabScreenBottomBar> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: const CustomAppBar(),
+        // appBar: const CustomAppBar(),
         body: PageView(
           controller: _controller,
           onPageChanged: _selectPage,
-          // children: _pages[_selectedIndex]['page'] as Widget,
           children: const [
             HomeScreen(),
             FavoritesScreen(),
             EqualizerScreen(),
           ],
         ),
-        floatingActionButton: Consumer<SongsLocal>(
+        floatingActionButton: Consumer<Songs>(
           builder: (ctx, songData, _) => songData.songs.isNotEmpty
-              ? const PrePlayingSong()
+              ? const MusicFloating()
               : const SizedBox(),
         ),
         floatingActionButtonLocation:

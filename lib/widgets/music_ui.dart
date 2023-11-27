@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import '../widgets/widgets.dart';
 import '../models/models.dart';
 
-class MusicTimer extends StatelessWidget {
-  const MusicTimer({
+class MusicUi extends StatelessWidget {
+  const MusicUi({
     Key? key,
   }) : super(key: key);
 
@@ -15,7 +15,7 @@ class MusicTimer extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final Color primaryColorLight = theme.primaryColorLight;
-    final songData = Provider.of<SongsLocal>(context, listen: false);
+    final songData = Provider.of<Songs>(context, listen: false);
     final mediaQuery = MediaQuery.of(context).size;
     final seekBarDataStream = songData.seekBarDataStream;
     final audioPlayer = songData.audioPlayer;
@@ -54,7 +54,7 @@ class MusicTimer extends StatelessWidget {
                 key: ValueKey(
                     songData.currentPlaylist[songData.currentIndex].id),
                 borderRadius: BorderRadius.circular(30),
-                child: Consumer<SongsLocal>(
+                child: Consumer<Songs>(
                   builder: (ctx, songData, _) => Hero(
                     tag: songData.currentPlaylist[songData.currentIndex].id,
                     child: QueryArtworkWidget(
@@ -80,7 +80,7 @@ class MusicTimer extends StatelessWidget {
             ),
           ),
           SizedBox(height: mediaQuery.height * 0.023),
-          Consumer<SongsLocal>(
+          Consumer<Songs>(
             builder: (ctx, songData, _) => Text(
               songData.currentPlaylist[songData.currentIndex].title,
               style: theme.textTheme.headlineSmall!.copyWith(
@@ -92,7 +92,7 @@ class MusicTimer extends StatelessWidget {
             ),
           ),
           SizedBox(height: mediaQuery.height * 0.023),
-          Consumer<SongsLocal>(
+          Consumer<Songs>(
             builder: (ctx, songData, _) => Text(
               songData.currentPlaylist[songData.currentIndex].artist ==
                       '<unknown>'
@@ -110,7 +110,7 @@ class MusicTimer extends StatelessWidget {
             stream: seekBarDataStream,
             builder: (context, snapshot) {
               final positionData = snapshot.data;
-              return Consumer<SongsLocal>(
+              return Consumer<Songs>(
                 builder: (ctx, songData, _) => SeekBar(
                   position: positionData?.position ?? songData.position,
                   duration: positionData?.duration ?? Duration.zero,
@@ -141,7 +141,7 @@ class MusicTimer extends StatelessWidget {
                     PopupMenuItem(
                       child: ListTile(
                         leading: const Icon(Icons.music_note),
-                        // trailing: Consumer<SongsLocal>(
+                        // trailing: Consumer<Songs>(
                         //   builder: (ctx, songData, _) => Text(
                         //       songData.songs[songData.currentIndex].size
                         //           .toString(),
@@ -155,7 +155,7 @@ class MusicTimer extends StatelessWidget {
                         //       maxLines: 2,
                         //       overflow: TextOverflow.ellipsis),
                         // ),
-                        title: Consumer<SongsLocal>(
+                        title: Consumer<Songs>(
                           builder: (ctx, songData, _) => Text(
                               songData.currentPlaylist[songData.currentIndex]
                                   .displayName,
@@ -171,7 +171,7 @@ class MusicTimer extends StatelessWidget {
                     PopupMenuItem(
                       child: ListTile(
                         leading: const Icon(Icons.album),
-                        title: Consumer<SongsLocal>(
+                        title: Consumer<Songs>(
                           builder: (ctx, songData, _) => Text(
                               songData
                                   .currentPlaylist[songData.currentIndex].album
@@ -185,7 +185,7 @@ class MusicTimer extends StatelessWidget {
                     PopupMenuItem(
                       child: ListTile(
                         leading: const Icon(Icons.person_2),
-                        title: Consumer<SongsLocal>(
+                        title: Consumer<Songs>(
                           builder: (ctx, songData, _) => Text(
                               songData.currentPlaylist[songData.currentIndex]
                                           .artist ==
@@ -208,7 +208,7 @@ class MusicTimer extends StatelessWidget {
                     PopupMenuItem(
                       child: ListTile(
                         leading: const Icon(Icons.folder_open),
-                        title: Consumer<SongsLocal>(
+                        title: Consumer<Songs>(
                           builder: (ctx, songData, _) => Text(
                               songData
                                   .currentPlaylist[songData.currentIndex].data

@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../models/models.dart';
 
-class SongCardLocal extends StatelessWidget {
-  const SongCardLocal({
+class SongCardOne extends StatelessWidget {
+  const SongCardOne({
     Key? key,
     required this.song,
     required this.index,
@@ -30,7 +30,7 @@ class SongCardLocal extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final Color primaryColorLight = theme.primaryColorLight;
-    final songData = Provider.of<SongsLocal>(context, listen: false);
+    final songData = Provider.of<Songs>(context, listen: false);
 
     return InkWell(
       onTap: () async {
@@ -103,7 +103,7 @@ class SongCardLocal extends StatelessWidget {
                 ],
               ),
             ),
-            Consumer<SongsLocal>(
+            Consumer<Songs>(
               builder: (ctx, songData, _) => Icon(
                   song.title == songData.currentSong
                       ? Icons.play_circle_outline

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musiking/widgets/new_app_bar.dart';
 
 class DiscoverMusic extends StatelessWidget {
   const DiscoverMusic({
@@ -14,6 +15,7 @@ class DiscoverMusic extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const NewAppBar(),
           Text(
             'Musiking',
             style: theme.textTheme.bodyLarge!.copyWith(color: Colors.white),
@@ -34,8 +36,9 @@ class DiscoverMusic extends StatelessWidget {
               isDense: true,
               prefixIcon: const Icon(Icons.search, color: Colors.grey),
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(13),
-                  borderSide: BorderSide.none),
+                borderRadius: BorderRadius.circular(13),
+                borderSide: BorderSide.none,
+              ),
               hintStyle:
                   theme.textTheme.bodyMedium!.copyWith(color: Colors.grey),
               hintText: 'Search',

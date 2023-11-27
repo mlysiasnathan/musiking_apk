@@ -8,19 +8,19 @@ import '../widgets/widgets.dart';
 
 class SongBottomSheet extends StatelessWidget {
   const SongBottomSheet({super.key});
-  static const routeName = '/songScreen-local';
+  static const routeName = '/song_screen';
 
   @override
   Widget build(BuildContext context) {
-    final songData = Provider.of<SongsLocal>(context, listen: false);
+    final songData = Provider.of<Songs>(context, listen: false);
     songData.audioPlayer.currentIndexStream.listen((index) {
       index != null ? songData.setCurrentSong(index) : null;
     });
     return Stack(
       children: [
-        Consumer<SongsLocal>(
+        Consumer<Songs>(
           builder: (ctx, songData, child) => QueryArtworkWidget(
-            id: songData.songs[songData.currentIndex].id,
+            id: songData.currentPlaylist[songData.currentIndex].id,
             type: ArtworkType.AUDIO,
             artworkFit: BoxFit.cover,
             artworkHeight: double.infinity,
@@ -38,7 +38,7 @@ class SongBottomSheet extends StatelessWidget {
           ),
         ),
         const BackgroundFilter(),
-        const MusicTimer(),
+        const MusicUi(),
       ],
     );
   }

@@ -2,14 +2,31 @@ import 'package:flutter/material.dart';
 import '../models/theme.dart';
 
 class ThemeProvider with ChangeNotifier {
-  ThemeData _themeData = lightMode;
-  ThemeData get themeData => _themeData;
-  set themeData(ThemeData themeData) {
-    _themeData = themeData;
+  ThemeMode themeMode = ThemeMode.system;
+  // ThemeData _themeDatas = lightMode;
+  // ThemeData get themeDatas => _themeDatas;
+  // set themeDatas(ThemeData themeDatas) {
+  //   _themeDatas = themeDatas;
+  //   notifyListeners();
+  // }
+  //
+  // void toggleTheme() {
+  //   _themeDatas == lightMode ? themeDatas = darkMode : themeDatas = lightMode;
+  // }
+
+  void followTheSystem() {
+    themeMode == ThemeMode.light
+        ? themeMode = ThemeMode.system
+        : themeMode == ThemeMode.dark
+            ? themeMode = ThemeMode.system
+            : themeMode = ThemeMode.light;
     notifyListeners();
   }
 
-  void toggleTheme() {
-    _themeData == lightMode ? themeData = darkMode : themeData = lightMode;
+  void toggleDarkLight() {
+    themeMode == ThemeMode.light
+        ? themeMode = ThemeMode.dark
+        : themeMode = ThemeMode.light;
+    notifyListeners();
   }
 }

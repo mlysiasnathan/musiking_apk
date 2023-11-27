@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../models/models.dart';
 
-class SongCardForPlaylist extends StatelessWidget {
-  const SongCardForPlaylist(
+class SongCardTwo extends StatelessWidget {
+  const SongCardTwo(
       {Key? key, required this.song, required this.index, required this.songs})
       : super(key: key);
   final SongModel song;
@@ -26,7 +26,7 @@ class SongCardForPlaylist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final songData = Provider.of<SongsLocal>(context, listen: false);
+    final songData = Provider.of<Songs>(context, listen: false);
     return InkWell(
       onTap: () async {
         songData.currentPlaylist = songs;
@@ -40,7 +40,7 @@ class SongCardForPlaylist extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
       child: ListTile(
         minLeadingWidth: 1,
-        leading: Consumer<SongsLocal>(builder: (ctx, songData, _) {
+        leading: Consumer<Songs>(builder: (ctx, songData, _) {
           if (song.title == songData.currentSong) {
             return Icon(Icons.play_arrow,
                 color: theme.colorScheme.background, size: 30);

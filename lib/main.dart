@@ -2,21 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-// import './models/theme_provider.dart';
 import './routes/screens.dart';
 import './models/models.dart';
-import './models/theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(
-    // ChangeNotifierProvider(
-    //   create: (context) => ThemeProvider(),
-    //   child: const MyApp(),
-    // ),
-    const MyApp(),
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: const MyApp(),
+    ),
   );
 }
 
@@ -29,7 +26,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => SongsLocal(),
+          create: (ctx) => Songs(),
         ),
         ChangeNotifierProvider(
           create: (ctx) => Playlists(),
@@ -38,15 +35,14 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'MusiKing',
         debugShowCheckedModeBanner: false,
-        // theme: Provider.of<ThemeProvider>(context).themeData,
         theme: lightMode,
         darkTheme: darkMode,
-        themeMode: ThemeMode.system,
+        themeMode: Provider.of<ThemeProvider>(context).themeMode,
         home: Builder(
           builder: (context) => FutureBuilder(
-            future: Provider.of<SongsLocal>(context, listen: false)
+            future: Provider.of<Songs>(context, listen: false)
                 .setSongs()
-                .then((_) => Provider.of<SongsLocal>(context, listen: false)
+                .then((_) => Provider.of<Songs>(context, listen: false)
                     .fetchAndSetCurrentSong())
                 .then(
                   (_) => Future.delayed(
@@ -56,17 +52,16 @@ class MyApp extends StatelessWidget {
             builder: (context, snapshots) =>
                 snapshots.connectionState == ConnectionState.waiting
                     ? const SplashScreen()
-                    : const CustomTabScreenBottomBar(),
+                    : const CustomBottomTab(),
           ),
         ),
         routes: {
           SplashScreen.routeName: (ctx) => const SplashScreen(),
           HomeScreen.routeName: (ctx) => const HomeScreen(),
-          PlaylistScreen.routeName: (ctx) => const PlaylistScreen(),
+          AlbumScreen.routeName: (ctx) => const AlbumScreen(),
           FavoritesScreen.routeName: (ctx) => const FavoritesScreen(),
           EqualizerScreen.routeName: (ctx) => const EqualizerScreen(),
-          CustomTabScreenBottomBar.routeName: (ctx) =>
-              const CustomTabScreenBottomBar(),
+          CustomBottomTab.routeName: (ctx) => const CustomBottomTab(),
         },
       ),
     );

@@ -14,7 +14,7 @@ class MusicControllers extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final Color primaryColorLight = theme.primaryColorLight;
-    final songData = Provider.of<SongsLocal>(context);
+    final songData = Provider.of<Songs>(context);
     final audioPlayer = songData.audioPlayer;
     void showToast(BuildContext ctx, String message) {
       ScaffoldMessenger.of(ctx).hideCurrentSnackBar();

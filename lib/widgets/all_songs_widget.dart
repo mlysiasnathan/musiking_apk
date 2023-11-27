@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import '../models/models.dart';
 import './widgets.dart';
 
-class LocalPlaylistMusic extends StatelessWidget {
-  const LocalPlaylistMusic({
+class AllSongsWgt extends StatelessWidget {
+  const AllSongsWgt({
     Key? key,
   }) : super(key: key);
 
@@ -13,13 +13,13 @@ class LocalPlaylistMusic extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final Color primaryColorLight = theme.primaryColorLight;
-    final songData = Provider.of<SongsLocal>(context, listen: false);
+    final songData = Provider.of<Songs>(context, listen: false);
 
     return Padding(
       padding: const EdgeInsets.all(19),
       child:
           // songData.songs.isNotEmpty
-          //     ? Consumer<SongsLocal>(
+          //     ? Consumer<Songs>(
           //         builder: (ctx, songData, _) => Column(
           //           children: [
           //             SectionHeader(
@@ -114,7 +114,7 @@ class LocalPlaylistMusic extends StatelessWidget {
                           ),
                         ],
                       )
-                    : Consumer<SongsLocal>(
+                    : Consumer<Songs>(
                         builder: (ctx, songData, _) => Column(
                           children: [
                             SectionHeader(
@@ -131,7 +131,7 @@ class LocalPlaylistMusic extends StatelessWidget {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: songData.songs.length,
                               itemBuilder: ((context, index) {
-                                return SongCardLocal(
+                                return SongCardOne(
                                     key: ValueKey(index),
                                     song: songData.songs[index],
                                     index: index);

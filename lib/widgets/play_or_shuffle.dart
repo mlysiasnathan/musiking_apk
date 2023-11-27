@@ -17,7 +17,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
     final Color primaryColor = theme.primaryColor;
     final Color primaryColorLight = theme.primaryColorLight;
     double width = MediaQuery.of(context).size.width * 0.7;
-    final songData = Provider.of<SongsLocal>(context);
+    final songData = Provider.of<Songs>(context);
     void showToast(BuildContext ctx, String message) {
       ScaffoldMessenger.of(ctx).showSnackBar(
         SnackBar(

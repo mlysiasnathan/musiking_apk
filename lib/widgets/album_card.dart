@@ -24,7 +24,7 @@ class AlbumCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 5.0),
       child: InkWell(
         onTap: () => Navigator.of(context)
-            .pushNamed(PlaylistScreen.routeName, arguments: playlist),
+            .pushNamed(AlbumScreen.routeName, arguments: playlist),
         key: ValueKey(playlist.id),
         borderRadius: playlistData.isViewMoreAlbum
             ? BorderRadius.circular(15)

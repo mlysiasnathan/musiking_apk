@@ -23,8 +23,8 @@ class _HomeScreenState extends State<HomeScreen>
       child: Column(
         children: const [
           DiscoverMusic(),
-          AlbumMusic(),
-          LocalPlaylistMusic(),
+          AlbumsArea(),
+          AllSongsWgt(),
           SizedBox(height: 43),
         ],
       ),

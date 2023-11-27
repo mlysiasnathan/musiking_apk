@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:rxdart/rxdart.dart' as rxdart;
@@ -9,13 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widgets/seekbar.dart';
 
-class SongsLocal with ChangeNotifier {
+class Songs with ChangeNotifier {
   List<SongModel> songs = <SongModel>[];
   List<SongModel> currentPlaylist = <SongModel>[];
   AudioPlayer audioPlayer = AudioPlayer();
   final OnAudioQuery _audioQuery = OnAudioQuery();
   bool isSongsSaved = false;
-  // PaletteGenerator? paletteGenerator;
 
   String currentSong = 'Click to play';
   int currentIndex = 0;

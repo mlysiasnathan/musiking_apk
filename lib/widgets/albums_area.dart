@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 import '../models/models.dart';
 import './widgets.dart';
 
-class AlbumMusic extends StatelessWidget {
-  const AlbumMusic({
+class AlbumsArea extends StatelessWidget {
+  const AlbumsArea({
     Key? key,
   }) : super(key: key);
 
