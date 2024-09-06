@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 
-import '../models/models.dart';
+import '../../models/models.dart';
 
 class MusicControllers extends StatelessWidget {
   const MusicControllers({
@@ -13,7 +13,6 @@ class MusicControllers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final Color primaryColorLight = theme.primaryColorLight;
     final songData = Provider.of<Songs>(context);
     final audioPlayer = songData.audioPlayer;
     void showToast(BuildContext ctx, String message) {
@@ -48,10 +47,12 @@ class MusicControllers extends StatelessWidget {
                           ? 'Shuffle mode Enabled'
                           : 'Shuffle mode Disabled');
                 },
-                icon: Icon(CupertinoIcons.shuffle,
-                    color: audioPlayer.shuffleModeEnabled
-                        ? primaryColorLight
-                        : theme.colorScheme.background),
+                icon: Icon(
+                  CupertinoIcons.shuffle,
+                  color: audioPlayer.shuffleModeEnabled
+                      ? theme.primaryColor
+                      : theme.colorScheme.background,
+                ),
                 iconSize: 20,
               ),
             );
@@ -64,7 +65,10 @@ class MusicControllers extends StatelessWidget {
               tooltip: songData.audioPlayer.currentIndex != null
                   ? songData.audioPlayer.currentIndex! > 0
                       ? songData
-                          .currentPlaylist[songData.currentIndex - 1].title
+                          .currentPlaylist[songData.currentPlaylist
+                                  .indexOf(songData.currentSong!) -
+                              1]
+                          .title
                       : 'This is the first song of the playlist'
                   : null,
               onPressed: songData.prev,
@@ -97,14 +101,14 @@ class MusicControllers extends StatelessWidget {
                   color: theme.colorScheme.background,
                   iconSize: 70,
                   onPressed: () async {
-                    if (songData.currentSong == 'Click to play' ||
+                    if (songData.currentSong == null ||
                         songData.audioPlayer.currentIndex == null) {
                       songData.currentPlaylist = songData.songs;
                       await songData.audioPlayer.setAudioSource(
                         songData.initializePlaylist(songData.currentPlaylist),
-                        initialIndex: songData.currentIndex,
+                        initialIndex: 0,
                       );
-                      songData.setCurrentSong(songData.currentIndex);
+                      songData.setCurrentSong(0);
                     }
                     audioPlayer.play();
                   },
@@ -166,7 +170,10 @@ class MusicControllers extends StatelessWidget {
                   ? songData.audioPlayer.currentIndex! <
                           songData.currentPlaylist.length - 1
                       ? songData
-                          .currentPlaylist[songData.currentIndex + 1].title
+                          .currentPlaylist[songData.currentPlaylist
+                                  .indexOf(songData.currentSong!) +
+                              1]
+                          .title
                       : 'End of the playlist'
                   : null,
               onPressed: songData.next,
@@ -194,7 +201,7 @@ class MusicControllers extends StatelessWidget {
                   icon: const Icon(
                     Icons.refresh,
                   ),
-                  color: primaryColorLight,
+                  color: theme.primaryColor,
                   iconSize: 20,
                 ),
               );
@@ -210,7 +217,7 @@ class MusicControllers extends StatelessWidget {
                   icon: const Icon(
                     Icons.loop_outlined,
                   ),
-                  color: primaryColorLight,
+                  color: theme.primaryColor,
                   iconSize: 20,
                 ),
               );

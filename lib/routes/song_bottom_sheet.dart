@@ -12,6 +12,7 @@ class SongBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     final songData = Provider.of<Songs>(context, listen: false);
     songData.audioPlayer.currentIndexStream.listen((index) {
       index != null ? songData.setCurrentSong(index) : null;
@@ -20,19 +21,24 @@ class SongBottomSheet extends StatelessWidget {
       children: [
         Consumer<Songs>(
           builder: (ctx, songData, child) => QueryArtworkWidget(
-            id: songData.currentPlaylist[songData.currentIndex].id,
+            id: songData.currentSong!.id,
             type: ArtworkType.AUDIO,
             artworkFit: BoxFit.cover,
             artworkHeight: double.infinity,
             artworkWidth: double.infinity,
             artworkBorder: BorderRadius.zero,
             keepOldArtwork: true,
-            nullArtworkWidget: ClipRRect(
-              child: Image.asset(
-                'assets/musiccovers/musiking_logo.jpg',
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
+            nullArtworkWidget: Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: theme.colorScheme.shadow.withOpacity(0.6),
+              ),
+              child: Icon(
+                Icons.music_note,
+                color: theme.primaryColor,
+                size: 300,
               ),
             ),
           ),

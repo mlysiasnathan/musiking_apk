@@ -2,15 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/songs_provider.dart';
-import './screens.dart';
+import '../providers/songs_provider.dart';
 import '../widgets/widgets.dart';
+import './screens.dart';
 
 class CustomBottomTab extends StatefulWidget {
-  const CustomBottomTab({
-    // required this.indexPage,
-    Key? key,
-  }) : super(key: key);
+  const CustomBottomTab({Key? key}) : super(key: key);
   static const routeName = '/tabs-bottom-bar';
 
   @override
@@ -43,17 +40,12 @@ class _CustomBottomBarState extends State<CustomBottomTab> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final Color primaryColor = theme.primaryColor;
-    final Color primaryColorDark = theme.primaryColorDark;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            primaryColorDark.withOpacity(0.8),
-            primaryColor.withOpacity(0.8),
-          ],
+          colors: [theme.colorScheme.primary, theme.colorScheme.secondary],
         ),
       ),
       child: Scaffold(
@@ -80,8 +72,8 @@ class _CustomBottomBarState extends State<CustomBottomTab> {
           selectedFontSize: 10,
           elevation: 0,
           backgroundColor: Colors.transparent,
-          unselectedItemColor: theme.colorScheme.background.withOpacity(0.7),
-          selectedItemColor: theme.colorScheme.background,
+          unselectedItemColor: Colors.white.withOpacity(0.5),
+          selectedItemColor: Colors.white,
           type: BottomNavigationBarType.fixed,
           showUnselectedLabels: false,
           showSelectedLabels: true,

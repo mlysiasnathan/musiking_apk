@@ -1,6 +1,6 @@
 library localsongmodels;
 
-export './playlists_provider_local.dart';
-export './songs_provider.dart';
+export '../providers/playlists_provider_local.dart';
+export '../providers/songs_provider.dart';
 export './theme.dart';
-export './theme_provider.dart';
+export '../providers/theme_provider.dart';

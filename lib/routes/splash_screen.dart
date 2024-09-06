@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
+import '../helpers/constant.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
   static const routeName = '/splash';
@@ -36,21 +38,21 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final Color primaryColorLight = theme.primaryColorLight;
-    final mediaQuery = MediaQuery.of(context).size;
+    final deviceSize = MediaQuery.of(context).size;
 
     return Scaffold(
       body: Container(
-        color: primaryColorLight,
+        color: theme.primaryColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const SizedBox(height: 50),
             Container(
-              // margin: const EdgeInsets.only(bottom: 10.0),
-              padding:
-                  const EdgeInsets.symmetric(vertical: 18.0, horizontal: 70.0),
+              padding: const EdgeInsets.symmetric(
+                vertical: 18.0,
+                horizontal: 70.0,
+              ),
               transform: Matrix4.rotationZ(-14 * pi / 180)..translate(-0.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -64,11 +66,10 @@ class _SplashScreenState extends State<SplashScreen> {
                 ],
               ),
               child: Text(
-                'MusiKing',
-                style: TextStyle(
+                appName,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  color: theme.primaryColor,
                   fontSize: 35,
-                  color: primaryColorLight,
-                  fontWeight: FontWeight.w700,
                 ),
               ),
             ),
@@ -81,31 +82,34 @@ class _SplashScreenState extends State<SplashScreen> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.asset(
-                  'assets/musiccovers/musiking_logo.jpg',
-                  width: mediaQuery.height * 0.20,
-                  height: mediaQuery.height * 0.20,
+                  imageList[0],
+                  width: deviceSize.height * 0.20,
+                  height: deviceSize.height * 0.20,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             Column(
               children: [
-                const Text(
+                Text(
                   'From',
-                  style: TextStyle(
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.background,
+                    letterSpacing: 1.2,
                     fontWeight: FontWeight.w900,
-                    // color: theme.colorScheme.background,
-                    fontSize: 12,
-                    letterSpacing: 4.0,
                   ),
                 ),
                 Image.asset(
-                  'assets/musiccovers/lysnB_land_logo_png.png',
-                  width: mediaQuery.width * 0.3,
+                  imageList[1],
+                  width: deviceSize.width * 0.35,
                   fit: BoxFit.fitWidth,
                 ),
                 const SizedBox(height: 10),
-                LinearProgressIndicator(color: primaryColorLight),
+                LinearProgressIndicator(
+                  color: theme.primaryColor,
+                  backgroundColor: theme.colorScheme.background,
+                  borderRadius: BorderRadius.circular(30),
+                ),
                 const SizedBox(height: 20),
               ],
             ),

@@ -4,6 +4,7 @@ class SectionHeader extends StatefulWidget {
   final String title;
   final String actionText;
   final String afterActionText;
+  final bool showButton;
   final Function action;
   const SectionHeader({
     Key? key,
@@ -11,6 +12,7 @@ class SectionHeader extends StatefulWidget {
     this.afterActionText = 'View less',
     required this.title,
     required this.action,
+    this.showButton = true,
   }) : super(key: key);
 
   @override
@@ -21,36 +23,38 @@ class _SectionHeaderState extends State<SectionHeader> {
   bool _isClicked = false;
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           widget.title,
-          style: Theme.of(context)
-              .textTheme
-              .headline6!
-              .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        TextButton.icon(
-          onPressed: () {
-            widget.action();
-            setState(() {
-              _isClicked = !_isClicked;
-            });
-          },
-          label: Text(
-            _isClicked == true ? widget.afterActionText : widget.actionText,
-            style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,
-                ),
+          style: theme.textTheme.titleMedium!.copyWith(
+            color: theme.colorScheme.background,
+            fontSize: 20,
           ),
-          icon: _isClicked == true
-              ? const Icon(Icons.keyboard_arrow_down_outlined,
-                  color: Colors.white)
-              : const Icon(Icons.keyboard_arrow_right_outlined,
-                  color: Colors.white),
         ),
+        if (widget.showButton)
+          TextButton.icon(
+            onPressed: () {
+              widget.action();
+              setState(() {
+                _isClicked = !_isClicked;
+              });
+            },
+            label: Text(
+              _isClicked ? widget.afterActionText : widget.actionText,
+              style: theme.textTheme.labelSmall!.copyWith(
+                color: theme.colorScheme.background,
+              ),
+            ),
+            icon: Icon(
+              _isClicked
+                  ? Icons.keyboard_arrow_down_outlined
+                  : Icons.keyboard_arrow_right_outlined,
+              color: theme.colorScheme.background,
+            ),
+          ),
       ],
     );
   }

@@ -6,7 +6,7 @@ import 'package:on_audio_query/on_audio_query.dart';
 import 'package:rxdart/rxdart.dart' as rxdart;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../widgets/seekbar.dart';
+import '../widgets/song/seekbar.dart';
 
 class Songs with ChangeNotifier {
   List<SongModel> songs = <SongModel>[];
@@ -15,8 +15,9 @@ class Songs with ChangeNotifier {
   final OnAudioQuery _audioQuery = OnAudioQuery();
   bool isSongsSaved = false;
 
-  String currentSong = 'Click to play';
-  int currentIndex = 0;
+  SongModel? currentSong;
+  // int currentIndex = 0;
+
   Duration position = Duration.zero;
   List<AudioSource> sources = [];
 
@@ -30,10 +31,7 @@ class Songs with ChangeNotifier {
   }
 
   ConcatenatingAudioSource initializePlaylist(List<SongModel> songsToPlay) {
-    // sources.isNotEmpty && sources.length != songsToPlay.length
-    //     ?
     sources.clear();
-    // : null;
     if (sources.isEmpty) {
       for (var song in songsToPlay) {
         sources.add(AudioSource.uri(Uri.parse(song.uri!)));
@@ -70,19 +68,18 @@ class Songs with ChangeNotifier {
     }
   }
 
-  void setCurrentSong(int index) async {
+  void setCurrentSong(int songId) async {
     if (currentPlaylist.isNotEmpty) {
-      currentSong = currentPlaylist[index].title;
-      currentIndex = index;
+      currentSong = songs.firstWhere((song) => song.id == songId);
     }
+    // print('Current song======================================$currentSong');
+    notifyListeners();
     final pref = await SharedPreferences.getInstance();
     final currentSongInfo = json.encode({
-      'currentSong': currentSong,
-      'currentIndex': currentIndex,
+      'currentSong': currentSong.toString(),
       'position': audioPlayer.position.toString(),
     });
     pref.setString('currentSongInfo', currentSongInfo);
-    notifyListeners();
   }
 
   void saveSongList() async {
@@ -111,7 +108,10 @@ class Songs with ChangeNotifier {
             orderType: OrderType.ASC_OR_SMALLER)
         .then((songsList) {
       if (songsList.isNotEmpty) {
-        // songs.clear();
+        // for (var song in songsList) {
+        //   print(' songId =============================${song.id} ');
+        //   print(' song =============================${song.title} ');
+        // }
         songs = songsList;
         currentPlaylist = songs;
         saveSongList();
@@ -131,18 +131,18 @@ class Songs with ChangeNotifier {
         json.decode(pref.getString('currentSongInfo').toString())
             as Map<String, dynamic>;
     if (extractedSongInfo['currentSong'] == null) {
-      currentSong = 'Click to play';
+      currentSong = null;
       return false;
     }
     if (extractedSongInfo['currentIndex'] == null) {
-      currentIndex = 0;
+      // currentIndex = 0;
       return false;
     }
     if (extractedSongInfo['position'] == null) {
       return false;
     }
     currentSong = extractedSongInfo['currentSong'];
-    currentIndex = extractedSongInfo['currentIndex'];
+    // currentIndex = extractedSongInfo['currentIndex'];
 
     List<String> timeParts =
         extractedSongInfo['position'].toString().split(':');

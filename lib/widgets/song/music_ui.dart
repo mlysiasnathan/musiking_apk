@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/widgets.dart';
-import '../models/models.dart';
+import '../widgets.dart';
+import '../../models/models.dart';
 
 class MusicUi extends StatelessWidget {
   const MusicUi({
@@ -14,75 +14,57 @@ class MusicUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final Color primaryColorLight = theme.primaryColorLight;
     final songData = Provider.of<Songs>(context, listen: false);
-    final mediaQuery = MediaQuery.of(context).size;
+    final deviceSize = MediaQuery.of(context).size;
     final seekBarDataStream = songData.seekBarDataStream;
     final audioPlayer = songData.audioPlayer;
     return Padding(
       padding: EdgeInsets.symmetric(
-          horizontal: mediaQuery.height * 0.020,
-          vertical: mediaQuery.height * 0.025),
-      // padding: const EdgeInsets.symmetric(horizontal: 19, vertical: 70),
+          horizontal: deviceSize.height * 0.020,
+          vertical: deviceSize.height * 0.025),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     TextButton.icon(
-          //       onPressed: () => Navigator.pop(context),
-          //       label: const Text(
-          //         'Close',
-          //         style: TextStyle(color: theme.colorScheme.background),
-          //       ),
-          //       icon: const Icon(
-          //         Icons.keyboard_arrow_down_outlined,
-          //         color: theme.colorScheme.background,
+          // Center(
+          //   child: Card(
+          //     shape: RoundedRectangleBorder(
+          //       borderRadius: BorderRadius.circular(32),
+          //     ),
+          //     elevation: 20,
+          //     child: ClipRRect(
+          //       key: ValueKey(
+          //           songData.currentPlaylist[songData.currentIndex].id),
+          //       borderRadius: BorderRadius.circular(30),
+          //       child: Consumer<Songs>(
+          //         builder: (ctx, songData, _) => Hero(
+          //           tag: songData.currentPlaylist[songData.currentIndex].id,
+          //           child: QueryArtworkWidget(
+          //             id: songData.currentPlaylist[songData.currentIndex].id,
+          //             type: ArtworkType.AUDIO,
+          //             artworkBorder: BorderRadius.zero,
+          //             artworkHeight: deviceSize.height * 0.45,
+          //             artworkWidth: deviceSize.height * 0.45,
+          //             artworkFit: BoxFit.cover,
+          //             keepOldArtwork: true,
+          //             nullArtworkWidget: ClipRRect(
+          //               child: Image.asset(
+          //                 'assets/musiccovers/musiking_logo.jpg',
+          //                 width: deviceSize.height * 0.45,
+          //                 height: deviceSize.height * 0.45,
+          //                 fit: BoxFit.cover,
+          //               ),
+          //             ),
+          //           ),
+          //         ),
           //       ),
           //     ),
-          //   ],
+          //   ),
           // ),
-          Center(
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(32),
-              ),
-              elevation: 20,
-              child: ClipRRect(
-                key: ValueKey(
-                    songData.currentPlaylist[songData.currentIndex].id),
-                borderRadius: BorderRadius.circular(30),
-                child: Consumer<Songs>(
-                  builder: (ctx, songData, _) => Hero(
-                    tag: songData.currentPlaylist[songData.currentIndex].id,
-                    child: QueryArtworkWidget(
-                      id: songData.currentPlaylist[songData.currentIndex].id,
-                      type: ArtworkType.AUDIO,
-                      artworkBorder: BorderRadius.zero,
-                      artworkHeight: mediaQuery.height * 0.45,
-                      artworkWidth: mediaQuery.height * 0.45,
-                      artworkFit: BoxFit.cover,
-                      keepOldArtwork: true,
-                      nullArtworkWidget: ClipRRect(
-                        child: Image.asset(
-                          'assets/musiccovers/musiking_logo.jpg',
-                          width: mediaQuery.height * 0.45,
-                          height: mediaQuery.height * 0.45,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(height: mediaQuery.height * 0.023),
+          SizedBox(height: deviceSize.height * 0.023),
           Consumer<Songs>(
             builder: (ctx, songData, _) => Text(
-              songData.currentPlaylist[songData.currentIndex].title,
+              songData.currentSong!.title,
               style: theme.textTheme.headlineSmall!.copyWith(
                 color: theme.colorScheme.background,
                 fontWeight: FontWeight.bold,
@@ -91,21 +73,19 @@ class MusicUi extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          SizedBox(height: mediaQuery.height * 0.023),
+          SizedBox(height: deviceSize.height * 0.023),
           Consumer<Songs>(
             builder: (ctx, songData, _) => Text(
-              songData.currentPlaylist[songData.currentIndex].artist ==
-                      '<unknown>'
+              songData.currentSong!.artist == '<unknown>'
                   ? 'Unknown Artist'
-                  : songData.currentPlaylist[songData.currentIndex].artist
-                      .toString(),
-              style: theme.textTheme.bodySmall!
+                  : songData.currentSong!.artist.toString(),
+              style: theme.textTheme.labelSmall!
                   .copyWith(color: theme.colorScheme.background),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          SizedBox(height: mediaQuery.height * 0.023),
+          SizedBox(height: deviceSize.height * 0.023),
           StreamBuilder<SeekBarData>(
             stream: seekBarDataStream,
             builder: (context, snapshot) {
@@ -120,7 +100,7 @@ class MusicUi extends StatelessWidget {
             },
           ),
           const MusicControllers(),
-          SizedBox(height: mediaQuery.height * 0.023),
+          SizedBox(height: deviceSize.height * 0.023),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -156,15 +136,14 @@ class MusicUi extends StatelessWidget {
                         //       overflow: TextOverflow.ellipsis),
                         // ),
                         title: Consumer<Songs>(
-                          builder: (ctx, songData, _) => Text(
-                              songData.currentPlaylist[songData.currentIndex]
-                                  .displayName,
-                              style: theme.textTheme.bodyLarge!.copyWith(
-                                color: primaryColorLight,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis),
+                          builder: (ctx, songData, _) =>
+                              Text(songData.currentSong!.displayName,
+                                  style: theme.textTheme.bodyLarge!.copyWith(
+                                    color: theme.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis),
                         ),
                       ),
                     ),
@@ -173,10 +152,8 @@ class MusicUi extends StatelessWidget {
                         leading: const Icon(Icons.album),
                         title: Consumer<Songs>(
                           builder: (ctx, songData, _) => Text(
-                              songData
-                                  .currentPlaylist[songData.currentIndex].album
-                                  .toString(),
-                              style: TextStyle(color: primaryColorLight),
+                              songData.currentSong!.album.toString(),
+                              style: theme.textTheme.titleMedium,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis),
                         ),
@@ -187,21 +164,14 @@ class MusicUi extends StatelessWidget {
                         leading: const Icon(Icons.person_2),
                         title: Consumer<Songs>(
                           builder: (ctx, songData, _) => Text(
-                              songData.currentPlaylist[songData.currentIndex]
-                                          .artist ==
-                                      '<unknown>'
-                                  ? 'Unknown Artist'
-                                  : songData
-                                      .currentPlaylist[songData.currentIndex]
-                                      .artist
-                                      .toString(),
-                              style: theme.textTheme.bodyMedium!.copyWith(
-                                color: primaryColorLight,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true),
+                            songData.currentSong!.artist == '<unknown>'
+                                ? 'Unknown Artist'
+                                : songData.currentSong!.artist.toString(),
+                            style: theme.textTheme.titleMedium,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                          ),
                         ),
                       ),
                     ),
@@ -210,16 +180,12 @@ class MusicUi extends StatelessWidget {
                         leading: const Icon(Icons.folder_open),
                         title: Consumer<Songs>(
                           builder: (ctx, songData, _) => Text(
-                              songData
-                                  .currentPlaylist[songData.currentIndex].data
-                                  .toString(),
-                              style: theme.textTheme.labelMedium!.copyWith(
-                                color: primaryColorLight,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: true),
+                            songData.currentSong!.data.toString(),
+                            style: theme.textTheme.labelMedium,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: true,
+                          ),
                         ),
                       ),
                     ),

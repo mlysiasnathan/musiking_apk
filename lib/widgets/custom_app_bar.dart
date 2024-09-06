@@ -2,9 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/songs_provider.dart';
+import '../providers/songs_provider.dart';
 
-class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+// class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+//   const CustomAppBar({
+//     Key? key,
+//   }) : super(key: key);
+  class CustomAppBar extends StatelessWidget {
   const CustomAppBar({
     Key? key,
   }) : super(key: key);

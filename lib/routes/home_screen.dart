@@ -18,14 +18,14 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SingleChildScrollView(
-      key: const ValueKey('home'),
+    return const SingleChildScrollView(
+      key: ValueKey('home'),
       child: Column(
-        children: const [
+        children: [
           DiscoverMusic(),
           AlbumsArea(),
           AllSongsWgt(),
-          SizedBox(height: 43),
+          SizedBox(height: 50),
         ],
       ),
     );

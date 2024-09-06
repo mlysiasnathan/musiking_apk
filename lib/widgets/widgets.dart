@@ -1,16 +1,16 @@
 library localsongwidgets;
 
-export './album_card.dart';
-export './albums_area.dart';
-export './background_filter.dart';
+export 'album/album_card.dart';
+export 'album/albums_area.dart';
+export 'song/background_filter.dart';
 export './custom_app_bar.dart';
 export './discover_music.dart';
-export './music_controllers.dart';
-export './music_ui.dart';
-export './play_or_shuffle.dart';
-export './all_songs_widget.dart';
-export './music_floating.dart';
+export 'song/music_controllers.dart';
+export 'song/music_ui.dart';
+export 'album/play_or_shuffle.dart';
+export 'song/all_songs_widget.dart';
+export 'song/music_floating.dart';
 export './section_header.dart';
-export './seekbar.dart';
-export './song_card_two.dart';
-export './song_card_one.dart';
+export 'song/seekbar.dart';
+export 'song/song_card_two.dart';
+export 'song/song_card_one.dart';
