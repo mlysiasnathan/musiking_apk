@@ -111,64 +111,58 @@ class _NewAppBarState extends State<NewAppBar> {
                             children: [
                               GestureDetector(
                                 onTap: themeProvider.setLightTheme,
-                                child: Expanded(
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Light',
-                                        style: TextStyle(
-                                          color: themeProvider.themeMode ==
-                                                  ThemeMode.light
-                                              ? theme.colorScheme.background
-                                              : theme.primaryColor,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Icon(
-                                        CupertinoIcons.sun_max_fill,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Light',
+                                      style: TextStyle(
                                         color: themeProvider.themeMode ==
                                                 ThemeMode.light
                                             ? theme.colorScheme.background
                                             : theme.primaryColor,
-                                        size: 15,
+                                        fontSize: 13,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Icon(
+                                      CupertinoIcons.sun_max_fill,
+                                      color: themeProvider.themeMode ==
+                                              ThemeMode.light
+                                          ? theme.colorScheme.background
+                                          : theme.primaryColor,
+                                      size: 15,
+                                    ),
+                                  ],
                                 ),
                               ),
                               GestureDetector(
                                 onTap: themeProvider.setDarkTheme,
-                                child: Expanded(
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Dark',
-                                        style: TextStyle(
-                                          color: themeProvider.themeMode ==
-                                                  ThemeMode.dark
-                                              ? theme.colorScheme.background
-                                              : theme.primaryColor,
-                                          fontSize: 13,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Icon(
-                                        CupertinoIcons.moon_fill,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Dark',
+                                      style: TextStyle(
                                         color: themeProvider.themeMode ==
                                                 ThemeMode.dark
                                             ? theme.colorScheme.background
                                             : theme.primaryColor,
-                                        size: 15,
+                                        fontSize: 13,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Icon(
+                                      CupertinoIcons.moon_fill,
+                                      color: themeProvider.themeMode ==
+                                              ThemeMode.dark
+                                          ? theme.colorScheme.background
+                                          : theme.primaryColor,
+                                      size: 15,
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],

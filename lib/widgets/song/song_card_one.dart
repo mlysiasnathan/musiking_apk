@@ -22,6 +22,9 @@ class SongCardOne extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final songData = Provider.of<Songs>(context, listen: false);
     final deviceSize = MediaQuery.of(context).size;
+    songData.audioPlayer.currentIndexStream.listen((index) {
+      index != null ? songData.setCurrentSong(index) : null;
+    });
 
     return showBigSize
         ? Container(
