@@ -13,41 +13,44 @@ class AllSongsWgt extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    final songData = Provider.of<Songs>(context, listen: true);
+    final songData = Provider.of<Songs>(context, listen: false);
+    // songData.audioPlayer.currentIndexStream.listen((index) {
+    //   print('========================================$index');
+    //   index != null ? songData.setCurrentSong(index) : null;
+    // });
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 19, right: 19, bottom: 8),
-      child: songData.songs.isEmpty
-          // && songData.isSongsSaved
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SectionHeader(
-                  title: 'No Songs found',
-                  action: () =>
-                      Navigator.pushNamed(context, RefreshScreen.routeName),
-                  actionText: 'Refresh',
-                  afterActionText: 'Refreshed',
-                ),
-                const SizedBox(height: 20),
-                Icon(
-                  Icons.do_not_disturb_alt,
-                  color: theme.primaryColorLight,
-                  size: 90,
-                ),
-                const SizedBox(height: 30),
-                const Text(
-                  'Refresh the Playlist',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+    return Consumer<Songs>(
+      builder: (ctx, songData, _) => Padding(
+        padding: const EdgeInsets.only(left: 19, right: 19, bottom: 8),
+        child: songData.songs.isEmpty
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SectionHeader(
+                    title: 'No Songs found',
+                    action: () =>
+                        Navigator.pushNamed(context, RefreshScreen.routeName),
+                    actionText: 'Refresh',
+                    afterActionText: 'Refreshed',
                   ),
-                ),
-              ],
-            )
-          : Consumer<Songs>(
-              builder: (ctx, songData, _) => Column(
+                  const SizedBox(height: 20),
+                  Icon(
+                    Icons.do_not_disturb_alt,
+                    color: theme.primaryColorLight,
+                    size: 50,
+                  ),
+                  const SizedBox(height: 30),
+                  const Text(
+                    'Refresh the Playlist',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              )
+            : Column(
                 children: [
                   SectionHeader(
                     // showButton: false,
@@ -75,7 +78,7 @@ class AllSongsWgt extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
+      ),
     );
   }
 }
