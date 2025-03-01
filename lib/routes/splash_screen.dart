@@ -15,23 +15,23 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final OnAudioQuery _audioQuery = OnAudioQuery();
-
-  void requestStoragePermission() async {
-    // only if platform is not web, coz web have no permission
-    if (!kIsWeb) {
-      bool permissionStatus = await _audioQuery.permissionsStatus();
-      if (!permissionStatus) {
-        await _audioQuery.permissionsRequest();
-      }
-      // ensure build method is called
-      setState(() {});
-    }
-  }
+  // final OnAudioQuery _audioQuery = OnAudioQuery();
+  //
+  // void requestStoragePermission() async {
+  //   // only if platform is not web, coz web have no permission
+  //   if (!kIsWeb) {
+  //     bool permissionStatus = await _audioQuery.permissionsStatus();
+  //     if (!permissionStatus) {
+  //       await _audioQuery.permissionsRequest();
+  //     }
+  //     // ensure build method is called
+  //     setState(() {});
+  //   }
+  // }
 
   @override
   void initState() {
-    requestStoragePermission();
+    // requestStoragePermission();
     super.initState();
   }
 
@@ -42,37 +42,19 @@ class _SplashScreenState extends State<SplashScreen> {
 
     return Scaffold(
       body: Container(
-        color: theme.primaryColor,
+        padding: EdgeInsets.only(top: deviceSize.width * 0.3),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [theme.colorScheme.primary, theme.colorScheme.secondary],
+          ),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const SizedBox(height: 50),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                vertical: 18.0,
-                horizontal: 70.0,
-              ),
-              transform: Matrix4.rotationZ(-14 * pi / 180)..translate(-0.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: theme.colorScheme.background,
-                boxShadow: const [
-                  BoxShadow(
-                    blurRadius: 8,
-                    color: Colors.black26,
-                    offset: Offset(0, 2),
-                  )
-                ],
-              ),
-              child: Text(
-                appName,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  color: theme.primaryColor,
-                  fontSize: 35,
-                ),
-              ),
-            ),
+            const SizedBox(),
             Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
@@ -83,22 +65,24 @@ class _SplashScreenState extends State<SplashScreen> {
                 borderRadius: BorderRadius.circular(20),
                 child: Image.asset(
                   imageList[0],
-                  width: deviceSize.height * 0.20,
-                  height: deviceSize.height * 0.20,
+                  width: deviceSize.height * 0.15,
+                  height: deviceSize.height * 0.15,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
+
             Column(
               children: [
                 Text(
-                  'From',
+                  'FROM',
                   style: theme.textTheme.labelSmall?.copyWith(
-                    color: theme.colorScheme.background,
-                    letterSpacing: 1.2,
+                    color: Colors.white,
+                    letterSpacing: 1.5,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
+                const SizedBox(height: 20),
                 Image.asset(
                   imageList[1],
                   width: deviceSize.width * 0.35,
@@ -106,11 +90,12 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 const SizedBox(height: 10),
                 LinearProgressIndicator(
-                  color: theme.primaryColor,
-                  backgroundColor: theme.colorScheme.background,
+                  color:theme.colorScheme.background ,
+                  minHeight: 1,
+                  backgroundColor: theme.primaryColor,
                   borderRadius: BorderRadius.circular(30),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
               ],
             ),
           ],
