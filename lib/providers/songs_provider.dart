@@ -82,6 +82,17 @@ class Songs with ChangeNotifier {
     pref.setString('currentSongInfo', currentSongInfo);
   }
 
+  Future<void> setSongs() async {
+    final pref = await SharedPreferences.getInstance();
+    final songListString = pref.getStringList('songList') ?? [];
+
+    for (final songStringData in songListString) {
+      print('$songStringData \n');
+      // songs.add(jsonDecode(songStringData));
+    }
+    print(' songs data==============$songs ');
+  }
+
   void saveSongList() async {
     final pref = await SharedPreferences.getInstance();
     final List<String> songListString = [];
@@ -89,37 +100,17 @@ class Songs with ChangeNotifier {
       songListString.add(song.toString());
     }
     pref.setStringList('songList', songListString);
-    // print('saved songs=====================${songListString}');
   }
 
-  Future<void> setSongs() async {
-    final pref = await SharedPreferences.getInstance();
-    final songListString = pref.getStringList('songList') ?? [];
-    // songs = songListString as List<SongModel>;
-    print(' songs data==============${songListString} ');
-  }
-
-  Future<void> getSongsList() async {
-    _audioQuery
-        .querySongs(
-            sortType: null,
-            ignoreCase: true,
-            uriType: UriType.EXTERNAL,
-            orderType: OrderType.ASC_OR_SMALLER)
-        .then((songsList) {
-      if (songsList.isNotEmpty) {
-        // for (var song in songsList) {
-        //   print(' songId =============================${song.id} ');
-        //   print(' song =============================${song.title} ');
-        // }
-        songs = songsList;
-        currentPlaylist = songs;
-        saveSongList();
-        notifyListeners();
-      } else {
-        songs.clear();
-      }
-    });
+  void getSongsList({required List<SongModel> songsList}) {
+    if (songsList.isNotEmpty) {
+      songs = songsList;
+      currentPlaylist = songs;
+    } else {
+      songs.clear();
+    }
+    notifyListeners();
+    saveSongList();
   }
 
   Future<bool> fetchAndSetCurrentSong() async {
