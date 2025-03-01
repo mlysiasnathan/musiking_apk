@@ -178,7 +178,7 @@ class MusicFloating extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(7),
                     child: FutureBuilder(
-                      future: songData.getSongsList(),
+                      future: Future.delayed(Durations.long1),
                       builder: (context, snapshots) =>
                           snapshots.connectionState == ConnectionState.waiting
                               ? Container(
