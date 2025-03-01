@@ -23,6 +23,7 @@ class SongCardOne extends StatelessWidget {
     final songData = Provider.of<Songs>(context, listen: false);
     final deviceSize = MediaQuery.of(context).size;
     songData.audioPlayer.currentIndexStream.listen((index) {
+      print('========================================$index');
       index != null ? songData.setCurrentSong(index) : null;
     });
 
@@ -124,7 +125,6 @@ class SongCardOne extends StatelessWidget {
                 songData.initializePlaylist(songData.currentPlaylist),
                 initialIndex: index,
               );
-              print('playlist=================>>>>${songData.currentPlaylist}');
               // await songData.audioPlayer.play();
               songData.setCurrentSong(index);
             },
