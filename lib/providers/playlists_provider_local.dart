@@ -10,8 +10,17 @@ class Playlists with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setAlbumsList() async {
-    _audioQuery
+  void getAlbumsList({required List<AlbumModel> albumsList}) {
+    if (albumsList.isNotEmpty) {
+      playlists = albumsList;
+    } else {
+      playlists.clear();
+    }
+    notifyListeners();
+  }
+
+  Future<List<AlbumModel>> setAlbumsList() async {
+    await _audioQuery
         .queryAlbums(
             sortType: null,
             ignoreCase: true,
@@ -26,5 +35,6 @@ class Playlists with ChangeNotifier {
         playlists.clear();
       }
     });
+    return playlists;
   }
 }
