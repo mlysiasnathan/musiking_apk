@@ -14,7 +14,7 @@ class ThemeProvider with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     final actualTheme = {'isFirstTime': isFirstTime};
     final themData = json.encode(actualTheme);
-    prefs.setString('themData', themData);
+    // prefs.setString('themData', themData);
   }
 
   Future<void> getIn() async {

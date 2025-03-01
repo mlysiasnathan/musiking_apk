@@ -1,50 +1,9 @@
 import 'package:flutter/material.dart';
 
-ThemeData lightMode = ThemeData(
-  brightness: Brightness.light,
-  primaryColor: Colors.orange,
-  primaryColorLight: Colors.deepOrangeAccent,
-  primaryColorDark: Colors.red,
-  colorScheme: ColorScheme.light(
-    background: Colors.white,
-    primary: Colors.deepOrangeAccent,
-    secondary: Colors.deepOrangeAccent.shade700,
-  ),
-  snackBarTheme: SnackBarThemeData(
-    backgroundColor: Colors.white,
-    closeIconColor: Colors.orange,
-    showCloseIcon: true,
-    behavior: SnackBarBehavior.floating,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(15),
-    ),
-  ),
-  fontFamily: 'PlusJakartaSans',
-);
-ThemeData darkMode = ThemeData(
-  brightness: Brightness.dark,
-  primaryColor: Colors.grey.shade900,
-  primaryColorLight: Colors.black,
-  primaryColorDark: Colors.black54,
-  colorScheme: ColorScheme.dark(
-    background: Colors.grey.shade300,
-    primary: Colors.black26,
-    secondary: Colors.black12,
-  ),
-  snackBarTheme: SnackBarThemeData(
-    backgroundColor: Colors.grey.shade600,
-    behavior: SnackBarBehavior.floating,
-    closeIconColor: Colors.black,
-    showCloseIcon: true,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(15),
-    ),
-  ),
-  fontFamily: 'PlusJakartaSans',
-);
 
-ThemeData lightMode1 = ThemeData(
-  fontFamily: 'Poppins',
+
+ThemeData lightMode = ThemeData(
+  fontFamily: 'PlusJakartaSans',
   brightness: Brightness.light,
   primaryColor: Colors.deepOrangeAccent,
   primaryColorLight: Colors.orange,
@@ -132,20 +91,23 @@ ThemeData lightMode1 = ThemeData(
   textTheme: const TextTheme(
     labelSmall: TextStyle(
       color: Colors.deepOrangeAccent,
+      fontFamily: 'PlusJakartaSans',
     ),
     titleMedium: TextStyle(
       color: Colors.deepOrangeAccent,
       fontWeight: FontWeight.bold,
+      fontFamily: 'PlusJakartaSans',
     ),
     headlineSmall: TextStyle(
       color: Colors.deepOrangeAccent,
       fontWeight: FontWeight.w900,
+      fontFamily: 'PlusJakartaSans',
     ),
   ),
 );
 
-ThemeData darkMode1 = ThemeData(
-  fontFamily: 'Poppins',
+ThemeData darkMode = ThemeData(
+  fontFamily: 'PlusJakartaSans',
   brightness: Brightness.dark,
   primaryColor: Colors.deepOrangeAccent,
   primaryColorLight: Colors.orange,
@@ -236,14 +198,17 @@ ThemeData darkMode1 = ThemeData(
   textTheme: const TextTheme(
     labelSmall: TextStyle(
       color: Colors.white,
+      fontFamily: 'PlusJakartaSans',
     ),
     titleMedium: TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.bold,
+      fontFamily: 'PlusJakartaSans',
     ),
     headlineSmall: TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.w900,
+      fontFamily: 'PlusJakartaSans',
     ),
   ),
 );
