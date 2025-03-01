@@ -1,8 +1,7 @@
 const String appName = 'Musiking';
 const List<String> imageList = [
-  'assets/musiccovers/musiking_logo.jpg',
-  'assets/musiccovers/lysnB_land_logo_png.png',
-  'assets/musiccovers/musiking_logo.png',
+  'assets/images/musiking.png',
+  'assets/images/logo_mini.png',
 ];
 
 String formatDuration(int? dur) {
