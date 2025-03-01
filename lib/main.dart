@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:musiking/routes/refresh_screen.dart';
+import 'package:musiking/routes/on_boarding_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:musiking/helpers/constant.dart';
-import 'package:musiking/routes/song_screen.dart';
+import './helpers/constant.dart';
+import './routes/refresh_screen.dart';
+import './routes/song_screen.dart';
 
 import './routes/screens.dart';
 import './models/models.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -42,28 +44,32 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: appName,
         debugShowCheckedModeBanner: false,
-        theme: lightMode1,
-        darkTheme: darkMode1,
+        theme: lightMode,
+        darkTheme: darkMode,
         themeMode: Provider.of<ThemeProvider>(context).themeMode,
-        // home: const CustomBottomTab(),
+        // home: const SplashScreen(),
 
-        home: Builder(
-          builder: (context) => FutureBuilder(
-            future: Future.delayed(const Duration(seconds: 3)).then(
-              (_) => Provider.of<ThemeProvider>(
-                context,
-                listen: false,
-              ).isInit = true,
+        home: FutureBuilder(
+          future: Future.delayed(const Duration(seconds: 2)),
+          builder: (context, splashSnapshot) =>
+          splashSnapshot.connectionState == ConnectionState.waiting
+              ? const SplashScreen()
+              : themeProvider.isFirstTime
+              ? const OnBoardingScreen()
+              :  FutureBuilder(
+              future:  Provider.of<Songs>(
+                  context,
+                  listen: false,
+                ).setSongs(),
+              builder: (context, snapshots) =>
+              snapshots.connectionState == ConnectionState.waiting &&
+                  !Provider.of<ThemeProvider>(
+                    context,
+                    listen: false,
+                  ).isInit
+                  ? const SplashScreen()
+                  : const CustomBottomTab(),
             ),
-            builder: (context, snapshots) =>
-                snapshots.connectionState == ConnectionState.waiting &&
-                        !Provider.of<ThemeProvider>(
-                          context,
-                          listen: false,
-                        ).isInit
-                    ? const SplashScreen()
-                    : const CustomBottomTab(),
-          ),
         ),
         routes: {
           SplashScreen.routeName: (ctx) => const SplashScreen(),
@@ -79,3 +85,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
