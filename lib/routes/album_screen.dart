@@ -13,6 +13,7 @@ class AlbumScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
+    final deviceSize = MediaQuery.of(context).size;
     final playlist = ModalRoute.of(context)?.settings.arguments as AlbumModel;
     final List<SongModel> songs = Provider.of<Songs>(context, listen: false)
         .songs
@@ -35,23 +36,52 @@ class AlbumScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          title: Text(
-            'Album',
-            style: theme.textTheme.headlineSmall!.copyWith(
-              color: theme.colorScheme.background,
+          title: FittedBox(
+            child: Text(
+              playlist.album,
+              style: theme.textTheme.headlineSmall!.copyWith(
+                color: theme.colorScheme.background,
+              ),
             ),
           ),
-          centerTitle: true,
         ),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(15),
             child: Column(
               children: [
-                _PlaylistInfo(playlist: playlist),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Hero(
+                    tag: playlist.id,
+                    child: QueryArtworkWidget(
+                      id: playlist.id,
+                      artworkBorder: BorderRadius.circular(20),
+                      type: ArtworkType.ALBUM,
+                      artworkFit: BoxFit.cover,
+                      artworkWidth: deviceSize.width * 0.5,
+                      artworkHeight: deviceSize.width * 0.5,
+                      keepOldArtwork: true,
+                      nullArtworkWidget: Container(
+                        width: deviceSize.width * 0.43,
+                        height: deviceSize.width * 0.43,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: theme.colorScheme.background.withOpacity(0.6),
+                        ),
+                        child: Icon(
+                          Icons.album,
+                          size: 150,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                // _PlaylistInfo(playlist: playlist),
                 const SizedBox(height: 10),
-                const PlayOrShuffleSwitch(),
-                const SizedBox(height: 5),
+                PlayOrShuffleSwitch(playLists: songs),
+                const SizedBox(height: 10),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -59,12 +89,13 @@ class AlbumScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
-                        SongCardTwo(
+                        SongCardOne(
+                          playLists: songs,
                           song: songs[index],
                           index: index,
-                          songs: songs,
+                          showIndex: true,
                         ),
-                        const Divider(color: Colors.white),
+                        const Divider(),
                       ],
                     );
                   },
@@ -74,62 +105,6 @@ class AlbumScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _PlaylistInfo extends StatelessWidget {
-  const _PlaylistInfo({
-    Key? key,
-    required this.playlist,
-  }) : super(key: key);
-
-  final AlbumModel playlist;
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    final deviceSize = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Hero(
-            tag: playlist.id,
-            child: QueryArtworkWidget(
-              id: playlist.id,
-              artworkBorder: BorderRadius.circular(20),
-              type: ArtworkType.ALBUM,
-              artworkFit: BoxFit.cover,
-              artworkWidth: deviceSize.height * 0.3,
-              artworkHeight: deviceSize.height * 0.3,
-              keepOldArtwork: true,
-              nullArtworkWidget: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  color: theme.colorScheme.background.withOpacity(0.7),
-                  child: Image.asset(
-                    color: theme.primaryColor,
-                    imageList[2],
-                    width: deviceSize.height * 0.3,
-                    height: deviceSize.height * 0.3,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        FittedBox(
-          child: Text(
-            playlist.album,
-            style: theme.textTheme.headlineSmall!.copyWith(
-              color: theme.colorScheme.background,
-            ),
-          ),
-        )
-      ],
     );
   }
 }
