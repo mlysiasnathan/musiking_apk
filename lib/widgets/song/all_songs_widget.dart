@@ -6,22 +6,21 @@ import '../../routes/refresh_screen.dart';
 import '../widgets.dart';
 
 class AllSongsWgt extends StatelessWidget {
-  const AllSongsWgt({
-    Key? key,
-  }) : super(key: key);
+  const AllSongsWgt({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final songData = Provider.of<Songs>(context, listen: false);
-    // songData.audioPlayer.currentIndexStream.listen((index) {
-    //   print('========================================$index');
-    //   index != null ? songData.setCurrentSong(index) : null;
-    // });
+    songData.audioPlayer.currentIndexStream.listen((index) {
+      index != null
+          ? songData.saveCurrentSong(songData.currentPlaylist[index])
+          : null;
+    });
 
     return Consumer<Songs>(
       builder: (ctx, songData, _) => Padding(
-        padding: const EdgeInsets.only(left: 19, right: 19, bottom: 8),
+        padding: const EdgeInsets.only(left: 19, right: 19, bottom: 30),
         child: songData.songs.isEmpty
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,7 +52,6 @@ class AllSongsWgt extends StatelessWidget {
             : Column(
                 children: [
                   SectionHeader(
-                    // showButton: false,
                     title: 'Trending Music',
                     action: () =>
                         Navigator.pushNamed(context, RefreshScreen.routeName),
@@ -68,10 +66,11 @@ class AllSongsWgt extends StatelessWidget {
                     addAutomaticKeepAlives: true,
                     padding: const EdgeInsets.all(0),
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: songData.songs.length,
+                    itemCount: songData.currentPlaylist.length,
                     itemBuilder: (context, index) => SongCardOne(
+                      playLists: songData.currentPlaylist,
                       key: ValueKey(index),
-                      song: songData.songs[index],
+                      song: songData.currentPlaylist[index],
                       index: index,
                       showBigSize: true,
                     ),
