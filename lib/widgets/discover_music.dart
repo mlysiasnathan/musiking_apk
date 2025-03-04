@@ -15,7 +15,7 @@ class DiscoverMusic extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const NewAppBar(),
+          // const NewAppBar(),
           Text(
             appName,
             style: theme.textTheme.titleMedium!.copyWith(
