@@ -52,24 +52,27 @@ class MyApp extends StatelessWidget {
         home: FutureBuilder(
           future: Future.delayed(const Duration(seconds: 2)),
           builder: (context, splashSnapshot) =>
-          splashSnapshot.connectionState == ConnectionState.waiting
-              ? const SplashScreen()
-              : themeProvider.isFirstTime
-              ? const OnBoardingScreen()
-              :  FutureBuilder(
-              future:  Provider.of<Songs>(
-                  context,
-                  listen: false,
-                ).setSongs(),
-              builder: (context, snapshots) =>
-              snapshots.connectionState == ConnectionState.waiting &&
-                  !Provider.of<ThemeProvider>(
-                    context,
-                    listen: false,
-                  ).isInit
+              splashSnapshot.connectionState == ConnectionState.waiting
                   ? const SplashScreen()
-                  : const CustomBottomTab(),
-            ),
+                  : themeProvider.isFirstTime
+                      ? const OnBoardingScreen()
+                      : FutureBuilder(
+                          future: Provider.of<Songs>(
+                            context,
+                            listen: false,
+                          ).initSongData().then(
+                                (_) => Provider.of<Playlists>(
+                                  context,
+                                  listen: false,
+                                ).loadPlaylists(),
+                              ),
+                          builder: (context, snapshots) =>
+                              snapshots.connectionState ==
+                                          ConnectionState.waiting &&
+                                      !themeProvider.isInit
+                                  ? const SplashScreen()
+                                  : const CustomBottomTab(),
+                        ),
         ),
         routes: {
           SplashScreen.routeName: (ctx) => const SplashScreen(),
@@ -85,4 +88,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
