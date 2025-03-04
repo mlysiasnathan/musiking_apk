@@ -11,17 +11,21 @@ import '../widgets/song/seekbar.dart';
 class Songs with ChangeNotifier {
   List<SongModel> songs = <SongModel>[];
   List<SongModel> currentPlaylist = <SongModel>[];
+  List<SongModel> favorites = <SongModel>[];
   AudioPlayer audioPlayer = AudioPlayer();
-  final OnAudioQuery _audioQuery = OnAudioQuery();
   bool isSongsSaved = false;
-
   SongModel? currentSong;
-  // int currentIndex = 0;
-
   Duration position = Duration.zero;
   List<AudioSource> sources = [];
-
   final ScrollController scrollCtrl = ScrollController();
+
+  Future<void> initSongData() async {
+    await loadAllSongs()
+        .then((_) => loadCurrentSong())
+        .then((_) => loadCurrentPlayList())
+        .then((_) => loadFavoritesSongs());
+  }
+
   void autoScroll() {
     scrollCtrl.animateTo(
       scrollCtrl.position.maxScrollExtent,
@@ -68,44 +72,26 @@ class Songs with ChangeNotifier {
     }
   }
 
-  void setCurrentSong(int songId) async {
-    if (currentPlaylist.isNotEmpty) {
-      currentSong = songs.firstWhere((song) => song.id == songId);
-    }
-    // print('Current song======================================$currentSong');
-    notifyListeners();
+  Future<void> loadAllSongs() async {
     final pref = await SharedPreferences.getInstance();
-    final currentSongInfo = json.encode({
-      'currentSong': currentSong.toString(),
-      'position': audioPlayer.position.toString(),
-    });
-    pref.setString('currentSongInfo', currentSongInfo);
-  }
-
-  Future<void> setSongs() async {
-    final pref = await SharedPreferences.getInstance();
-    final songListString = pref.getStringList('songList') ?? [];
-
-    for (final songStringData in songListString) {
-      print('$songStringData \n');
-      // songs.add(jsonDecode(songStringData));
+    final List<String> songListString = pref.getStringList('songList') ?? [];
+    if (songListString.isNotEmpty) {
+      songs = songListString
+          .map((songString) => SongModel(jsonDecode(songString)))
+          .toList();
     }
-    print(' songs data==============$songs ');
   }
 
   void saveSongList() async {
     final pref = await SharedPreferences.getInstance();
-    final List<String> songListString = [];
-    for (var song in songs) {
-      songListString.add(song.toString());
-    }
+    final songListString =
+        songs.map((song) => jsonEncode(song.getMap)).toList();
     pref.setStringList('songList', songListString);
   }
 
   void getSongsList({required List<SongModel> songsList}) {
     if (songsList.isNotEmpty) {
       songs = songsList;
-      currentPlaylist = songs;
     } else {
       songs.clear();
     }
@@ -113,36 +99,68 @@ class Songs with ChangeNotifier {
     saveSongList();
   }
 
-  Future<bool> fetchAndSetCurrentSong() async {
+  Future<void> loadFavoritesSongs() async {
     final pref = await SharedPreferences.getInstance();
-    if (!pref.containsKey('currentSongInfo')) {
-      return false;
+    final List<String> songListString = pref.getStringList('favorites') ?? [];
+    if (songListString.isNotEmpty) {
+      favorites = songListString
+          .map((songString) => SongModel(jsonDecode(songString)))
+          .toList();
     }
-    final extractedSongInfo =
-        json.decode(pref.getString('currentSongInfo').toString())
-            as Map<String, dynamic>;
-    if (extractedSongInfo['currentSong'] == null) {
-      currentSong = null;
-      return false;
-    }
-    if (extractedSongInfo['currentIndex'] == null) {
-      // currentIndex = 0;
-      return false;
-    }
-    if (extractedSongInfo['position'] == null) {
-      return false;
-    }
-    currentSong = extractedSongInfo['currentSong'];
-    // currentIndex = extractedSongInfo['currentIndex'];
+  }
 
-    List<String> timeParts =
-        extractedSongInfo['position'].toString().split(':');
-    position = Duration(
-      hours: int.parse(timeParts[0]),
-      minutes: int.parse(timeParts[1]),
-      seconds: double.parse(timeParts[2]).toInt(),
-    );
-    // notifyListeners();
-    return true;
+  void saveFavoritesSongs() async {
+    final pref = await SharedPreferences.getInstance();
+    final songListString =
+        favorites.map((song) => jsonEncode(song.getMap)).toList();
+    pref.setStringList('favorites', songListString);
+    notifyListeners();
+  }
+
+  Future<void> loadCurrentPlayList() async {
+    final pref = await SharedPreferences.getInstance();
+    final List<String> songListString =
+        pref.getStringList('currentPlaylist') ?? [];
+    if (songListString.isNotEmpty) {
+      currentPlaylist = songListString
+          .map((songString) => SongModel(jsonDecode(songString)))
+          .toList();
+    }
+  }
+
+  void saveCurrentPlayList() async {
+    final pref = await SharedPreferences.getInstance();
+    final songListString =
+        currentPlaylist.map((song) => jsonEncode(song.getMap)).toList();
+    pref.setStringList('currentPlaylist', songListString);
+    notifyListeners();
+  }
+
+  void refreshSongs() {
+    songs.clear();
+    notifyListeners();
+  }
+
+  void saveCurrentSong(SongModel song) async {
+    if (currentSong != song) {
+      final pref = await SharedPreferences.getInstance();
+      final currentSongInfo = jsonEncode(song.getMap);
+      pref.setString('currentSongInfo', currentSongInfo);
+    }
+    if (currentPlaylist.isNotEmpty && currentSong != song) {
+      currentSong = song;
+      notifyListeners();
+    }
+  }
+
+  Future<void> loadCurrentSong() async {
+    final pref = await SharedPreferences.getInstance();
+    if (!pref.containsKey('currentSongInfo')) return;
+    final String? extractedSong = pref.getString('currentSongInfo');
+    if (extractedSong == null) return;
+    final Map<String, dynamic> songMap = jsonDecode(extractedSong);
+    // print('========================ANALYSIS GET=====================');
+    currentSong = SongModel(songMap);
+    notifyListeners();
   }
 }
