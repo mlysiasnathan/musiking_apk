@@ -8,6 +8,7 @@ import '../widgets/widgets.dart';
 
 class SongBottomSheet extends StatelessWidget {
   const SongBottomSheet({super.key});
+
   static const routeName = '/song_screen';
 
   @override
@@ -15,7 +16,8 @@ class SongBottomSheet extends StatelessWidget {
     final ThemeData theme = Theme.of(context);
     final songData = Provider.of<Songs>(context, listen: false);
     songData.audioPlayer.currentIndexStream.listen((index) {
-      index != null ? songData.setCurrentSong(index) : null;
+      index != null ? songData.saveCurrentSong(songData.songs[index]) : null;
+      // index != null ? songData.setCurrentSong(index) : null;
     });
     return Stack(
       children: [
