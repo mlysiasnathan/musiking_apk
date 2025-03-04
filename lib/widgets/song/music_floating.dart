@@ -9,9 +9,7 @@ import '../../models/models.dart';
 import '../../routes/screens.dart';
 
 class MusicFloating extends StatelessWidget {
-  const MusicFloating({
-    Key? key,
-  }) : super(key: key);
+  const MusicFloating({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +65,7 @@ class MusicFloating extends StatelessWidget {
                                 initialIndex: index,
                               );
                               songData.audioPlayer.play();
-                              songData.setCurrentSong(index);
+                              // songData.setCurrentSong(index);
                             },
                             borderRadius: BorderRadius.circular(10),
                             child: Consumer<Songs>(
@@ -152,18 +150,16 @@ class MusicFloating extends StatelessWidget {
       );
     }
 
-    songData.audioPlayer.currentIndexStream.listen((index) {
-      index != null ? songData.setCurrentSong(index) : null;
-    });
-
     return PageStorage(
       bucket: bucket,
       child: Container(
-        height: 50,
-        width: MediaQuery.of(context).size.width * 0.94,
+        height: deviceSize.width * 0.14,
+        width: deviceSize.width * 0.94,
+        margin: const EdgeInsets.all(5),
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(13),
           color: theme.colorScheme.background,
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,7 +170,6 @@ class MusicFloating extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
               child: Row(
                 children: [
-                  const SizedBox(width: 5),
                   ClipRRect(
                     borderRadius: BorderRadius.circular(7),
                     child: FutureBuilder(
@@ -201,11 +196,11 @@ class MusicFloating extends StatelessWidget {
                                     id: songData.currentSong?.id ?? 0,
                                     type: ArtworkType.AUDIO,
                                     artworkBorder: BorderRadius.zero,
-                                    artworkHeight: 42,
-                                    artworkWidth: 42,
+                                    artworkWidth: deviceSize.width * 0.12,
+                                    artworkHeight: deviceSize.width * 0.12,
                                     nullArtworkWidget: Container(
-                                      width: 42,
-                                      height: 42,
+                                      width: deviceSize.width * 0.12,
+                                      height: deviceSize.width * 0.12,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(8),
                                         color: theme.primaryColor,
@@ -266,7 +261,7 @@ class MusicFloating extends StatelessWidget {
                                 .initializePlaylist(songData.currentPlaylist),
                             initialIndex: 0,
                           );
-                          songData.setCurrentSong(0);
+                          songData.saveCurrentSong(songData.songs.first);
                         }
                         audioPlayer.play();
                       },
