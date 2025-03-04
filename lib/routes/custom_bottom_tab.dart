@@ -18,6 +18,7 @@ class _CustomBottomBarState extends State<CustomBottomTab> {
   final PageController _controller = PageController();
   late List<Map<String, Object>> _pages;
   late int _selectedIndex = 0;
+
   void _selectPage(int index) {
     if (_selectedIndex != index) {
       _controller.jumpToPage(index);
@@ -50,7 +51,23 @@ class _CustomBottomBarState extends State<CustomBottomTab> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        // appBar: const CustomAppBar(),
+        appBar: CustomAppBar(
+          title: _selectedIndex == 1
+              ? Text(
+                  'Favorites Songs',
+                  style: theme.textTheme.headlineSmall!.copyWith(
+                    color: theme.colorScheme.background,
+                  ),
+                )
+              : _selectedIndex == 2
+                  ? Text(
+                      'Favorites Songs',
+                      style: theme.textTheme.headlineSmall!.copyWith(
+                        color: theme.colorScheme.background,
+                      ),
+                    )
+                  : null,
+        ),
         body: PageView(
           controller: _controller,
           onPageChanged: _selectPage,
