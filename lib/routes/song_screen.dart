@@ -8,6 +8,7 @@ import '../widgets/song/music_ui.dart';
 
 class SongScreen extends StatelessWidget {
   const SongScreen({super.key});
+
   static const routeName = '/song-screen';
 
   @override
@@ -87,7 +88,8 @@ class SongScreen extends StatelessWidget {
                             initialIndex: index,
                           );
                           songData.audioPlayer.play();
-                          songData.setCurrentSong(index);
+                          songData.saveCurrentSong(
+                              songData.currentSong ?? songData.songs[0]);
                         },
                         borderRadius: BorderRadius.circular(10),
                         child: Consumer<Songs>(
