@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/models.dart';
@@ -8,14 +9,13 @@ import '../../models/models.dart';
 class PlayOrShuffleSwitch extends StatelessWidget {
   const PlayOrShuffleSwitch({
     Key? key,
+    required this.playLists,
   }) : super(key: key);
+  final List<SongModel> playLists;
 
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-
-    final Color primaryColor = theme.primaryColor;
-    final Color primaryColorLight = theme.primaryColorLight;
     double width = MediaQuery.of(context).size.width * 0.7;
     final songData = Provider.of<Songs>(context);
     void showToast(BuildContext ctx, String message) {
@@ -27,26 +27,31 @@ class PlayOrShuffleSwitch extends StatelessWidget {
       );
     }
 
+    Future<void> onTap() async {
+      await songData.audioPlayer.stop();
+      await songData.audioPlayer.setAudioSource(
+        songData.initializePlaylist(playLists),
+        initialIndex: 0,
+      );
+      await songData.audioPlayer.play();
+      songData.audioPlayer.shuffleModeEnabled
+          ? songData.audioPlayer.setShuffleModeEnabled(false).then(
+                (_) => showToast(context, 'Shuffle mode Enabled'),
+              )
+          : songData.audioPlayer.setShuffleModeEnabled(true).then(
+                (_) => showToast(context, 'Shuffle mode Disabled'),
+              );
+      if (songData.currentPlaylist != playLists) {
+        songData.currentPlaylist = playLists;
+        songData.saveCurrentPlayList();
+      }
+    }
+
     return StreamBuilder<SequenceState?>(
       stream: songData.audioPlayer.sequenceStateStream,
       builder: (context, index) {
         return GestureDetector(
-          onTap: () async {
-            if (songData.currentSong == 'Click to play') {
-              await songData.audioPlayer.setAudioSource(
-                songData.initializePlaylist(songData.songs),
-                initialIndex: 0,
-              );
-            }
-            await songData.audioPlayer.play();
-            songData.audioPlayer.shuffleModeEnabled
-                ? songData.audioPlayer
-                    .setShuffleModeEnabled(false)
-                    .then((_) => showToast(context, 'Shuffle mode Enabled'))
-                : songData.audioPlayer
-                    .setShuffleModeEnabled(true)
-                    .then((_) => showToast(context, 'Shuffle mode Disabled'));
-          },
+          onTap: onTap,
           child: Container(
             height: 40,
             width: width,
@@ -69,7 +74,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                     height: 40,
                     width: width * 0.40,
                     decoration: BoxDecoration(
-                      color: primaryColorLight,
+                      color: theme.primaryColor,
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -86,7 +91,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                               style: TextStyle(
                                 color: !songData.audioPlayer.shuffleModeEnabled
                                     ? theme.colorScheme.background
-                                    : primaryColor,
+                                    : theme.primaryColor,
                                 fontSize: 13,
                               ),
                             ),
@@ -96,7 +101,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                             Icons.play_circle_outline,
                             color: !songData.audioPlayer.shuffleModeEnabled
                                 ? theme.colorScheme.background
-                                : primaryColor,
+                                : theme.primaryColor,
                           ),
                         ],
                       ),
@@ -110,7 +115,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                               'Shuffle',
                               style: TextStyle(
                                 color: !songData.audioPlayer.shuffleModeEnabled
-                                    ? primaryColor
+                                    ? theme.primaryColor
                                     : theme.colorScheme.background,
                                 fontSize: 13,
                               ),
@@ -120,7 +125,7 @@ class PlayOrShuffleSwitch extends StatelessWidget {
                           Icon(
                             CupertinoIcons.shuffle,
                             color: !songData.audioPlayer.shuffleModeEnabled
-                                ? primaryColor
+                                ? theme.primaryColor
                                 : theme.colorScheme.background,
                           ),
                         ],
