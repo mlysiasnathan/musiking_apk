@@ -12,5 +12,4 @@ export 'song/all_songs_widget.dart';
 export 'song/music_floating.dart';
 export './section_header.dart';
 export 'song/seekbar.dart';
-export 'song/song_card_two.dart';
 export 'song/song_card_one.dart';
