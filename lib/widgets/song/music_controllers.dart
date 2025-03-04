@@ -6,9 +6,7 @@ import 'package:provider/provider.dart';
 import '../../models/models.dart';
 
 class MusicControllers extends StatelessWidget {
-  const MusicControllers({
-    Key? key,
-  }) : super(key: key);
+  const MusicControllers({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,15 +60,15 @@ class MusicControllers extends StatelessWidget {
           stream: audioPlayer.sequenceStateStream,
           builder: (context, index) {
             return IconButton(
-              tooltip: songData.audioPlayer.currentIndex != null
-                  ? songData.audioPlayer.currentIndex! > 0
-                      ? songData
-                          .currentPlaylist[songData.currentPlaylist
-                                  .indexOf(songData.currentSong!) -
-                              1]
-                          .title
-                      : 'This is the first song of the playlist'
-                  : null,
+              // tooltip: songData.audioPlayer.currentIndex != null
+              //     ? songData.audioPlayer.currentIndex! > 0
+              //         ? songData
+              //             .currentPlaylist[songData.currentPlaylist
+              //                     .indexOf(songData.currentSong!) -
+              //                 1]
+              //             .title
+              //         : 'This is the first song of the playlist'
+              //     : null,
               onPressed: songData.prev,
               icon: Icon(
                 CupertinoIcons.backward_end_fill,
@@ -108,7 +106,7 @@ class MusicControllers extends StatelessWidget {
                         songData.initializePlaylist(songData.currentPlaylist),
                         initialIndex: 0,
                       );
-                      songData.setCurrentSong(0);
+                      songData.saveCurrentSong(songData.songs.first);
                     }
                     audioPlayer.play();
                   },
