@@ -43,19 +43,19 @@ class AlbumCard extends StatelessWidget {
                       : BorderRadius.circular(20),
                   type: ArtworkType.ALBUM,
                   keepOldArtwork: true,
-                  nullArtworkWidget: ClipRRect(
-                    borderRadius: playlistData.isViewMoreAlbum
-                        ? BorderRadius.circular(15)
-                        : BorderRadius.circular(20),
-                    child: Container(
-                      color: Colors.white.withOpacity(0.4),
-                      child: Image.asset(
-                        color: theme.primaryColorDark,
-                        imageList[2],
-                        width: deviceSize.width * 0.43,
-                        height: deviceSize.width * 0.43,
-                        fit: BoxFit.cover,
-                      ),
+                  nullArtworkWidget: Container(
+                    width: deviceSize.width * 0.43,
+                    height: deviceSize.width * 0.43,
+                    decoration: BoxDecoration(
+                      borderRadius: playlistData.isViewMoreAlbum
+                          ? BorderRadius.circular(15)
+                          : BorderRadius.circular(20),
+                      color: theme.colorScheme.background.withOpacity(0.6),
+                    ),
+                    child: Icon(
+                      Icons.album,
+                      size: playlistData.isViewMoreAlbum ? 100 : 150,
+                      color: theme.primaryColor,
                     ),
                   ),
                 ),
