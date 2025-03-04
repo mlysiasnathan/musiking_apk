@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:musiking/widgets/new_app_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../models/models.dart';
@@ -21,9 +20,12 @@ class _FavoritesScreenState extends State<FavoritesScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final songData = Provider.of<Songs>(context, listen: false);
+    final ThemeData theme = Theme.of(context);
+    final songData = Provider.of<Songs>(context);
     songData.audioPlayer.currentIndexStream.listen((index) {
-      index != null ? songData.setCurrentSong(index) : null;
+      index != null
+          ? songData.saveCurrentSong(songData.currentPlaylist[index])
+          : null;
     });
 
     return SingleChildScrollView(
@@ -32,27 +34,40 @@ class _FavoritesScreenState extends State<FavoritesScreen>
         padding: const EdgeInsets.all(19.9),
         child: Column(
           children: [
-            const NewAppBar(),
             const SizedBox(height: 10),
-            const PlayOrShuffleSwitch(),
+            PlayOrShuffleSwitch(playLists: songData.favorites),
             const SizedBox(height: 10),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: songData.songs.length >= 3 ? 3 : 0,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    SongCardTwo(
-                      song: songData.songs[index],
-                      index: index,
-                      songs: songData.songs,
+            if (songData.favorites.isEmpty)
+              Column(
+                children: [
+                  Text(
+                    'No favorite song',
+                    style: theme.textTheme.headlineSmall!.copyWith(
+                      color: theme.colorScheme.background,
                     ),
-                    const Divider(),
-                  ],
-                );
-              },
-            ),
+                  ),
+                  const Icon(
+                    Icons.heart_broken,
+                    size: 120,
+                  ),
+                ],
+              )
+            else
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: songData.favorites.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 3),
+                    child: SongCardOne(
+                      playLists: songData.favorites,
+                      song: songData.favorites[index],
+                      index: index,
+                    ),
+                  );
+                },
+              ),
           ],
         ),
       ),
