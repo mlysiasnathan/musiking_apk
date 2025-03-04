@@ -4,6 +4,7 @@ import '../widgets/new_app_bar.dart';
 
 class EqualizerScreen extends StatelessWidget {
   const EqualizerScreen({Key? key}) : super(key: key);
+
   bool get wantKeepAlive => true;
   static const routeName = '/equalizer';
 
@@ -14,7 +15,6 @@ class EqualizerScreen extends StatelessWidget {
       key: const ValueKey('equalizer'),
       child: Column(
         children: [
-          const NewAppBar(),
           const SizedBox(height: 10),
           Text(
             'For the Equalizer keep waiting for the next update',
