@@ -97,9 +97,9 @@ class AlbumsArea extends StatelessWidget {
                           addAutomaticKeepAlives: true,
                           scrollDirection: Axis.horizontal,
                           itemCount:
-                              playlistData.playlists.length >= viewLessLength
-                                  ? viewLessLength
-                                  : playlistData.playlists.length,
+                              playlistData.playlists.length < viewLessLength
+                                  ?playlistData.playlists.length
+                                  : viewLessLength,
                           itemBuilder: (context, index) {
                             return AlbumCard(
                               key: ValueKey(
