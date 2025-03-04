@@ -192,13 +192,27 @@ class MusicUi extends StatelessWidget {
                   ];
                 },
               ),
-              IconButton(
-                tooltip: 'Add This song to favorite Playlist',
-                onPressed: () {},
-                icon: Icon(
-                  CupertinoIcons.heart,
-                  color: theme.colorScheme.background,
-                ),
+              Consumer<Songs>(
+                builder: (ctx, songData, _) {
+                  final isFavorite = songData.favorites
+                      .any((song) => song.id == songData.currentSong!.id);
+                  return IconButton(
+                    tooltip: 'Add This song to favorite Playlist',
+                    onPressed: () {
+                      isFavorite
+                          ? songData.favorites.removeWhere(
+                              (song) => song.id == songData.currentSong!.id)
+                          : songData.favorites.add(songData.currentSong!);
+                      songData.saveFavoritesSongs();
+                    },
+                    icon: Icon(
+                      isFavorite
+                          ? CupertinoIcons.heart_fill
+                          : CupertinoIcons.heart,
+                      color: theme.colorScheme.background,
+                    ),
+                  );
+                },
               ),
               IconButton(
                 tooltip: 'Show the current Playlist',
